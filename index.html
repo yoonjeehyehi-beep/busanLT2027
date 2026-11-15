@@ -6,7 +6,7 @@
 <title>2027 마음의 소리: 부산사서교사협의회</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet">
 <style>
 :root {
   /* 밤의 트리 앞에 놓인 우체통: 뒤에는 흐릿한 트리 조명, 앞에는 손글씨 편지지 */
@@ -20,8 +20,9 @@
   --gold: #ffd84d;
   --green: #2f9a60;
   --line: #e2d8c2;
-  --font: "Nanum Myeongjo", "AppleMyungjo", "Batang", serif;
-  --fs: 0.95; /* 전체 글씨 크기를 약 2pt 낮춰 선명하게 보이도록 조정 */
+  --font: "Nanum Gothic", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --title: "Nanum Myeongjo", "AppleMyungjo", "Batang", serif;
+  --fs: 1;
 }
 * { box-sizing: border-box; }
 html { font-size: calc(18px * var(--fs)); scroll-behavior: smooth; background: var(--night); }
@@ -49,10 +50,10 @@ button { font-size: inherit; cursor: pointer; color: inherit; }
 /* 위쪽 별 장식: 크기가 다른 별이 실에 매달려 하늘하늘 흔들린다 */
 .lights {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: flex-start;
-  height: 118px;
-  padding: 0 8px;
+  height: 124px;
+  padding: 0 6px;
   overflow: hidden;
 }
 .bulb {
@@ -95,6 +96,7 @@ header { display: grid; gap: 1rem; padding: 1rem 0 1.6rem; }
 .head-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: .8rem; }
 .title-group { display: grid; gap: .35rem; flex: 1 1 0; min-width: 0; }
 h1 {
+  font-family: var(--title);
   margin: 0;
   font-size: clamp(2.6rem, 9vw, 4.6rem);
   line-height: 1.05;
@@ -102,9 +104,10 @@ h1 {
   color: #ff4a36;
   text-shadow: 0 2px 18px rgba(0, 0, 0, .6);
 }
-h1 span { color: #ffffff; white-space: nowrap; }
+h1 span { color: #ffffff; }
+h1 span { white-space: nowrap; }
 h1 small { display: block; font-size: .4em; font-weight: 700; color: var(--cream); margin-top: .35em; line-height: 1.2; }
-.subtitle { margin: 0; font-weight: 700; font-size: clamp(1.15rem, 3vw, 1.5rem); color: var(--cream); text-shadow: 0 1px 12px rgba(0, 0, 0, .6); }
+.subtitle { margin: 0; font-family: var(--title); font-weight: 700; font-size: clamp(1.15rem, 3vw, 1.5rem); color: var(--cream); text-shadow: 0 1px 12px rgba(0, 0, 0, .6); }
 .bgm-btn {
   background: rgba(13, 28, 25, .55);
   border: 1px solid rgba(255, 248, 234, .55);
@@ -122,8 +125,8 @@ h1 small { display: block; font-size: .4em; font-weight: 700; color: var(--cream
   max-width: 40em;
   display: grid;
   gap: .35rem;
-  font-weight: 700;
 }
+.greeting p:last-child { font-weight: 700; }
 .greeting p { margin: 0; }
 .greeting p:last-child { color: var(--gold); }
 
@@ -133,7 +136,7 @@ h1 small { display: block; font-size: .4em; font-weight: 700; color: var(--cream
   outline-offset: 3px;
 }
 
-/* 편지지: 우표와 소인 도장이 찍힌 클래식 편지지 */
+/* 편지지: 붉은 인장이 찍힌 오래된 양피지 크리스마스 카드 */
 .mailbox {
   --sepia: #3a2a14;
   --sepia-soft: #6b5330;
@@ -165,134 +168,79 @@ h1 small { display: block; font-size: .4em; font-weight: 700; color: var(--cream
   outline-offset: 3px;
   pointer-events: none;
 }
-
-/* ✉️ 부산사서교사 우표 & 우편 소인(도장) */
-.postage-stamp {
-  position: absolute;
-  top: 22px;
-  right: 26px;
-  z-index: 2;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  transform: rotate(3deg);
-}
-.stamp-paper {
-  width: 78px;
-  height: 92px;
-  background:
-    radial-gradient(circle at 0 0, transparent 4px, #fbf3df 4.5px) 0 0 / 12px 12px,
-    #fbf3df;
-  padding: 6px;
-  border: 2px dashed rgba(120, 82, 34, .45);
-  border-radius: 2px;
-  box-shadow: 0 3px 10px rgba(58, 42, 20, .25);
-  display: flex;
-}
-.stamp-inner {
-  flex: 1;
-  border: 1.5px solid #8e241a;
-  background: linear-gradient(180deg, rgba(168, 42, 30, .08) 0%, rgba(47, 111, 98, .12) 100%);
-  padding: 5px 4px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
-  color: #7a1c14;
-}
-.stamp-kr {
-  font-size: .55rem;
-  font-weight: 800;
-  letter-spacing: .06em;
-  opacity: .85;
-}
-.stamp-icon {
-  font-size: 1.15rem;
-  line-height: 1;
-  margin: 1px 0;
-}
-.stamp-title {
-  font-size: .68rem;
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: -.02em;
-  color: #264a40;
-  word-break: keep-all;
-}
-.stamp-year {
-  font-size: .58rem;
-  font-weight: 800;
-  color: #8e241a;
-  letter-spacing: .05em;
-}
-/* 우표 위에 겹쳐 찍힌 클래식 소인 도장 */
-.postmark-seal {
-  position: absolute;
-  left: -38px;
-  bottom: -6px;
-  width: 68px;
-  height: 68px;
-  border: 2px solid rgba(128, 28, 20, .62);
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: rgba(128, 28, 20, .72);
-  font-weight: 800;
-  font-size: .58rem;
-  line-height: 1.15;
-  letter-spacing: .02em;
-  transform: rotate(-16deg);
-  box-shadow: inset 0 0 0 3px transparent, inset 0 0 0 4px rgba(128, 28, 20, .38);
-  background: radial-gradient(circle, rgba(243, 226, 182, .15) 0%, transparent 70%);
-}
-.postmark-seal span {
-  border-top: 1px solid rgba(128, 28, 20, .55);
-  border-bottom: 1px solid rgba(128, 28, 20, .55);
-  padding: 1px 4px;
-  margin: 2px 0;
-  font-size: .62rem;
-}
-
 .mailbox > * { position: relative; }
+/* 낡은 우표 */
+.mailbox > .stamp {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.7rem;
+  width: 98px;
+  height: 126px;
+  padding: 13px;
+  background: #f7edd2;
+  -webkit-mask:
+    linear-gradient(#000 0 0) center / calc(100% - 12px) calc(100% - 12px) no-repeat,
+    radial-gradient(circle 4.5px at center, #0000 96%, #000) -7px -7px / 14px 14px repeat;
+  mask:
+    linear-gradient(#000 0 0) center / calc(100% - 12px) calc(100% - 12px) no-repeat,
+    radial-gradient(circle 4.5px at center, #0000 96%, #000) -7px -7px / 14px 14px repeat;
+  rotate: 3deg;
+}
+.stamp-face {
+  height: 100%;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 1px;
+  background: linear-gradient(170deg, #8a2a22 0%, #6a1814 100%);
+  box-shadow: inset 0 0 0 2px #f7edd2, inset 0 0 0 3px #c9a35a;
+  color: #f7e6c2;
+  text-align: center;
+  line-height: 1.25;
+}
+.stamp-face .star { font-size: 15px; color: #e6c06a; }
+.stamp-face .place { font-size: 12px; font-weight: 700; letter-spacing: .2em; margin-right: -.2em; }
+.stamp-face .name { font-size: 15px; font-weight: 800; }
+.stamp-face .year { font-size: 11px; font-weight: 700; letter-spacing: .12em; color: #e6c06a; margin-top: 2px; }
 .mailbox h2 {
   margin: 0;
-  padding: 0 7.2rem .7rem 0;
-  font-size: 1.4rem;
+  padding: 0 8rem .7rem 0;
+  min-height: 4.2rem;
+  align-content: end;
+  display: grid;
+  font-size: 1.55rem;
   font-weight: 800;
   border-bottom: 1px solid rgba(110, 72, 22, .45);
 }
 .mailbox h2 .deco { font-weight: 400; }
-.topics { display: flex; flex-wrap: wrap; gap: .45rem; border: 0; padding: 0; margin: 0; padding-right: 5.5rem; }
-.topics legend { padding: 0; margin-bottom: .4rem; color: var(--sepia-soft); font-size: .88rem; font-weight: 700; }
-.topics label { border: 1.5px solid var(--sepia); border-radius: 999px; padding: .28rem .85rem; cursor: pointer; background: rgba(255, 251, 236, .55); font-size: .92rem; }
+.topics { display: flex; flex-wrap: wrap; gap: .45rem; border: 0; padding: 0; margin: 0; }
+.topics legend { padding: 0; margin-bottom: .4rem; color: var(--sepia-soft); font-size: .9rem; font-weight: 700; }
+.topics label { border: 1.5px solid var(--sepia); border-radius: 999px; padding: .3rem .9rem; cursor: pointer; background: rgba(255, 251, 236, .55); }
 .topics input { position: absolute; opacity: 0; pointer-events: none; }
 .topics label:has(input:checked) { background: #8e1a1a; border-color: #8e1a1a; color: #f8e6c4; }
 .topics label:has(input:focus-visible) { outline: 3px solid var(--ink); outline-offset: 2px; }
 textarea {
   width: 100%;
-  min-height: 10.5rem;
+  min-height: 12rem;
   border: 0;
   padding: 0 .3rem;
-  font-size: 1.02rem; /* 편지 입력 글씨 2pt 축소 */
-  line-height: 2.1rem;
+  font-size: 1.08rem;
+  line-height: 2.4rem;
   color: var(--sepia);
-  background: repeating-linear-gradient(180deg, transparent 0 calc(2.1rem - 1px), rgba(110, 72, 22, .34) calc(2.1rem - 1px) 2.1rem) local;
+  background: repeating-linear-gradient(180deg, transparent 0 calc(2.4rem - 1px), rgba(110, 72, 22, .34) calc(2.4rem - 1px) 2.4rem) local;
   resize: vertical;
 }
 textarea::placeholder { color: rgba(90, 62, 24, .55); }
 textarea:focus-visible { outline: 2px dashed #8e1a1a; outline-offset: 4px; }
 .send-row { display: flex; flex-wrap: wrap; align-items: center; gap: .7rem; justify-content: space-between; }
-.count { color: var(--sepia-soft); font-size: .88rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-.send { background: #8e1a1a; color: #f8e6c4; border: 1px solid #c9a35a; border-radius: 4px; padding: .5rem 1.5rem; font-size: 1.05rem; font-weight: 700; box-shadow: 0 4px 0 #5e0e0e; }
+.count { color: var(--sepia-soft); font-size: .9rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.send { background: #8e1a1a; color: #f8e6c4; border: 1px solid #c9a35a; border-radius: 4px; padding: .55rem 1.6rem; font-size: 1.15rem; font-weight: 700; box-shadow: 0 4px 0 #5e0e0e; }
 .send:active { translate: 0 2px; box-shadow: 0 2px 0 #5e0e0e; }
 .send:disabled { opacity: .55; cursor: not-allowed; }
 .notice { margin: 0; min-height: 1.6em; color: #2f5d3a; font-weight: 700; }
 .notice.error { color: var(--red-dark); }
-.rule { margin: 0; color: #6b5330; font-size: .88rem; font-weight: 700; }
-.closed-box { text-align: center; padding: 1.4rem .8rem; font-size: 1.4rem; margin: 0; }
+.rule { margin: 0; color: #6b5330; font-size: .9rem; font-weight: 700; }
+.closed-box { text-align: center; padding: 1.4rem .8rem; font-size: 1.5rem; margin: 0; }
 
 /* 우체통과 초록 트리 */
 .postbox-stage { margin: 2.6rem 0 1rem; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; }
@@ -342,7 +290,7 @@ textarea:focus-visible { outline: 2px dashed #8e1a1a; outline-offset: 4px; }
 .postbox-caption {
   white-space: nowrap;
   margin: 6px -160px 0;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   color: var(--ink);
   background: var(--cream);
   padding: .3rem 1.1rem;
@@ -361,10 +309,10 @@ textarea:focus-visible { outline: 2px dashed #8e1a1a; outline-offset: 4px; }
 .wall-section { animation: fadeUp .4s ease; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 .wall-head { display: flex; flex-wrap: wrap; gap: .7rem; align-items: baseline; justify-content: space-between; margin: 1.4rem 0 1rem; }
-.wall-head h2 { margin: 0; font-size: 1.45rem; text-shadow: 0 1px 12px rgba(0, 0, 0, .6); }
+.wall-head h2 { margin: 0; font-size: 1.5rem; text-shadow: 0 1px 12px rgba(0, 0, 0, .6); }
 .wall-head h2 span { color: var(--gold); }
 .tabs { display: flex; flex-wrap: wrap; gap: .35rem; }
-.tab { background: rgba(13, 28, 25, .55); border: 1px solid rgba(255, 248, 234, .55); border-radius: 999px; padding: .2rem .8rem; font-size: .88rem; font-weight: 700; }
+.tab { background: rgba(13, 28, 25, .55); border: 1px solid rgba(255, 248, 234, .55); border-radius: 999px; padding: .2rem .8rem; font-size: .9rem; font-weight: 700; }
 .tab[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--ink); }
 .wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(235px, 1fr)); gap: 22px 18px; padding: 8px 4px; }
 .letter {
@@ -386,61 +334,25 @@ textarea:focus-visible { outline: 2px dashed #8e1a1a; outline-offset: 4px; }
 .letter[data-palette="6"], .stage-card[data-palette="6"] { background: #fff8c4; }
 .letter[data-palette="7"], .stage-card[data-palette="7"] { background: #dff5f3; }
 .letter[data-palette="8"], .stage-card[data-palette="8"] { background: #ffe5d4; }
-.letter .topic { font-size: .8rem; font-weight: 700; color: #5e5648; background: rgba(255, 255, 255, .7); justify-self: start; padding: .05rem .55rem; border-radius: 999px; }
-
-/* 편지 카드 본문 글씨 크기 약 2pt 축소해 깨짐 방지 */
-.letter p {
-  margin: 0;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  font-size: .96rem;
-  line-height: 1.58;
-}
-.letter footer {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: .15rem;
-}
-
-/* ❤️👍 카톡 스타일 공감 반응 버튼 */
-.like {
-  display: inline-flex;
-  align-items: center;
-  gap: .35rem;
-  border: 1.5px solid rgba(226, 62, 42, .28);
-  background: rgba(255, 255, 255, .92);
-  border-radius: 999px;
-  padding: .24rem .82rem;
-  color: var(--ink);
-  font-size: .84rem;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
-  transition: transform .15s ease, background .15s ease, border-color .15s ease;
-}
-.like:hover:not(:disabled) {
-  transform: scale(1.05);
-  border-color: var(--red);
-  background: #ffffff;
-}
-.like[aria-pressed="true"] {
-  background: #fff0f0;
-  border-color: var(--red);
-  color: var(--red-dark);
-}
+.letter .topic { font-size: .85rem; font-weight: 700; color: #5e5648; background: rgba(255, 255, 255, .7); justify-self: start; padding: 0 .55rem; border-radius: 999px; }
+.letter p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 1rem; line-height: 1.6; }
+.letter footer { display: flex; justify-content: space-between; align-items: center; font-size: .85rem; font-weight: 700; color: #5e5648; }
+.like { border: 1.5px solid rgba(43, 38, 32, .22); background: #fff; border-radius: 999px; padding: .25rem .95rem; font-size: 1rem; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; transition: scale .15s ease; }
+.like:not(:disabled):hover { scale: 1.08; }
+.like:disabled { cursor: default; opacity: 1; }
+.like[aria-pressed="true"] { border-color: #e2533f; background: #fff0ee; color: var(--red-dark); }
 .empty { color: var(--soft); padding: 1.3rem .2rem; }
 
 /* 답장 */
-.comments-wrap { border-top: 1px dashed rgba(43, 38, 32, .25); padding-top: .4rem; display: grid; gap: .3rem; font-size: .85rem; }
+.comments-wrap { border-top: 1px dashed rgba(43, 38, 32, .25); padding-top: .4rem; display: grid; gap: .3rem; font-size: .9rem; }
 .comment-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .25rem; }
-.comment-item { background: rgba(255, 255, 255, .65); border-radius: 6px; padding: .18rem .45rem; white-space: pre-wrap; overflow-wrap: anywhere; }
-.reply-toggle { justify-self: start; background: none; border: 0; padding: 0; color: #6d6456; font-size: .78rem; text-decoration: underline; }
+.comment-item { background: rgba(255, 255, 255, .65); border-radius: 6px; padding: .15rem .45rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+.reply-toggle { justify-self: start; background: none; border: 0; padding: 0; color: #6d6456; font-size: .8rem; text-decoration: underline; }
 .reply-form { display: grid; gap: .3rem; }
 .reply-form[hidden] { display: none; }
-.reply-input { width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: .25rem .45rem; font-size: .86rem; color: var(--ink); background: #fff; }
+.reply-input { width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: .25rem .45rem; font-size: .9rem; color: var(--ink); background: #fff; }
 .reply-row { display: flex; justify-content: space-between; align-items: center; gap: .3rem; }
-.reply-btn { background: var(--green); color: #fff; border: 0; border-radius: 6px; padding: .15rem .6rem; font-size: .78rem; flex-shrink: 0; }
+.reply-btn { background: var(--green); color: #fff; border: 0; border-radius: 6px; padding: .15rem .6rem; font-size: .8rem; flex-shrink: 0; }
 
 /* #show 전시 모드 */
 body.show-mode .mailbox,
@@ -451,9 +363,9 @@ body.show-mode .wrap { max-width: 900px; min-height: 100vh; display: flex; flex-
 .stage { display: none; }
 body.show-mode .stage { display: grid; gap: 20px; }
 .stage-card { background: var(--cream); color: var(--ink); border-radius: 8px 8px 28px 8px; padding: clamp(28px, 5vw, 56px); box-shadow: 0 18px 44px rgba(0, 0, 0, .45); display: grid; gap: 20px; }
-.stage-card .topic { font-size: .95rem; color: #6d6456; }
-.stage-card .stage-text { font-size: clamp(1.45rem, 3.6vw, 2.3rem); line-height: 1.48; margin: 0; white-space: pre-wrap; }
-.stage-comments { border-top: 1px dashed rgba(43, 38, 32, .3); padding-top: 14px; display: grid; gap: 8px; font-size: clamp(.95rem, 1.9vw, 1.12rem); }
+.stage-card .topic { font-size: 1rem; color: #6d6456; }
+.stage-card .stage-text { font-size: clamp(1.6rem, 4vw, 2.6rem); line-height: 1.45; margin: 0; white-space: pre-wrap; }
+.stage-comments { border-top: 1px dashed rgba(43, 38, 32, .3); padding-top: 14px; display: grid; gap: 8px; font-size: clamp(1rem, 2vw, 1.2rem); }
 .stage-comments[hidden] { display: none; }
 .stage-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; color: #6d6456; font-size: .9rem; }
 .stage-controls { display: flex; gap: 8px; align-items: center; }
@@ -462,11 +374,12 @@ body.show-mode .stage { display: grid; gap: 20px; }
 @keyframes drift { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
 @media (max-width: 520px) {
   .mailbox { padding: 2.2rem 1.4rem 1.4rem; }
-  .postage-stamp { top: 16px; right: 16px; transform: scale(0.86) rotate(3deg); transform-origin: top right; }
-  .mailbox h2 { padding-right: 5.5rem; }
-  .topics { padding-right: 0; }
+  .mailbox > .stamp { scale: .8; transform-origin: top right; top: 1.3rem; right: 1.2rem; }
+  .mailbox h2 { padding-right: 6rem; }
   .tree.second { display: none; }
   .postbox-caption { white-space: normal; margin: 6px -40px 0; }
+}
+@media (max-width: 520px) {
   .lights { height: 96px; }
   .bulb i { width: calc(var(--s, 30px) * .8); height: calc(var(--s, 30px) * .8); }
 }
@@ -496,24 +409,8 @@ body.show-mode .stage { display: grid; gap: 20px; }
   </header>
 
   <form class="mailbox" id="form">
-    <!-- 우표와 편지 소인 도장 -->
-    <div class="postage-stamp" aria-hidden="true">
-      <div class="stamp-paper">
-        <div class="stamp-inner">
-          <span class="stamp-kr">대한민국우표</span>
-          <span class="stamp-icon">📚</span>
-          <strong class="stamp-title">부산사서교사</strong>
-          <span class="stamp-year">2027</span>
-        </div>
-      </div>
-      <div class="postmark-seal">
-        <div>마음우체국</div>
-        <span>부산사서교사</span>
-        <div>2027.12</div>
-      </div>
-    </div>
-
-    <h2><span class="deco" aria-hidden="true">✉️</span> 편지 쓰기 <span class="deco" aria-hidden="true">🖋️</span></h2>
+    <div class="stamp" aria-hidden="true"><div class="stamp-face"><span class="star">★</span><span class="place">부산</span><span class="name">사서교사</span><span class="year">2027</span></div></div>
+    <h2><span><span class="deco" aria-hidden="true">✉️</span> 편지 쓰기 <span class="deco" aria-hidden="true">🖋️</span></span></h2>
     <fieldset class="topics">
       <legend>어떤 이야기인가요?</legend>
       <label><input type="radio" name="topic" id="topic1" value="1" checked><span>함께 해보고 싶은 일</span></label>
@@ -550,14 +447,14 @@ body.show-mode .stage { display: grid; gap: 20px; }
         <circle class="orn" cx="78" cy="130" r="4.5" fill="#8ec9ff" style="--d:.2s"/>
         <circle class="orn" cx="98" cy="134" r="4" fill="#ffffff" style="--d:1s"/>
       </svg>
-      <button type="button" class="red-postbox" id="redPostbox" aria-expanded="false">
-        <div class="postbox-body">
-          <div class="postbox-slot"></div>
-          <span class="postbox-emblem">마음우체통</span>
-          <span class="postbox-count" id="boxCount">편지함</span>
-        </div>
-        <span class="postbox-caption" id="boxCaption">빨간 우체통을 눌러 먼저 도착한 편지 보기</span>
-      </button>
+    <button type="button" class="red-postbox" id="redPostbox" aria-expanded="false">
+      <div class="postbox-body">
+        <div class="postbox-slot"></div>
+        <span class="postbox-emblem">마음우체통</span>
+        <span class="postbox-count" id="boxCount">편지함</span>
+      </div>
+      <span class="postbox-caption" id="boxCaption">빨간 우체통을 눌러 먼저 도착한 편지 보기</span>
+    </button>
       <svg class="tree second" viewBox="0 0 120 170" aria-hidden="true">
         <rect x="52" y="140" width="16" height="22" rx="2" fill="#7a5236"/>
         <path d="M60 22 L92 70 H28 Z" fill="#2f7d5b"/>
@@ -610,6 +507,7 @@ body.show-mode .stage { display: grid; gap: 20px; }
   </section>
 </div>
 
+
 <script>
 /* ───── 설정 (웹 앱 URL 연결 완료!) ─────
    받는 기간이 끝나면 IS_CLOSED 를 true 로 바꾸거나 CLOSE_AT 에 마감 일시를 적으세요. */
@@ -632,20 +530,22 @@ let filter = 0;
 let wallOpened = false;
 const $ = (id) => document.getElementById(id);
 
-/* ───── 저작권 걱정 없는 잔잔한 배경음악 (Web Audio API) ───── */
+/* ───── 저작권 걱정 없는 잔잔한 배경음악 (Web Audio API) ─────
+   따뜻한 일렉트릭 피아노(Rhodes 풍) 코드 보이싱과 워킹 베이스, 부드러운 멜로디 */
 let audioCtx = null;
 let bgmPlaying = false;
 let bgmTimer = null;
 let jazzStep = 0;
 let userMutedBgm = false;
 
+// 재즈 II-V-I-VI 코드 진행 (Fmaj9 - Em7 - A7b13 - Dm9 - G13 - Cmaj9)
 const JAZZ_PROGRESSION = [
-  { bass: 87.31,  chord: [174.61, 220.00, 261.63, 329.63, 392.00], mel: [523.25, 440.00, 392.00, 329.63] },
-  { bass: 82.41,  chord: [164.81, 196.00, 246.94, 293.66, 349.23], mel: [392.00, 493.88, 440.00, 369.99] },
-  { bass: 110.00, chord: [220.00, 277.18, 329.63, 392.00, 440.00], mel: [554.37, 523.25, 440.00, 392.00] },
-  { bass: 73.42,  chord: [146.83, 174.61, 220.00, 261.63, 329.63], mel: [440.00, 392.00, 349.23, 293.66] },
-  { bass: 98.00,  chord: [196.00, 246.94, 293.66, 349.23, 440.00], mel: [493.88, 440.00, 392.00, 329.63] },
-  { bass: 65.41,  chord: [130.81, 164.81, 196.00, 246.94, 293.66], mel: [392.00, 329.63, 293.66, 246.94] }
+  { bass: 87.31,  chord: [174.61, 220.00, 261.63, 329.63, 392.00], mel: [523.25, 440.00, 392.00, 329.63] }, // Fmaj9
+  { bass: 82.41,  chord: [164.81, 196.00, 246.94, 293.66, 349.23], mel: [392.00, 493.88, 440.00, 369.99] }, // Em7 -> A7
+  { bass: 110.00, chord: [220.00, 277.18, 329.63, 392.00, 440.00], mel: [554.37, 523.25, 440.00, 392.00] }, // A7(b13)
+  { bass: 73.42,  chord: [146.83, 174.61, 220.00, 261.63, 329.63], mel: [440.00, 392.00, 349.23, 293.66] }, // Dm9
+  { bass: 98.00,  chord: [196.00, 246.94, 293.66, 349.23, 440.00], mel: [493.88, 440.00, 392.00, 329.63] }, // G13
+  { bass: 65.41,  chord: [130.81, 164.81, 196.00, 246.94, 293.66], mel: [392.00, 329.63, 293.66, 246.94] }  // Cmaj9
 ];
 
 function playJazzTone(freq, duration, vol, delaySec = 0) {
@@ -664,6 +564,7 @@ function playJazzTone(freq, duration, vol, delaySec = 0) {
   const warmGain = audioCtx.createGain();
   warmGain.gain.setValueAtTime(vol * 0.25, start);
 
+  // 부드러운 로우패스 필터로 포근한 재즈 피아노 질감 생성
   filterNode.type = "lowpass";
   filterNode.frequency.setValueAtTime(950, start);
 
@@ -694,12 +595,15 @@ function startJazzLoop() {
   const barTick = () => {
     if (!bgmPlaying) return;
     const item = JAZZ_PROGRESSION[jazzStep % JAZZ_PROGRESSION.length];
+    // 1박: 따뜻한 어쿠스틱 베이스 + 부드럽게 굴러가는 재즈 코드(아르페지오 스트럼)
     playJazzTone(item.bass, 2.8, 0.05, 0);
     item.chord.forEach((f, idx) => {
       playJazzTone(f, 2.4, 0.024, idx * 0.045);
     });
+    // 스윙 리듬의 잔잔한 오른손 재즈 선율
     playJazzTone(item.mel[0], 1.1, 0.03, 0.55);
     playJazzTone(item.mel[1], 0.9, 0.026, 1.25);
+    // 3박: 워킹 베이스 5도음과 코드 살짝 짚어주기
     playJazzTone(item.bass * 1.5, 1.4, 0.038, 1.6);
     playJazzTone(item.mel[2], 1.2, 0.028, 2.15);
     if (jazzStep % 2 === 0) {
@@ -716,6 +620,9 @@ function stopJazzLoop() {
   clearInterval(bgmTimer);
 }
 
+/* 배경음악은 켜짐이 기본입니다.
+   브라우저는 방문자가 화면을 한 번 누르거나 키를 누르기 전에는 소리를 막으므로,
+   첫 동작 때 자동으로 시작합니다. 버튼으로 언제든 끌 수 있습니다. */
 let wantBgm = true;
 function syncBgmButton() {
   $("bgmBtn").setAttribute("aria-pressed", String(wantBgm));
@@ -808,6 +715,7 @@ function render() {
     const card = document.createElement("article");
     card.className = "letter";
     card.dataset.topic = l.topic;
+    // 6가지 파스텔 색상이 골고루 어우러지도록 배정
     card.dataset.palette = String((i % 8) + 1);
     card.style.setProperty("--tilt", ((i * 37) % 5 - 2) * 0.6 + "deg");
     card.style.setProperty("--delay", -((i * 13) % 7) + "s");
@@ -825,10 +733,11 @@ function render() {
     like.className = "like";
     const isLiked = liked.has(l.id);
     like.setAttribute("aria-pressed", String(isLiked));
-    like.textContent = "❤️ 👍 공감 " + (Number(l.likes) || 0);
+    like.textContent = (isLiked ? "❤️ " : "🤍 ") + (Number(l.likes) || 0);
+    like.setAttribute("aria-label", "공감 " + (Number(l.likes) || 0) + "개");
     like.disabled = isLiked;
     like.addEventListener("click", () => sendLike(l));
-    foot.appendChild(like);
+    foot.append(like);
 
     const cWrap = document.createElement("div");
     cWrap.className = "comments-wrap";
@@ -977,7 +886,7 @@ $("form").addEventListener("submit", async (e) => {
     if (API_URL) {
       const out = await post({ action: "write", topic, text });
       if (!out.ok) throw new Error(out.error || "저장 실패");
-      notice.textContent = "편지가 빨간 우체통에 쏙 들어갔습니다! 확인 뒤 우체통 안에 실립니다.";
+      notice.textContent = "편지가 빨간 우체통에 쏙 들어갔습니다! 인수위원회 확인 뒤 우체통 안에 실립니다.";
     } else {
       letters.unshift({ id: "local" + Date.now(), topic, text, likes: 0, comments: [] });
       render();
@@ -1017,7 +926,7 @@ function renderStage() {
   card.dataset.palette = String((stageIdx % 8) + 1);
   $("stageTopic").textContent = TOPICS[l.topic] || "";
   $("stageText").textContent = l.text;
-  $("stageLikes").textContent = "❤️ 👍 공감 " + (Number(l.likes) || 0);
+  $("stageLikes").textContent = "공감 " + (Number(l.likes) || 0);
   $("stageIndex").textContent = (stageIdx + 1) + " / " + letters.length;
 
   const comments = l.comments || [];
@@ -1067,15 +976,15 @@ syncShowMode();
 
 /* 화면 위 전구 줄 만들기 */
 (function makeLights() {
-  const sizes = [22, 34, 26, 44, 30, 38, 24];
-  const threads = [10, 34, 18, 6, 44, 24, 52];
+  const sizes = [16, 26, 14, 34, 20, 30, 15, 40, 22, 18, 28];
+  const threads = [8, 46, 22, 4, 62, 30, 14, 54, 36, 70, 18];
   const box = $("lights");
-  const n = Math.max(6, Math.min(15, Math.floor(window.innerWidth / 86)));
+  const n = Math.max(14, Math.min(40, Math.floor(window.innerWidth / 34)));
   for (let i = 0; i < n; i++) {
     const b = document.createElement("span");
     b.className = "bulb";
     b.style.setProperty("--s", sizes[i % sizes.length] + "px");
-    b.style.setProperty("--l", threads[(i * 3) % threads.length] + "px");
+    b.style.setProperty("--l", threads[(i * 4) % threads.length] + "px");
     b.style.setProperty("--t", (5 + (i * 1.3) % 3).toFixed(1) + "s");
     b.style.setProperty("--d", (-(i * 0.9) % 5).toFixed(2) + "s");
     b.appendChild(document.createElement("i"));
@@ -1083,7 +992,8 @@ syncShowMode();
   }
 })();
 
-/* ───── 뒤에 깔리는 흐릿한 트리 조명 ───── */
+/* ───── 뒤에 깔리는 흐릿한 트리 조명 ─────
+   화면 가운데에 큰 트리 모양으로 빛망울을 뿌리고 천천히 깜빡이게 합니다. */
 (function bokeh() {
   const cv = $("bokeh");
   const ctx = cv.getContext("2d");
@@ -1094,6 +1004,7 @@ syncShowMode();
     W = cv.width = window.innerWidth;
     H = cv.height = window.innerHeight;
     const small = W < 600 ? 0.7 : 1;
+    /* 화면을 칸으로 나누고 칸마다 하나씩 놓아 한쪽으로 몰리지 않게 한다 */
     const cols = Math.max(3, Math.round(W / 230));
     const rows = Math.max(4, Math.round(H / 200));
     dots = [];
@@ -1117,6 +1028,7 @@ syncShowMode();
     for (const d of dots) {
       const wave = 0.5 + 0.5 * Math.sin(t * d.s + d.p);
       const a = 0.12 + 0.4 * wave;
+      /* 촛불처럼 위아래로 길쭉한 불빛. 깜빡일 때 살짝 길어졌다 줄어든다 */
       const tall = 1.45 + 0.18 * Math.sin(t * d.s * 1.7 + d.p);
       ctx.save();
       ctx.translate(d.x, d.y);
@@ -1141,6 +1053,17 @@ syncShowMode();
   build();
   requestAnimationFrame(draw);
 })();
+
+/* 편지를 쓰는 동안 글자가 다른 서체로 섞여 보이지 않도록,
+   자주 쓰는 한글 2,350자의 서체 조각을 화면이 뜬 뒤에 미리 받아 둔다. */
+window.addEventListener("load", () => {
+  const common = "가각간갇갈갉갊감갑값갓갔강갖갗같갚갛개객갠갤갬갭갯갰갱갸갹갼걀걋걍걔걘걜거걱건걷걸걺검겁것겄겅겆겉겊겋게겐겔겜겝겟겠겡겨격겪견겯결겸겹겻겼경곁계곈곌곕곗고곡곤곧골곪곬곯곰곱곳공곶과곽관괄괆괌괍괏광괘괜괠괩괬괭괴괵괸괼굄굅굇굉교굔굘굡굣구국군굳굴굵굶굻굼굽굿궁궂궈궉권궐궜궝궤궷귀귁귄귈귐귑귓규균귤그극근귿글긁금급긋긍긔기긱긴긷길긺김깁깃깅깆깊까깍깎깐깔깖깜깝깟깠깡깥깨깩깬깰깸깹깻깼깽꺄꺅꺌꺼꺽꺾껀껄껌껍껏껐껑께껙껜껨껫껭껴껸껼꼇꼈꼍꼐꼬꼭꼰꼲꼴꼼꼽꼿꽁꽂꽃꽈꽉꽐꽜꽝꽤꽥꽹꾀꾄꾈꾐꾑꾕꾜꾸꾹꾼꿀꿇꿈꿉꿋꿍꿎꿔꿜꿨꿩꿰꿱꿴꿸뀀뀁뀄뀌뀐뀔뀜뀝뀨끄끅끈끊끌끎끓끔끕끗끙끝끼끽낀낄낌낍낏낑나낙낚난낟날낡낢남납낫났낭낮낯낱낳내낵낸낼냄냅냇냈냉냐냑냔냘냠냥너넉넋넌널넒넓넘넙넛넜넝넣네넥넨넬넴넵넷넸넹녀녁년녈념녑녔녕녘녜녠노녹논놀놂놈놉놋농높놓놔놘놜놨뇌뇐뇔뇜뇝뇟뇨뇩뇬뇰뇹뇻뇽누눅눈눋눌눔눕눗눙눠눴눼뉘뉜뉠뉨뉩뉴뉵뉼늄늅늉느늑는늘늙늚늠늡늣능늦늪늬늰늴니닉닌닐닒님닙닛닝닢다닥닦단닫달닭닮닯닳담답닷닸당닺닻닿대댁댄댈댐댑댓댔댕댜더덕덖던덛덜덞덟덤덥덧덩덫덮데덱덴델뎀뎁뎃뎄뎅뎌뎐뎔뎠뎡뎨뎬도독돈돋돌돎돐돔돕돗동돛돝돠돤돨돼됐되된될됨됩됫됴두둑둔둘둠둡둣둥둬뒀뒈뒝뒤뒨뒬뒵뒷뒹듀듄듈듐듕드득든듣들듦듬듭듯등듸디딕딘딛딜딤딥딧딨딩딪따딱딴딸땀땁땃땄땅땋때땍땐땔땜땝땟땠땡떠떡떤떨떪떫떰떱떳떴떵떻떼떽뗀뗄뗌뗍뗏뗐뗑뗘뗬또똑똔똘똥똬똴뙈뙤뙨뚜뚝뚠뚤뚫뚬뚱뛔뛰뛴뛸뜀뜁뜅뜨뜩뜬뜯뜰뜸뜹뜻띄띈띌띔띕띠띤띨띰띱띳띵라락란랄람랍랏랐랑랒랖랗래랙랜랠램랩랫랬랭랴략랸럇량러럭런럴럼럽럿렀렁렇레렉렌렐렘렙렛렝려력련렬렴렵렷렸령례롄롑롓로록론롤롬롭롯롱롸롼뢍뢨뢰뢴뢸룀룁룃룅료룐룔룝룟룡루룩룬룰룸룹룻룽뤄뤘뤠뤼뤽륀륄륌륏륑류륙륜률륨륩륫륭르륵른를름릅릇릉릊릍릎리릭린릴림립릿링마막만많맏말맑맒맘맙맛망맞맡맣매맥맨맬맴맵맷맸맹맺먀먁먈먕머먹먼멀멂멈멉멋멍멎멓메멕멘멜멤멥멧멨멩며멱면멸몃몄명몇몌모목몫몬몰몲몸몹못몽뫄뫈뫘뫙뫼묀묄묍묏묑묘묜묠묩묫무묵묶문묻물묽묾뭄뭅뭇뭉뭍뭏뭐뭔뭘뭡뭣뭬뮈뮌뮐뮤뮨뮬뮴뮷므믄믈믐믓미믹민믿밀밂밈밉밋밌밍및밑바박밖밗반받발밝밞밟밤밥밧방밭배백밴밸뱀뱁뱃뱄뱅뱉뱌뱍뱐뱝버벅번벋벌벎범법벗벙벚베벡벤벧벨벰벱벳벴벵벼벽변별볍볏볐병볕볘볜보복볶본볼봄봅봇봉봐봔봤봬뵀뵈뵉뵌뵐뵘뵙뵤뵨부북분붇불붉붊붐붑붓붕붙붚붜붤붰붸뷔뷕뷘뷜뷩뷰뷴뷸븀븃븅브븍븐블븜븝븟비빅빈빌빎빔빕빗빙빚빛빠빡빤빨빪빰빱빳빴빵빻빼빽뺀뺄뺌뺍뺏뺐뺑뺘뺙뺨뻐뻑뻔뻗뻘뻠뻣뻤뻥뻬뼁뼈뼉뼘뼙뼛뼜뼝뽀뽁뽄뽈뽐뽑뽕뾔뾰뿅뿌뿍뿐뿔뿜뿟뿡쀼쁑쁘쁜쁠쁨쁩삐삑삔삘삠삡삣삥사삭삯산삳살삵삶삼삽삿샀상샅새색샌샐샘샙샛샜생샤샥샨샬샴샵샷샹섀섄섈섐섕서석섞섟선섣설섦섧섬섭섯섰성섶세섹센셀셈셉셋셌셍셔셕션셜셤셥셧셨셩셰셴셸솅소속솎손솔솖솜솝솟송솥솨솩솬솰솽쇄쇈쇌쇔쇗쇘쇠쇤쇨쇰쇱쇳쇼쇽숀숄숌숍숏숑수숙순숟술숨숩숫숭숯숱숲숴쉈쉐쉑쉔쉘쉠쉥쉬쉭쉰쉴쉼쉽쉿슁슈슉슐슘슛슝스슥슨슬슭슴습슷승시식신싣실싫심십싯싱싶싸싹싻싼쌀쌈쌉쌌쌍쌓쌔쌕쌘쌜쌤쌥쌨쌩썅써썩썬썰썲썸썹썼썽쎄쎈쎌쏀쏘쏙쏜쏟쏠쏢쏨쏩쏭쏴쏵쏸쐈쐐쐤쐬쐰쐴쐼쐽쑈쑤쑥쑨쑬쑴쑵쑹쒀쒔쒜쒸쒼쓩쓰쓱쓴쓸쓺쓿씀씁씌씐씔씜씨씩씬씰씸씹씻씽아악안앉않알앍앎앓암압앗았앙앝앞애액앤앨앰앱앳앴앵야약얀얄얇얌얍얏양얕얗얘얜얠얩어억언얹얻얼얽얾엄업없엇었엉엊엌엎에엑엔엘엠엡엣엥여역엮연열엶엷염엽엾엿였영옅옆옇예옌옐옘옙옛옜오옥온올옭옮옰옳옴옵옷옹옻와왁완왈왐왑왓왔왕왜왝왠왬왯왱외왹왼욀욈욉욋욍요욕욘욜욤욥욧용우욱운울욹욺움웁웃웅워웍원월웜웝웠웡웨웩웬웰웸웹웽위윅윈윌윔윕윗윙유육윤율윰윱윳융윷으윽은을읊음읍읏응읒읓읔읕읖읗의읜읠읨읫이익인일읽읾잃임입잇있잉잊잎자작잔잖잗잘잚잠잡잣잤장잦재잭잰잴잼잽잿쟀쟁쟈쟉쟌쟎쟐쟘쟝쟤쟨쟬저적전절젊점접젓정젖제젝젠젤젬젭젯젱져젼졀졈졉졌졍졔조족존졸졺좀좁좃종좆좇좋좌좍좔좝좟좡좨좼좽죄죈죌죔죕죗죙죠죡죤죵주죽준줄줅줆줌줍줏중줘줬줴쥐쥑쥔쥘쥠쥡쥣쥬쥰쥴쥼즈즉즌즐즘즙즛증지직진짇질짊짐집짓징짖짙짚짜짝짠짢짤짧짬짭짯짰짱째짹짼쨀쨈쨉쨋쨌쨍쨔쨘쨩쩌쩍쩐쩔쩜쩝쩟쩠쩡쩨쩽쪄쪘쪼쪽쫀쫄쫌쫍쫏쫑쫓쫘쫙쫠쫬쫴쬈쬐쬔쬘쬠쬡쭁쭈쭉쭌쭐쭘쭙쭝쭤쭸쭹쮜쮸쯔쯤쯧쯩찌찍찐찔찜찝찡찢찧차착찬찮찰참찹찻찼창찾채책챈챌챔챕챗챘챙챠챤챦챨챰챵처척천철첨첩첫첬청체첵첸첼쳄쳅쳇쳉쳐쳔쳤쳬쳰촁초촉촌촐촘촙촛총촤촨촬촹최쵠쵤쵬쵭쵯쵱쵸춈추축춘출춤춥춧충춰췄췌췐취췬췰췸췹췻췽츄츈츌츔츙츠측츤츨츰츱츳층치칙친칟칠칡침칩칫칭카칵칸칼캄캅캇캉캐캑캔캘캠캡캣캤캥캬캭컁커컥컨컫컬컴컵컷컸컹케켁켄켈켐켑켓켕켜켠켤켬켭켯켰켱켸코콕콘콜콤콥콧콩콰콱콴콸쾀쾅쾌쾡쾨쾰쿄쿠쿡쿤쿨쿰쿱쿳쿵쿼퀀퀄퀑퀘퀭퀴퀵퀸퀼큄큅큇큉큐큔큘큠크큭큰클큼큽킁키킥킨킬킴킵킷킹타탁탄탈탉탐탑탓탔탕태택탠탤탬탭탯탰탱탸턍터턱턴털턺텀텁텃텄텅테텍텐텔템텝텟텡텨텬텼톄톈토톡톤톨톰톱톳통톺톼퇀퇘퇴퇸툇툉툐투툭툰툴툼툽툿퉁퉈퉜퉤튀튁튄튈튐튑튕튜튠튤튬튱트특튼튿틀틂틈틉틋틔틘틜틤틥티틱틴틸팀팁팃팅파팍팎판팔팖팜팝팟팠팡팥패팩팬팰팸팹팻팼팽퍄퍅퍼퍽펀펄펌펍펏펐펑페펙펜펠펨펩펫펭펴편펼폄폅폈평폐폘폡폣포폭폰폴폼폽폿퐁퐈퐝푀푄표푠푤푭푯푸푹푼푿풀풂품풉풋풍풔풩퓌퓐퓔퓜퓟퓨퓬퓰퓸퓻퓽프픈플픔픕픗피픽핀필핌핍핏핑하학한할핥함합핫항해핵핸핼햄햅햇했행햐향허헉헌헐헒험헙헛헝헤헥헨헬헴헵헷헹혀혁현혈혐협혓혔형혜혠혤혭호혹혼홀홅홈홉홋홍홑화확환활홧황홰홱홴횃횅회획횐횔횝횟횡효횬횰횹횻후훅훈훌훑훔훗훙훠훤훨훰훵훼훽휀휄휑휘휙휜휠휨휩휫휭휴휵휸휼흄흇흉흐흑흔흖흗흘흙흠흡흣흥흩희흰흴흼흽힁히힉힌힐힘힙힛힝";
+  if (document.fonts && document.fonts.load) {
+    ["400", "700"].forEach((w) => {
+      document.fonts.load(w + ' 16px "Nanum Gothic"', common).catch(() => {});
+    });
+  }
+});
 
 load();
 </script>
