@@ -3,56 +3,109 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>마음의 소리 우체통</title>
+<title>2027 마음의 소리</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* 레이아웃: 위에는 우체통(쓰기), 아래에는 편지가 천천히 떠 있는 벽 */
+  /* 기본 색상 변수 유지 + 다양한 파스텔 편지지 색상 추가 */
   --paper: #eef3f1;
   --ink: #1f2d2b;
   --muted: #5b6b68;
   --post: #c8372d;      /* 우체통 빨강: 보내기 버튼, 강조 */
+  --post-dark: #9e241b;
   --leaf: #2f6f62;      /* 공감, 선택된 탭 */
   --card: #ffffff;
   --line: #d5dedb;
-  --tint-1: #fff6e0;    /* 함께 해보고 싶은 일 */
-  --tint-2: #e6f1ff;    /* 지켜졌으면 하는 것 */
-  --tint-3: #eaf6ea;    /* 혼자 고민하는 것 */
+  --tint-1: #fff6e0;    /* 따뜻한 크림옐로우 */
+  --tint-2: #e6f1ff;    /* 맑은 베이비블루 */
+  --tint-3: #eaf6ea;    /* 산뜻한 민트그린 */
+  --tint-4: #ffecee;    /* 은은한 피치핑크 */
+  --tint-5: #f2ecff;    /* 부드러운 라벤더 */
+  --tint-6: #fff0e5;    /* 포근한 살구빛 */
   --display: "Gowun Batang", "Nanum Myeongjo", serif;
   --body: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 }
 * { box-sizing: border-box; }
-html, body { margin: 0; }
+html, body { margin: 0; scroll-behavior: smooth; }
 body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--body);
   font-size: 16px;
-  line-height: 1.65;
+  line-height: 1.7;
 }
-.wrap { max-width: 1040px; margin: 0 auto; padding: 28px 16px 64px; }
-header { display: grid; gap: 8px; margin-bottom: 24px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 32px 16px 80px; }
+
+/* 헤더 & 인사말 */
+header { display: grid; gap: 12px; margin-bottom: 28px; }
+.head-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.title-group { display: grid; gap: 4px; }
 h1 {
   font-family: var(--display);
-  font-size: clamp(28px, 5vw, 40px);
+  font-size: clamp(30px, 5vw, 42px);
   line-height: 1.25;
   margin: 0;
-  text-wrap: balance;
 }
 h1 span { color: var(--post); }
-.lead { max-width: 40em; margin: 0; color: var(--muted); }
+.subtitle {
+  font-family: var(--display);
+  font-size: clamp(17px, 2.5vw, 21px);
+  color: var(--leaf);
+  margin: 0;
+  font-weight: 700;
+}
+.greeting {
+  background: rgba(255, 255, 255, .65);
+  border-left: 4px solid var(--post);
+  border-radius: 4px 12px 12px 4px;
+  padding: 16px 20px;
+  margin-top: 6px;
+  color: var(--ink);
+  max-width: 46em;
+  display: grid;
+  gap: 6px;
+}
+.greeting p { margin: 0; }
 
-/* 우체통(쓰기 영역) */
+/* 재즈 배경음악 버튼 */
+.bgm-btn {
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 7px 15px;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all .2s ease;
+  box-shadow: 0 2px 6px rgba(31, 45, 43, .05);
+}
+.bgm-btn[aria-pressed="true"] {
+  border-color: var(--leaf);
+  background: #e3efec;
+  color: var(--leaf);
+  font-weight: 700;
+}
+
+/* 편지 쓰기 영역 */
 .mailbox {
   background: var(--card);
   border: 1px solid var(--line);
   border-top: 10px solid var(--post);
   border-radius: 14px;
-  padding: 20px;
+  padding: 22px;
   display: grid;
   gap: 14px;
+  box-shadow: 0 6px 20px rgba(31, 45, 43, .06);
 }
 .mailbox h2 { font-family: var(--display); font-size: 20px; margin: 0; }
 .topics { display: flex; flex-wrap: wrap; gap: 8px; border: 0; padding: 0; margin: 0; }
@@ -92,8 +145,11 @@ button { font: inherit; cursor: pointer; }
   font-weight: 700;
 }
 .send:disabled { opacity: .5; cursor: not-allowed; }
-.send:focus-visible, .tab:focus-visible, .like:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
-.notice { margin: 0; min-height: 1.6em; color: var(--leaf); }
+.send:focus-visible, .tab:focus-visible, .like:focus-visible, .bgm-btn:focus-visible, .red-postbox:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+.notice { margin: 0; min-height: 1.6em; color: var(--leaf); font-weight: 700; }
 .notice.error { color: var(--post); }
 .rule { margin: 0; color: var(--muted); font-size: 14px; }
 .closed-box {
@@ -105,8 +161,132 @@ button { font: inherit; cursor: pointer; }
   margin: 0;
 }
 
-/* 편지 벽 */
-.wall-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; justify-content: space-between; margin: 36px 0 14px; }
+/* 📮 빨간 우체통 인터랙티브 영역 */
+.postbox-stage {
+  margin: 40px 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+.flying-letter {
+  width: 68px;
+  height: 46px;
+  background: #fffdf7;
+  border: 2px solid var(--post);
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  box-shadow: 0 6px 14px rgba(0,0,0,.15);
+  margin-bottom: -14px;
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+}
+.flying-letter.drop {
+  animation: dropIntoBox 1.05s cubic-bezier(.4, 0, .2, 1) forwards;
+}
+@keyframes dropIntoBox {
+  0% { opacity: 1; transform: translateY(-55px) scale(1.1) rotate(-8deg); }
+  60% { opacity: 1; transform: translateY(34px) scale(0.85) rotate(4deg); }
+  100% { opacity: 0; transform: translateY(58px) scale(0.3); }
+}
+
+.red-postbox {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transition: transform .25s ease;
+}
+.red-postbox:hover { transform: translateY(-4px); }
+.red-postbox.shake { animation: boxBounce .6s ease; }
+@keyframes boxBounce {
+  0%, 100% { transform: scale(1); }
+  35% { transform: scale(1.06, 0.94); }
+  70% { transform: scale(0.97, 1.04); }
+}
+.postbox-body {
+  width: 156px;
+  height: 196px;
+  background: linear-gradient(145deg, #df4237 0%, var(--post) 60%, var(--post-dark) 100%);
+  border-radius: 78px 78px 18px 18px;
+  position: relative;
+  box-shadow: 0 14px 28px rgba(200, 55, 45, .28), inset 0 4px 10px rgba(255,255,255,.28);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 38px;
+  color: #fff;
+}
+.postbox-body::after {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  width: 176px;
+  height: 14px;
+  background: var(--post-dark);
+  border-radius: 999px;
+}
+.postbox-slot {
+  width: 92px;
+  height: 14px;
+  background: #2b0907;
+  border-radius: 999px;
+  border: 3px solid #f7d6d2;
+  box-shadow: inset 0 3px 5px rgba(0,0,0,.6);
+  transition: height .25s ease;
+}
+.red-postbox[aria-expanded="true"] .postbox-slot {
+  height: 20px;
+  background: #fff6e0;
+}
+.postbox-emblem {
+  margin-top: 22px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 1px;
+  padding: 4px 14px;
+  border: 1.5px solid rgba(255,255,255,.75);
+  border-radius: 999px;
+}
+.postbox-count {
+  margin-top: 10px;
+  font-size: 13px;
+  background: rgba(0,0,0,.22);
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+.postbox-caption {
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--post);
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 8px 18px;
+  border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(31, 45, 43, .08);
+  margin-top: 6px;
+}
+
+/* 편지 벽 (우체통 클릭 시 열림) */
+.wall-section[hidden] { display: none !important; }
+.wall-section {
+  animation: fadeUp .4s ease;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.wall-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; justify-content: space-between; margin: 24px 0 16px; }
 .wall-head h2 { font-family: var(--display); font-size: 22px; margin: 0; }
 .tabs { display: flex; flex-wrap: wrap; gap: 6px; }
 .tab {
@@ -117,10 +297,12 @@ button { font: inherit; cursor: pointer; }
   color: var(--ink);
 }
 .tab[aria-pressed="true"] { background: var(--leaf); border-color: var(--leaf); color: #fff; }
-.wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 22px 18px; padding: 8px 4px; }
+.wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(235px, 1fr)); gap: 22px 18px; padding: 8px 4px; }
+
+/* 편지 카드 - 6가지 파스텔 배경색이 어우러지도록 설정 */
 .letter {
   background: var(--tint-1);
-  border-radius: 6px 6px 14px 6px;
+  border-radius: 8px 8px 16px 8px;
   padding: 16px 16px 12px;
   box-shadow: 0 6px 16px rgba(31, 45, 43, .10);
   display: grid;
@@ -130,14 +312,26 @@ button { font: inherit; cursor: pointer; }
   animation: drift 7s ease-in-out infinite;
   animation-delay: var(--delay, 0s);
 }
-.letter[data-topic="2"] { background: var(--tint-2); }
-.letter[data-topic="3"] { background: var(--tint-3); }
-.letter .topic { font-size: 13px; color: var(--muted); }
+.letter[data-palette="1"] { background: var(--tint-1); }
+.letter[data-palette="2"] { background: var(--tint-2); }
+.letter[data-palette="3"] { background: var(--tint-3); }
+.letter[data-palette="4"] { background: var(--tint-4); }
+.letter[data-palette="5"] { background: var(--tint-5); }
+.letter[data-palette="6"] { background: var(--tint-6); }
+
+.letter .topic {
+  font-size: 12.5px;
+  color: var(--muted);
+  background: rgba(255,255,255,.65);
+  justify-self: start;
+  padding: 2px 9px;
+  border-radius: 999px;
+}
 .letter p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--display); }
 .letter footer { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--muted); }
 .like {
   border: 1px solid transparent;
-  background: rgba(255, 255, 255, .7);
+  background: rgba(255, 255, 255, .75);
   border-radius: 999px;
   padding: 4px 10px;
   color: var(--ink);
@@ -145,7 +339,7 @@ button { font: inherit; cursor: pointer; }
 }
 .like[aria-pressed="true"] { border-color: var(--leaf); color: var(--leaf); font-weight: 700; }
 .empty { color: var(--muted); padding: 24px 4px; }
-.demo-flag { display: inline-block; background: #fff3cd; border: 1px solid #e6cf7a; border-radius: 8px; padding: 6px 10px; font-size: 14px; }
+.demo-flag { display: inline-block; background: #fff3cd; border: 1px solid #e6cf7a; border-radius: 8px; padding: 6px 10px; font-size: 14px; margin: 0; }
 
 /* 댓글(답장) */
 .comments-wrap {
@@ -195,9 +389,9 @@ button { font: inherit; cursor: pointer; }
 
 /* #show 전시 모드 (12월 전체모임 스크린용) */
 body.show-mode .mailbox,
-body.show-mode .wall-head,
-body.show-mode .wall,
-body.show-mode .lead,
+body.show-mode .postbox-stage,
+body.show-mode .wall-section,
+body.show-mode .greeting,
 body.show-mode #demoFlag { display: none !important; }
 body.show-mode .wrap {
   max-width: 900px;
@@ -217,8 +411,12 @@ body.show-mode .stage { display: grid; gap: 20px; }
   display: grid;
   gap: 20px;
 }
-.stage-card[data-topic="2"] { background: var(--tint-2); }
-.stage-card[data-topic="3"] { background: var(--tint-3); }
+.stage-card[data-palette="1"] { background: var(--tint-1); }
+.stage-card[data-palette="2"] { background: var(--tint-2); }
+.stage-card[data-palette="3"] { background: var(--tint-3); }
+.stage-card[data-palette="4"] { background: var(--tint-4); }
+.stage-card[data-palette="5"] { background: var(--tint-5); }
+.stage-card[data-palette="6"] { background: var(--tint-6); }
 .stage-card .topic { font-size: 18px; color: var(--muted); }
 .stage-card .stage-text {
   font-family: var(--display);
@@ -265,9 +463,20 @@ body.show-mode .stage { display: grid; gap: 20px; }
 <body>
 <div class="wrap">
   <header>
-    <h1>마음의 소리 <span>우체통</span></h1>
-    <p class="lead">2027년 우리 사서교사 모임이 어떤 모습이면 좋을까요? 크든 작든 떠오르는 것을 한 장 써서 넣어 주세요. 이름은 남지 않습니다.</p>
-    <p id="demoFlag" class="demo-flag" hidden>연습 화면입니다. 지금 쓰는 편지는 저장되지 않습니다.</p>
+    <div class="head-top">
+      <div class="title-group">
+        <h1>2027 <span>마음의 소리</span></h1>
+        <p class="subtitle">당신의 목소리를 기다립니다</p>
+      </div>
+      <button type="button" class="bgm-btn" id="bgmBtn" aria-pressed="false">🎷 재즈 음악 켜기</button>
+    </div>
+    <div class="greeting">
+      <p>안녕하세요 선생님, 반갑습니다.</p>
+      <p>선생님의 이야기들에 먼저 귀기울이고 그 이야기를 모아 방향성을 정하려 합니다.</p>
+      <p>거창한 제안이 아니어도 괜찮습니다. 해보고 싶었던 일, 지켜졌으면 하는 약속, 혼자 안고 있던 고민을 들려주세요.</p>
+      <p>작은 목소리도 놓치지 않고 듣겠습니다. 2027년은 우리가 함께 만들어 가요.</p>
+    </div>
+    <p id="demoFlag" class="demo-flag" hidden>연습 화면입니다. API_URL을 연결하면 실제 시트에 저장됩니다.</p>
   </header>
 
   <form class="mailbox" id="form">
@@ -278,7 +487,7 @@ body.show-mode .stage { display: grid; gap: 20px; }
       <label><input type="radio" name="topic" id="topic2" value="2"><span>이것만은 지켜졌으면</span></label>
       <label><input type="radio" name="topic" id="topic3" value="3"><span>요즘 혼자 하는 고민</span></label>
     </fieldset>
-    <label for="text" class="rule">편지 내용 (300자까지)</label>
+    <label for="text" class="rule">편지 내용 (300자까지 · 이름은 남지 않습니다)</label>
     <textarea id="text" maxlength="300" placeholder="예: 가까운 학교 선생님들과 한 학기에 한 번 밥 먹는 자리가 있으면 좋겠어요."></textarea>
     <div class="send-row">
       <span class="count" id="count">0 / 300</span>
@@ -288,17 +497,34 @@ body.show-mode .stage { display: grid; gap: 20px; }
     <p class="rule">특정 선생님을 지목하는 글은 싣지 않습니다. 그 밖의 의견은 인수위원회가 확인한 뒤 모두 싣습니다.</p>
   </form>
 
-  <div class="wall-head">
-    <h2>도착한 편지 <span id="total"></span></h2>
-    <div class="tabs" id="tabs">
-      <button type="button" class="tab" data-filter="0" aria-pressed="true">전체</button>
-      <button type="button" class="tab" data-filter="1" aria-pressed="false">함께 해보고 싶은 일</button>
-      <button type="button" class="tab" data-filter="2" aria-pressed="false">지켜졌으면</button>
-      <button type="button" class="tab" data-filter="3" aria-pressed="false">혼자 하는 고민</button>
-    </div>
+  <!-- 📮 빨간 우체통 영역 -->
+  <div class="postbox-stage" id="postboxStage">
+    <div class="flying-letter" id="flyingLetter" aria-hidden="true">✉️</div>
+    <button type="button" class="red-postbox" id="redPostbox" aria-expanded="false">
+      <div class="postbox-body">
+        <div class="postbox-slot"></div>
+        <span class="postbox-emblem">마음우체통</span>
+        <span class="postbox-count" id="boxCount">편지함</span>
+      </div>
+      <span class="postbox-caption" id="boxCaption">📮 빨간 우체통을 눌러 먼저 도착한 편지 보기</span>
+    </button>
   </div>
-  <div class="wall" id="wall" aria-live="polite"></div>
 
+  <!-- 도착한 편지 벽 (빨간 우체통을 클릭하면 열립니다) -->
+  <section class="wall-section" id="wallSection" hidden>
+    <div class="wall-head">
+      <h2>먼저 도착한 편지 <span id="total"></span></h2>
+      <div class="tabs" id="tabs">
+        <button type="button" class="tab" data-filter="0" aria-pressed="true">전체</button>
+        <button type="button" class="tab" data-filter="1" aria-pressed="false">함께 해보고 싶은 일</button>
+        <button type="button" class="tab" data-filter="2" aria-pressed="false">지켜졌으면</button>
+        <button type="button" class="tab" data-filter="3" aria-pressed="false">혼자 하는 고민</button>
+      </div>
+    </div>
+    <div class="wall" id="wall" aria-live="polite"></div>
+  </section>
+
+  <!-- #show 전체모임 스크린 전시 모드 -->
   <section class="stage" id="stage" aria-live="polite">
     <article class="stage-card" id="stageCard">
       <span class="topic" id="stageTopic"></span>
@@ -318,9 +544,8 @@ body.show-mode .stage { display: grid; gap: 20px; }
 </div>
 
 <script>
-/* ───── 설정 ─────
-   1. Apps Script 웹 앱 URL을 아래 API_URL 따옴표 안에 붙여 넣으세요.
-   2. 받는 기간이 끝나면 IS_CLOSED 를 true 로 바꾸거나 CLOSE_AT 에 마감 일시를 적으세요. */
+/* ───── 설정 (웹 앱 URL 연결 완료!) ─────
+   받는 기간이 끝나면 IS_CLOSED 를 true 로 바꾸거나 CLOSE_AT 에 마감 일시를 적으세요. */
 const API_URL = "https://script.google.com/macros/s/AKfycbx7OTlknAFxp2xY-8e_OVXMUQ-MpD9Hxjrkl7SEhxBqVoTqEXiUQ4Hy2Lfq6XWSFiIW0Q/exec";
 const IS_CLOSED = false;
 const CLOSE_AT = ""; // 예: "2026-12-08T23:59:59+09:00"
@@ -337,7 +562,150 @@ const SAMPLE = [
 
 let letters = [];
 let filter = 0;
+let wallOpened = false;
 const $ = (id) => document.getElementById(id);
+
+/* ───── 저작권 걱정 없는 잔잔한 재즈 라운지 음악 (Web Audio API) ─────
+   따뜻한 일렉트릭 피아노(Rhodes 풍) 코드 보이싱과 워킹 베이스, 부드러운 멜로디 */
+let audioCtx = null;
+let bgmPlaying = false;
+let bgmTimer = null;
+let jazzStep = 0;
+let userMutedBgm = false;
+
+// 재즈 II-V-I-VI 코드 진행 (Fmaj9 - Em7 - A7b13 - Dm9 - G13 - Cmaj9)
+const JAZZ_PROGRESSION = [
+  { bass: 87.31,  chord: [174.61, 220.00, 261.63, 329.63, 392.00], mel: [523.25, 440.00, 392.00, 329.63] }, // Fmaj9
+  { bass: 82.41,  chord: [164.81, 196.00, 246.94, 293.66, 349.23], mel: [392.00, 493.88, 440.00, 369.99] }, // Em7 -> A7
+  { bass: 110.00, chord: [220.00, 277.18, 329.63, 392.00, 440.00], mel: [554.37, 523.25, 440.00, 392.00] }, // A7(b13)
+  { bass: 73.42,  chord: [146.83, 174.61, 220.00, 261.63, 329.63], mel: [440.00, 392.00, 349.23, 293.66] }, // Dm9
+  { bass: 98.00,  chord: [196.00, 246.94, 293.66, 349.23, 440.00], mel: [493.88, 440.00, 392.00, 329.63] }, // G13
+  { bass: 65.41,  chord: [130.81, 164.81, 196.00, 246.94, 293.66], mel: [392.00, 329.63, 293.66, 246.94] }  // Cmaj9
+];
+
+function playJazzTone(freq, duration, vol, delaySec = 0) {
+  if (!audioCtx || !bgmPlaying) return;
+  const start = audioCtx.currentTime + delaySec;
+  const osc = audioCtx.createOscillator();
+  const warm = audioCtx.createOscillator();
+  const filterNode = audioCtx.createBiquadFilter();
+  const gain = audioCtx.createGain();
+
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(freq, start);
+
+  warm.type = "triangle";
+  warm.frequency.setValueAtTime(freq, start);
+  const warmGain = audioCtx.createGain();
+  warmGain.gain.setValueAtTime(vol * 0.25, start);
+
+  // 부드러운 로우패스 필터로 포근한 재즈 피아노 질감 생성
+  filterNode.type = "lowpass";
+  filterNode.frequency.setValueAtTime(950, start);
+
+  gain.gain.setValueAtTime(0.0001, start);
+  gain.gain.linearRampToValueAtTime(vol, start + 0.05);
+  gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+
+  osc.connect(filterNode);
+  warm.connect(warmGain);
+  warmGain.connect(filterNode);
+  filterNode.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start(start);
+  warm.start(start);
+  osc.stop(start + duration + 0.05);
+  warm.stop(start + duration + 0.05);
+}
+
+function startJazzLoop() {
+  if (bgmPlaying) return;
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === "suspended") audioCtx.resume();
+  bgmPlaying = true;
+  $("bgmBtn").setAttribute("aria-pressed", "true");
+  $("bgmBtn").textContent = "🎷 재즈 음악 끄기";
+
+  const barTick = () => {
+    if (!bgmPlaying) return;
+    const item = JAZZ_PROGRESSION[jazzStep % JAZZ_PROGRESSION.length];
+    // 1박: 따뜻한 어쿠스틱 베이스 + 부드럽게 굴러가는 재즈 코드(아르페지오 스트럼)
+    playJazzTone(item.bass, 2.8, 0.05, 0);
+    item.chord.forEach((f, idx) => {
+      playJazzTone(f, 2.4, 0.024, idx * 0.045);
+    });
+    // 스윙 리듬의 잔잔한 오른손 재즈 선율
+    playJazzTone(item.mel[0], 1.1, 0.03, 0.55);
+    playJazzTone(item.mel[1], 0.9, 0.026, 1.25);
+    // 3박: 워킹 베이스 5도음과 코드 살짝 짚어주기
+    playJazzTone(item.bass * 1.5, 1.4, 0.038, 1.6);
+    playJazzTone(item.mel[2], 1.2, 0.028, 2.15);
+    if (jazzStep % 2 === 0) {
+      playJazzTone(item.mel[3], 0.9, 0.022, 2.75);
+    }
+    jazzStep++;
+  };
+  barTick();
+  bgmTimer = setInterval(barTick, 3200);
+}
+
+function stopJazzLoop() {
+  bgmPlaying = false;
+  clearInterval(bgmTimer);
+  $("bgmBtn").setAttribute("aria-pressed", "false");
+  $("bgmBtn").textContent = "🎷 재즈 음악 켜기";
+}
+
+$("bgmBtn").addEventListener("click", () => {
+  if (bgmPlaying) {
+    userMutedBgm = true;
+    stopJazzLoop();
+  } else {
+    userMutedBgm = false;
+    startJazzLoop();
+  }
+});
+
+// 사용자가 화면을 처음 클릭할 때(음악을 일부러 끈 적이 없다면) 자연스럽게 재즈 음악 시작
+document.addEventListener("pointerdown", (e) => {
+  if (e.target.closest("#bgmBtn")) return;
+  if (!bgmPlaying && !userMutedBgm) {
+    startJazzLoop();
+  }
+}, { once: true });
+
+/* ───── 빨간 우체통 열기 / 닫기 & 편지 넣기 애니메이션 ───── */
+function togglePostbox(forceOpen) {
+  wallOpened = typeof forceOpen === "boolean" ? forceOpen : !wallOpened;
+  const sec = $("wallSection");
+  const btn = $("redPostbox");
+  const cap = $("boxCaption");
+  sec.hidden = !wallOpened;
+  btn.setAttribute("aria-expanded", String(wallOpened));
+  cap.textContent = wallOpened
+    ? "📮 우체통이 열렸습니다 (다시 누르면 닫힙니다)"
+    : "📮 빨간 우체통을 눌러 먼저 도착한 편지 보기";
+  if (wallOpened) {
+    setTimeout(() => sec.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
+  }
+}
+
+$("redPostbox").addEventListener("click", () => togglePostbox());
+
+function triggerMailboxDropAnimation() {
+  const stage = $("postboxStage");
+  const flyer = $("flyingLetter");
+  const box = $("redPostbox");
+  stage.scrollIntoView({ behavior: "smooth", block: "center" });
+  flyer.classList.remove("drop");
+  box.classList.remove("shake");
+  void flyer.offsetWidth;
+  flyer.classList.add("drop");
+  setTimeout(() => box.classList.add("shake"), 650);
+}
 
 function likedSet() {
   try { return new Set(JSON.parse(localStorage.getItem("mailbox-liked") || "[]")); }
@@ -355,289 +723,4 @@ function isClosedNow(serverClosed) {
 function applyClosedState(serverClosed) {
   if (!isClosedNow(serverClosed)) return;
   const form = $("form");
-  form.textContent = "";
-  const msg = document.createElement("p");
-  msg.className = "closed-box";
-  msg.textContent = "편지 접수가 끝났습니다";
-  form.appendChild(msg);
-}
-
-function render() {
-  const wall = $("wall");
-  wall.textContent = "";
-  const liked = likedSet();
-  const list = letters.filter((l) => filter === 0 || Number(l.topic) === filter);
-  $("total").textContent = letters.length ? "(" + letters.length + "통)" : "";
-  if (!list.length) {
-    const p = document.createElement("p");
-    p.className = "empty";
-    p.textContent = letters.length ? "이 주제의 편지는 아직 없습니다." : "아직 도착한 편지가 없습니다. 첫 편지를 넣어 주세요.";
-    wall.appendChild(p);
-    return;
-  }
-  list.forEach((l, i) => {
-    const card = document.createElement("article");
-    card.className = "letter";
-    card.dataset.topic = l.topic;
-    card.style.setProperty("--tilt", ((i * 37) % 5 - 2) * 0.6 + "deg");
-    card.style.setProperty("--delay", -((i * 13) % 7) + "s");
-
-    const topic = document.createElement("span");
-    topic.className = "topic";
-    topic.textContent = TOPICS[l.topic] || "";
-
-    const body = document.createElement("p");
-    body.textContent = l.text;
-
-    const foot = document.createElement("footer");
-    const hint = document.createElement("span");
-    hint.textContent = "마음이 가면";
-    const like = document.createElement("button");
-    like.type = "button";
-    like.className = "like";
-    const isLiked = liked.has(l.id);
-    like.setAttribute("aria-pressed", String(isLiked));
-    like.textContent = "공감 " + (Number(l.likes) || 0);
-    like.disabled = isLiked;
-    like.addEventListener("click", () => sendLike(l));
-    foot.append(hint, like);
-
-    const cWrap = document.createElement("div");
-    cWrap.className = "comments-wrap";
-
-    const cList = document.createElement("ul");
-    cList.className = "comment-list";
-    (l.comments || []).forEach((c) => {
-      const li = document.createElement("li");
-      li.className = "comment-item";
-      li.textContent = "↳ " + c.text;
-      cList.appendChild(li);
-    });
-    if ((l.comments || []).length) cWrap.appendChild(cList);
-
-    const toggle = document.createElement("button");
-    toggle.type = "button";
-    toggle.className = "reply-toggle";
-    toggle.textContent = "답장 달기";
-
-    const rForm = document.createElement("div");
-    rForm.className = "reply-form";
-    rForm.hidden = true;
-
-    const rInput = document.createElement("input");
-    rInput.type = "text";
-    rInput.className = "reply-input";
-    rInput.maxLength = 150;
-    rInput.placeholder = "따뜻한 답장을 남겨 주세요 (150자)";
-
-    const rRow = document.createElement("div");
-    rRow.className = "reply-row";
-    const rNotice = document.createElement("span");
-    rNotice.className = "rule";
-    const rBtn = document.createElement("button");
-    rBtn.type = "button";
-    rBtn.className = "reply-btn";
-    rBtn.textContent = "등록";
-
-    toggle.addEventListener("click", () => {
-      rForm.hidden = !rForm.hidden;
-      if (!rForm.hidden) rInput.focus();
-    });
-
-    rBtn.addEventListener("click", async () => {
-      const val = rInput.value.trim();
-      if (val.length < 2) {
-        rNotice.textContent = "두 글자 이상 써 주세요.";
-        return;
-      }
-      rBtn.disabled = true;
-      try {
-        if (API_URL) {
-          const out = await post({ action: "comment", letterId: l.id, text: val });
-          if (!out.ok) throw new Error(out.error);
-          rNotice.textContent = "확인 뒤 실립니다.";
-        } else {
-          l.comments = l.comments || [];
-          l.comments.push({ id: "lc" + Date.now(), text: val });
-          render();
-          return;
-        }
-        rInput.value = "";
-      } catch (err) {
-        rNotice.textContent = "다시 눌러 주세요.";
-      } finally {
-        rBtn.disabled = false;
-      }
-    });
-
-    rRow.append(rNotice, rBtn);
-    rForm.append(rInput, rRow);
-    cWrap.append(toggle, rForm);
-
-    card.append(topic, body, foot, cWrap);
-    wall.appendChild(card);
-  });
-}
-
-async function load() {
-  if (!API_URL) {
-    $("demoFlag").hidden = false;
-    letters = SAMPLE.map((l) => ({ ...l, comments: [...(l.comments || [])] }));
-    render();
-    applyClosedState(false);
-    renderStage();
-    return;
-  }
-  try {
-    const res = await fetch(API_URL);
-    const data = await res.json();
-    letters = (data.letters || []).reverse();
-    render();
-    applyClosedState(data.closed);
-    renderStage();
-  } catch (e) {
-    $("wall").textContent = "";
-    const p = document.createElement("p");
-    p.className = "empty";
-    p.textContent = "편지를 불러오지 못했습니다. 잠시 뒤 새로고침해 주세요.";
-    $("wall").appendChild(p);
-  }
-}
-
-async function post(payload) {
-  const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
-  return res.json();
-}
-
-async function sendLike(letter) {
-  const liked = likedSet();
-  if (liked.has(letter.id)) return;
-  liked.add(letter.id);
-  saveLiked(liked);
-  letter.likes = (Number(letter.likes) || 0) + 1;
-  render();
-  if (!API_URL) return;
-  try { await post({ action: "like", id: letter.id }); } catch (e) {}
-}
-
-if ($("text")) {
-  $("text").addEventListener("input", () => {
-    $("count").textContent = $("text").value.length + " / 300";
-  });
-}
-
-$("tabs").addEventListener("click", (e) => {
-  const btn = e.target.closest(".tab");
-  if (!btn) return;
-  filter = Number(btn.dataset.filter);
-  document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-pressed", String(t === btn)));
-  render();
-});
-
-$("form").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const notice = $("notice");
-  const text = $("text").value.trim();
-  const topic = Number(document.querySelector('input[name="topic"]:checked').value);
-  notice.className = "notice";
-  if (text.length < 5) {
-    notice.className = "notice error";
-    notice.textContent = "다섯 글자 이상 써 주세요.";
-    return;
-  }
-  $("send").disabled = true;
-  try {
-    if (API_URL) {
-      const out = await post({ action: "write", topic, text });
-      if (!out.ok) throw new Error(out.error || "저장 실패");
-      notice.textContent = "편지가 우체통에 들어갔습니다. 인수위원회가 확인한 뒤 벽에 걸립니다.";
-    } else {
-      letters.unshift({ id: "local" + Date.now(), topic, text, likes: 0, comments: [] });
-      render();
-      notice.textContent = "연습 화면이라 이 편지는 저장되지 않습니다.";
-    }
-    $("text").value = "";
-    $("count").textContent = "0 / 300";
-  } catch (err) {
-    notice.className = "notice error";
-    notice.textContent = "편지를 넣지 못했습니다. 내용은 그대로 두었으니 잠시 뒤 다시 눌러 주세요.";
-  } finally {
-    $("send").disabled = false;
-  }
-});
-
-/* ───── #show 전시 모드 ───── */
-let stageIdx = 0;
-let stageTimer = null;
-let stagePaused = false;
-
-function renderStage() {
-  if (!document.body.classList.contains("show-mode")) return;
-  const card = $("stageCard");
-  const cBox = $("stageComments");
-  cBox.textContent = "";
-  if (!letters.length) {
-    $("stageTopic").textContent = "";
-    $("stageText").textContent = "전시할 편지가 아직 없습니다.";
-    $("stageLikes").textContent = "";
-    $("stageIndex").textContent = "";
-    cBox.hidden = true;
-    return;
-  }
-  stageIdx = ((stageIdx % letters.length) + letters.length) % letters.length;
-  const l = letters[stageIdx];
-  card.dataset.topic = l.topic;
-  $("stageTopic").textContent = TOPICS[l.topic] || "";
-  $("stageText").textContent = l.text;
-  $("stageLikes").textContent = "공감 " + (Number(l.likes) || 0);
-  $("stageIndex").textContent = (stageIdx + 1) + " / " + letters.length;
-
-  const comments = l.comments || [];
-  if (comments.length) {
-    cBox.hidden = false;
-    comments.forEach((c) => {
-      const p = document.createElement("div");
-      p.textContent = "↳ " + c.text;
-      cBox.appendChild(p);
-    });
-  } else {
-    cBox.hidden = true;
-  }
-}
-
-function stepStage(delta) {
-  if (!letters.length) return;
-  stageIdx = (stageIdx + delta + letters.length) % letters.length;
-  renderStage();
-}
-
-function syncShowMode() {
-  const isShow = location.hash === "#show";
-  document.body.classList.toggle("show-mode", isShow);
-  clearInterval(stageTimer);
-  if (isShow) {
-    renderStage();
-    stageTimer = setInterval(() => {
-      if (!stagePaused) stepStage(1);
-    }, 8000);
-  }
-}
-
-$("stagePrev").addEventListener("click", () => stepStage(-1));
-$("stageNext").addEventListener("click", () => stepStage(1));
-$("stagePause").addEventListener("click", () => {
-  stagePaused = !stagePaused;
-  $("stagePause").textContent = stagePaused ? "재생" : "일시정지";
-});
-window.addEventListener("keydown", (e) => {
-  if (!document.body.classList.contains("show-mode")) return;
-  if (e.key === "ArrowRight") stepStage(1);
-  if (e.key === "ArrowLeft") stepStage(-1);
-});
-window.addEventListener("hashchange", syncShowMode);
-syncShowMode();
-
-load();
-</script>
-</body>
-</html>
+  form
