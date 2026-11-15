@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>마음의 소리 우체통</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* 레이아웃: 위에는 우체통(쓰기), 아래에는 편지가 천천히 떠 있는 벽 */
+  --paper: #eef3f1;
+  --ink: #1f2d2b;
+  --muted: #5b6b68;
+  --post: #c8372d;      /* 우체통 빨강: 보내기 버튼, 강조 */
+  --leaf: #2f6f62;      /* 공감, 선택된 탭 */
+  --card: #ffffff;
+  --line: #d5dedb;
+  --tint-1: #fff6e0;    /* 함께 해보고 싶은 일 */
+  --tint-2: #e6f1ff;    /* 지켜졌으면 하는 것 */
+  --tint-3: #eaf6ea;    /* 혼자 고민하는 것 */
+  --display: "Gowun Batang", "Nanum Myeongjo", serif;
+  --body: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.65;
+}
+.wrap { max-width: 1040px; margin: 0 auto; padding: 28px 16px 64px; }
+header { display: grid; gap: 8px; margin-bottom: 24px; }
+h1 {
+  font-family: var(--display);
+  font-size: clamp(28px, 5vw, 40px);
+  line-height: 1.25;
+  margin: 0;
+  text-wrap: balance;
+}
+h1 span { color: var(--post); }
+.lead { max-width: 40em; margin: 0; color: var(--muted); }
+
+/* 우체통(쓰기 영역) */
+.mailbox {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-top: 10px solid var(--post);
+  border-radius: 14px;
+  padding: 20px;
+  display: grid;
+  gap: 14px;
+}
+.mailbox h2 { font-family: var(--display); font-size: 20px; margin: 0; }
+.topics { display: flex; flex-wrap: wrap; gap: 8px; border: 0; padding: 0; margin: 0; }
+.topics legend { padding: 0; margin-bottom: 8px; color: var(--muted); font-size: 14px; }
+.topics label {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+  background: var(--paper);
+}
+.topics input { position: absolute; opacity: 0; pointer-events: none; }
+.topics input:checked + span { font-weight: 700; }
+.topics label:has(input:checked) { border-color: var(--leaf); background: #e3efec; }
+.topics label:has(input:focus-visible) { outline: 3px solid var(--leaf); outline-offset: 2px; }
+textarea {
+  width: 100%;
+  min-height: 120px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  font: inherit;
+  color: inherit;
+  background: #fbfcfc;
+  resize: vertical;
+}
+textarea:focus-visible { outline: 3px solid var(--leaf); outline-offset: 1px; }
+.send-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; justify-content: space-between; }
+.count { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
+button { font: inherit; cursor: pointer; }
+.send {
+  background: var(--post);
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 22px;
+  font-weight: 700;
+}
+.send:disabled { opacity: .5; cursor: not-allowed; }
+.send:focus-visible, .tab:focus-visible, .like:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.notice { margin: 0; min-height: 1.6em; color: var(--leaf); }
+.notice.error { color: var(--post); }
+.rule { margin: 0; color: var(--muted); font-size: 14px; }
+.closed-box {
+  text-align: center;
+  padding: 28px 16px;
+  font-family: var(--display);
+  font-size: 20px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* 편지 벽 */
+.wall-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; justify-content: space-between; margin: 36px 0 14px; }
+.wall-head h2 { font-family: var(--display); font-size: 22px; margin: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tab {
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 999px;
+  padding: 6px 12px;
+  color: var(--ink);
+}
+.tab[aria-pressed="true"] { background: var(--leaf); border-color: var(--leaf); color: #fff; }
+.wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 22px 18px; padding: 8px 4px; }
+.letter {
+  background: var(--tint-1);
+  border-radius: 6px 6px 14px 6px;
+  padding: 16px 16px 12px;
+  box-shadow: 0 6px 16px rgba(31, 45, 43, .10);
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  transform: rotate(var(--tilt, 0deg));
+  animation: drift 7s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+.letter[data-topic="2"] { background: var(--tint-2); }
+.letter[data-topic="3"] { background: var(--tint-3); }
+.letter .topic { font-size: 13px; color: var(--muted); }
+.letter p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--display); }
+.letter footer { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--muted); }
+.like {
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, .7);
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.like[aria-pressed="true"] { border-color: var(--leaf); color: var(--leaf); font-weight: 700; }
+.empty { color: var(--muted); padding: 24px 4px; }
+.demo-flag { display: inline-block; background: #fff3cd; border: 1px solid #e6cf7a; border-radius: 8px; padding: 6px 10px; font-size: 14px; }
+
+/* 댓글(답장) */
+.comments-wrap {
+  border-top: 1px dashed rgba(31, 45, 43, .16);
+  padding-top: 8px;
+  display: grid;
+  gap: 6px;
+  font-size: 13.5px;
+}
+.comment-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+.comment-item {
+  background: rgba(255, 255, 255, .6);
+  border-radius: 6px;
+  padding: 5px 8px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.reply-toggle {
+  justify-self: start;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--muted);
+  font-size: 12.5px;
+  text-decoration: underline;
+}
+.reply-form { display: grid; gap: 6px; margin-top: 2px; }
+.reply-form[hidden] { display: none; }
+.reply-input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font: inherit;
+  background: rgba(255, 255, 255, .9);
+}
+.reply-row { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+.reply-btn {
+  background: var(--leaf);
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12.5px;
+  flex-shrink: 0;
+}
+
+/* #show 전시 모드 (12월 전체모임 스크린용) */
+body.show-mode .mailbox,
+body.show-mode .wall-head,
+body.show-mode .wall,
+body.show-mode .lead,
+body.show-mode #demoFlag { display: none !important; }
+body.show-mode .wrap {
+  max-width: 900px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 32px 24px;
+}
+.stage { display: none; }
+body.show-mode .stage { display: grid; gap: 20px; }
+.stage-card {
+  background: var(--tint-1);
+  border-radius: 10px 10px 28px 10px;
+  padding: clamp(28px, 5vw, 56px);
+  box-shadow: 0 14px 36px rgba(31, 45, 43, .12);
+  display: grid;
+  gap: 20px;
+}
+.stage-card[data-topic="2"] { background: var(--tint-2); }
+.stage-card[data-topic="3"] { background: var(--tint-3); }
+.stage-card .topic { font-size: 18px; color: var(--muted); }
+.stage-card .stage-text {
+  font-family: var(--display);
+  font-size: clamp(24px, 3.6vw, 38px);
+  line-height: 1.55;
+  margin: 0;
+  white-space: pre-wrap;
+}
+.stage-comments {
+  border-top: 1px dashed rgba(31, 45, 43, .2);
+  padding-top: 14px;
+  display: grid;
+  gap: 8px;
+  font-size: clamp(16px, 2vw, 20px);
+}
+.stage-comments[hidden] { display: none; }
+.stage-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 16px;
+}
+.stage-controls { display: flex; gap: 8px; align-items: center; }
+.stage-btn {
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 14px;
+}
+
+@keyframes drift {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -7px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .letter { animation: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>마음의 소리 <span>우체통</span></h1>
+    <p class="lead">2027년 우리 사서교사 모임이 어떤 모습이면 좋을까요? 크든 작든 떠오르는 것을 한 장 써서 넣어 주세요. 이름은 남지 않습니다.</p>
+    <p id="demoFlag" class="demo-flag" hidden>연습 화면입니다. 지금 쓰는 편지는 저장되지 않습니다.</p>
+  </header>
+
+  <form class="mailbox" id="form">
+    <h2>편지 쓰기</h2>
+    <fieldset class="topics">
+      <legend>어떤 이야기인가요?</legend>
+      <label><input type="radio" name="topic" id="topic1" value="1" checked><span>함께 해보고 싶은 일</span></label>
+      <label><input type="radio" name="topic" id="topic2" value="2"><span>이것만은 지켜졌으면</span></label>
+      <label><input type="radio" name="topic" id="topic3" value="3"><span>요즘 혼자 하는 고민</span></label>
+    </fieldset>
+    <label for="text" class="rule">편지 내용 (300자까지)</label>
+    <textarea id="text" maxlength="300" placeholder="예: 가까운 학교 선생님들과 한 학기에 한 번 밥 먹는 자리가 있으면 좋겠어요."></textarea>
+    <div class="send-row">
+      <span class="count" id="count">0 / 300</span>
+      <button class="send" id="send" type="submit">우체통에 넣기</button>
+    </div>
+    <p class="notice" id="notice" role="status"></p>
+    <p class="rule">특정 선생님을 지목하는 글은 싣지 않습니다. 그 밖의 의견은 인수위원회가 확인한 뒤 모두 싣습니다.</p>
+  </form>
+
+  <div class="wall-head">
+    <h2>도착한 편지 <span id="total"></span></h2>
+    <div class="tabs" id="tabs">
+      <button type="button" class="tab" data-filter="0" aria-pressed="true">전체</button>
+      <button type="button" class="tab" data-filter="1" aria-pressed="false">함께 해보고 싶은 일</button>
+      <button type="button" class="tab" data-filter="2" aria-pressed="false">지켜졌으면</button>
+      <button type="button" class="tab" data-filter="3" aria-pressed="false">혼자 하는 고민</button>
+    </div>
+  </div>
+  <div class="wall" id="wall" aria-live="polite"></div>
+
+  <section class="stage" id="stage" aria-live="polite">
+    <article class="stage-card" id="stageCard">
+      <span class="topic" id="stageTopic"></span>
+      <p class="stage-text" id="stageText"></p>
+      <div class="stage-comments" id="stageComments" hidden></div>
+      <div class="stage-foot">
+        <span id="stageLikes"></span>
+        <div class="stage-controls">
+          <span id="stageIndex"></span>
+          <button type="button" class="stage-btn" id="stagePrev">이전</button>
+          <button type="button" class="stage-btn" id="stagePause">일시정지</button>
+          <button type="button" class="stage-btn" id="stageNext">다음</button>
+        </div>
+      </div>
+    </article>
+  </section>
+</div>
+
+<script>
+/* ───── 설정 ─────
+   1. Apps Script 웹 앱 URL을 아래 API_URL 따옴표 안에 붙여 넣으세요.
+   2. 받는 기간이 끝나면 IS_CLOSED 를 true 로 바꾸거나 CLOSE_AT 에 마감 일시를 적으세요. */
+const API_URL = "https://script.google.com/macros/s/AKfycbx7OTlknAFxp2xY-8e_OVXMUQ-MpD9Hxjrkl7SEhxBqVoTqEXiUQ4Hy2Lfq6XWSFiIW0Q/exec";
+const IS_CLOSED = false;
+const CLOSE_AT = ""; // 예: "2026-12-08T23:59:59+09:00"
+
+const TOPICS = { 1: "함께 해보고 싶은 일", 2: "이것만은 지켜졌으면", 3: "요즘 혼자 하는 고민" };
+const SAMPLE = [
+  { id: "s1", topic: 1, text: "가까운 학교 선생님들과 한 학기에 한 번 밥 먹는 자리가 있으면 좋겠어요.", likes: 7, comments: [{ id: "c1", text: "저도요! 권역별로 소소하게 모이면 부담 없고 좋을 것 같아요." }] },
+  { id: "s2", topic: 3, text: "도서관 협력수업을 처음 제안해 보려는데 어떻게 말을 꺼내야 할지 모르겠어요.", likes: 4, comments: [] },
+  { id: "s3", topic: 2, text: "전체모임이 제시간에 끝났으면 좋겠습니다.", likes: 11, comments: [] },
+  { id: "s4", topic: 1, text: "신규 선생님께 첫 학기 업무 달력을 선물하면 어떨까요?", likes: 5, comments: [] },
+  { id: "s5", topic: 2, text: "회비가 어디에 쓰였는지 한 장으로 알려 주세요.", likes: 9, comments: [] },
+  { id: "s6", topic: 3, text: "업무분장에서 도서관 일이 아닌 것이 자꾸 넘어옵니다. 다른 학교는 어떤가요?", likes: 6, comments: [] }
+];
+
+let letters = [];
+let filter = 0;
+const $ = (id) => document.getElementById(id);
+
+function likedSet() {
+  try { return new Set(JSON.parse(localStorage.getItem("mailbox-liked") || "[]")); }
+  catch (e) { return new Set(); }
+}
+function saveLiked(set) {
+  try { localStorage.setItem("mailbox-liked", JSON.stringify([...set])); } catch (e) {}
+}
+
+function isClosedNow(serverClosed) {
+  if (IS_CLOSED || serverClosed) return true;
+  if (CLOSE_AT && Date.now() > new Date(CLOSE_AT).getTime()) return true;
+  return false;
+}
+function applyClosedState(serverClosed) {
+  if (!isClosedNow(serverClosed)) return;
+  const form = $("form");
+  form.textContent = "";
+  const msg = document.createElement("p");
+  msg.className = "closed-box";
+  msg.textContent = "편지 접수가 끝났습니다";
+  form.appendChild(msg);
+}
+
+function render() {
+  const wall = $("wall");
+  wall.textContent = "";
+  const liked = likedSet();
+  const list = letters.filter((l) => filter === 0 || Number(l.topic) === filter);
+  $("total").textContent = letters.length ? "(" + letters.length + "통)" : "";
+  if (!list.length) {
+    const p = document.createElement("p");
+    p.className = "empty";
+    p.textContent = letters.length ? "이 주제의 편지는 아직 없습니다." : "아직 도착한 편지가 없습니다. 첫 편지를 넣어 주세요.";
+    wall.appendChild(p);
+    return;
+  }
+  list.forEach((l, i) => {
+    const card = document.createElement("article");
+    card.className = "letter";
+    card.dataset.topic = l.topic;
+    card.style.setProperty("--tilt", ((i * 37) % 5 - 2) * 0.6 + "deg");
+    card.style.setProperty("--delay", -((i * 13) % 7) + "s");
+
+    const topic = document.createElement("span");
+    topic.className = "topic";
+    topic.textContent = TOPICS[l.topic] || "";
+
+    const body = document.createElement("p");
+    body.textContent = l.text;
+
+    const foot = document.createElement("footer");
+    const hint = document.createElement("span");
+    hint.textContent = "마음이 가면";
+    const like = document.createElement("button");
+    like.type = "button";
+    like.className = "like";
+    const isLiked = liked.has(l.id);
+    like.setAttribute("aria-pressed", String(isLiked));
+    like.textContent = "공감 " + (Number(l.likes) || 0);
+    like.disabled = isLiked;
+    like.addEventListener("click", () => sendLike(l));
+    foot.append(hint, like);
+
+    const cWrap = document.createElement("div");
+    cWrap.className = "comments-wrap";
+
+    const cList = document.createElement("ul");
+    cList.className = "comment-list";
+    (l.comments || []).forEach((c) => {
+      const li = document.createElement("li");
+      li.className = "comment-item";
+      li.textContent = "↳ " + c.text;
+      cList.appendChild(li);
+    });
+    if ((l.comments || []).length) cWrap.appendChild(cList);
+
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "reply-toggle";
+    toggle.textContent = "답장 달기";
+
+    const rForm = document.createElement("div");
+    rForm.className = "reply-form";
+    rForm.hidden = true;
+
+    const rInput = document.createElement("input");
+    rInput.type = "text";
+    rInput.className = "reply-input";
+    rInput.maxLength = 150;
+    rInput.placeholder = "따뜻한 답장을 남겨 주세요 (150자)";
+
+    const rRow = document.createElement("div");
+    rRow.className = "reply-row";
+    const rNotice = document.createElement("span");
+    rNotice.className = "rule";
+    const rBtn = document.createElement("button");
+    rBtn.type = "button";
+    rBtn.className = "reply-btn";
+    rBtn.textContent = "등록";
+
+    toggle.addEventListener("click", () => {
+      rForm.hidden = !rForm.hidden;
+      if (!rForm.hidden) rInput.focus();
+    });
+
+    rBtn.addEventListener("click", async () => {
+      const val = rInput.value.trim();
+      if (val.length < 2) {
+        rNotice.textContent = "두 글자 이상 써 주세요.";
+        return;
+      }
+      rBtn.disabled = true;
+      try {
+        if (API_URL) {
+          const out = await post({ action: "comment", letterId: l.id, text: val });
+          if (!out.ok) throw new Error(out.error);
+          rNotice.textContent = "확인 뒤 실립니다.";
+        } else {
+          l.comments = l.comments || [];
+          l.comments.push({ id: "lc" + Date.now(), text: val });
+          render();
+          return;
+        }
+        rInput.value = "";
+      } catch (err) {
+        rNotice.textContent = "다시 눌러 주세요.";
+      } finally {
+        rBtn.disabled = false;
+      }
+    });
+
+    rRow.append(rNotice, rBtn);
+    rForm.append(rInput, rRow);
+    cWrap.append(toggle, rForm);
+
+    card.append(topic, body, foot, cWrap);
+    wall.appendChild(card);
+  });
+}
+
+async function load() {
+  if (!API_URL) {
+    $("demoFlag").hidden = false;
+    letters = SAMPLE.map((l) => ({ ...l, comments: [...(l.comments || [])] }));
+    render();
+    applyClosedState(false);
+    renderStage();
+    return;
+  }
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    letters = (data.letters || []).reverse();
+    render();
+    applyClosedState(data.closed);
+    renderStage();
+  } catch (e) {
+    $("wall").textContent = "";
+    const p = document.createElement("p");
+    p.className = "empty";
+    p.textContent = "편지를 불러오지 못했습니다. 잠시 뒤 새로고침해 주세요.";
+    $("wall").appendChild(p);
+  }
+}
+
+async function post(payload) {
+  const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
+  return res.json();
+}
+
+async function sendLike(letter) {
+  const liked = likedSet();
+  if (liked.has(letter.id)) return;
+  liked.add(letter.id);
+  saveLiked(liked);
+  letter.likes = (Number(letter.likes) || 0) + 1;
+  render();
+  if (!API_URL) return;
+  try { await post({ action: "like", id: letter.id }); } catch (e) {}
+}
+
+if ($("text")) {
+  $("text").addEventListener("input", () => {
+    $("count").textContent = $("text").value.length + " / 300";
+  });
+}
+
+$("tabs").addEventListener("click", (e) => {
+  const btn = e.target.closest(".tab");
+  if (!btn) return;
+  filter = Number(btn.dataset.filter);
+  document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-pressed", String(t === btn)));
+  render();
+});
+
+$("form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const notice = $("notice");
+  const text = $("text").value.trim();
+  const topic = Number(document.querySelector('input[name="topic"]:checked').value);
+  notice.className = "notice";
+  if (text.length < 5) {
+    notice.className = "notice error";
+    notice.textContent = "다섯 글자 이상 써 주세요.";
+    return;
+  }
+  $("send").disabled = true;
+  try {
+    if (API_URL) {
+      const out = await post({ action: "write", topic, text });
+      if (!out.ok) throw new Error(out.error || "저장 실패");
+      notice.textContent = "편지가 우체통에 들어갔습니다. 인수위원회가 확인한 뒤 벽에 걸립니다.";
+    } else {
+      letters.unshift({ id: "local" + Date.now(), topic, text, likes: 0, comments: [] });
+      render();
+      notice.textContent = "연습 화면이라 이 편지는 저장되지 않습니다.";
+    }
+    $("text").value = "";
+    $("count").textContent = "0 / 300";
+  } catch (err) {
+    notice.className = "notice error";
+    notice.textContent = "편지를 넣지 못했습니다. 내용은 그대로 두었으니 잠시 뒤 다시 눌러 주세요.";
+  } finally {
+    $("send").disabled = false;
+  }
+});
+
+/* ───── #show 전시 모드 ───── */
+let stageIdx = 0;
+let stageTimer = null;
+let stagePaused = false;
+
+function renderStage() {
+  if (!document.body.classList.contains("show-mode")) return;
+  const card = $("stageCard");
+  const cBox = $("stageComments");
+  cBox.textContent = "";
+  if (!letters.length) {
+    $("stageTopic").textContent = "";
+    $("stageText").textContent = "전시할 편지가 아직 없습니다.";
+    $("stageLikes").textContent = "";
+    $("stageIndex").textContent = "";
+    cBox.hidden = true;
+    return;
+  }
+  stageIdx = ((stageIdx % letters.length) + letters.length) % letters.length;
+  const l = letters[stageIdx];
+  card.dataset.topic = l.topic;
+  $("stageTopic").textContent = TOPICS[l.topic] || "";
+  $("stageText").textContent = l.text;
+  $("stageLikes").textContent = "공감 " + (Number(l.likes) || 0);
+  $("stageIndex").textContent = (stageIdx + 1) + " / " + letters.length;
+
+  const comments = l.comments || [];
+  if (comments.length) {
+    cBox.hidden = false;
+    comments.forEach((c) => {
+      const p = document.createElement("div");
+      p.textContent = "↳ " + c.text;
+      cBox.appendChild(p);
+    });
+  } else {
+    cBox.hidden = true;
+  }
+}
+
+function stepStage(delta) {
+  if (!letters.length) return;
+  stageIdx = (stageIdx + delta + letters.length) % letters.length;
+  renderStage();
+}
+
+function syncShowMode() {
+  const isShow = location.hash === "#show";
+  document.body.classList.toggle("show-mode", isShow);
+  clearInterval(stageTimer);
+  if (isShow) {
+    renderStage();
+    stageTimer = setInterval(() => {
+      if (!stagePaused) stepStage(1);
+    }, 8000);
+  }
+}
+
+$("stagePrev").addEventListener("click", () => stepStage(-1));
+$("stageNext").addEventListener("click", () => stepStage(1));
+$("stagePause").addEventListener("click", () => {
+  stagePaused = !stagePaused;
+  $("stagePause").textContent = stagePaused ? "재생" : "일시정지";
+});
+window.addEventListener("keydown", (e) => {
+  if (!document.body.classList.contains("show-mode")) return;
+  if (e.key === "ArrowRight") stepStage(1);
+  if (e.key === "ArrowLeft") stepStage(-1);
+});
+window.addEventListener("hashchange", syncShowMode);
+syncShowMode();
+
+load();
+</script>
+</body>
+</html>
