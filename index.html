@@ -90,4 +90,1525 @@ button { font-size: inherit; cursor: pointer; color: inherit; }
   0%, 100% { rotate: -7deg; }
   50% { rotate: 7deg; }
 }
-@keyframes twinkle { 0%, 100% {
+@keyframes twinkle { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+
+/* 머리 */
+header { display: grid; gap: 1rem; padding: 1rem 0 1.6rem; }
+.head-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: .8rem; }
+.title-group { display: grid; gap: .35rem; flex: 1 1 0; min-width: 0; }
+h1 {
+  font-family: var(--title);
+  margin: 0;
+  font-size: clamp(2.6rem, 9vw, 4.6rem);
+  line-height: 1.05;
+  font-weight: 800;
+  color: #ff4a36;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .6);
+}
+h1 span { color: #ffffff; }
+h1 span { white-space: nowrap; }
+h1 small { display: block; font-size: .4em; font-weight: 700; color: var(--cream); margin-top: .35em; line-height: 1.2; }
+.subtitle { margin: 0; font-family: var(--title); font-weight: 700; font-size: clamp(1.15rem, 3vw, 1.5rem); color: var(--cream); text-shadow: 0 1px 12px rgba(0, 0, 0, .6); }
+.bgm-btn {
+  background: rgba(13, 28, 25, .55);
+  border: 1px solid rgba(255, 248, 234, .55);
+  border-radius: 999px;
+  padding: .3rem .9rem;
+  font-size: .9rem;
+  font-weight: 700;
+}
+.bgm-btn[aria-pressed="true"] { border-color: var(--gold); color: var(--gold); }
+.greeting {
+  background: rgba(13, 28, 25, .86);
+  border: 1px solid rgba(255, 248, 234, .22);
+  border-radius: 16px;
+  padding: 1rem 1.2rem;
+  max-width: 40em;
+  display: grid;
+  gap: .35rem;
+}
+.greeting p:last-child { font-weight: 700; }
+.greeting p { margin: 0; }
+.greeting p:last-child { color: var(--gold); }
+
+.send:focus-visible, .tab:focus-visible, .like:focus-visible, .bgm-btn:focus-visible, .red-postbox:focus-visible,
+.stage-btn:focus-visible, .reply-btn:focus-visible, .reply-toggle:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* 편지지: 트리 불빛이 비치는 서리 낀 흰 유리 편지지. 위쪽에 빨강·초록 항공우편 띠 */
+.stack { display: grid; gap: 1.6rem; }
+.mailbox-wrap { position: relative; animation: fadeUp .8s .15s ease both; }
+.ghost-card {
+  position: absolute;
+  inset: 14px -10px -12px 16px;
+  border-radius: 26px;
+  rotate: 1.6deg;
+  background: rgba(255, 255, 255, .2);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, .45);
+}
+.mailbox {
+  --paper-ink: #1F2A44;
+  --paper-soft: rgba(31, 42, 68, .74);
+  --x-red: #C5301F;
+  --x-green: #1F7A4D;
+  position: relative;
+  overflow: hidden;
+  color: var(--paper-ink);
+  background: linear-gradient(135deg, rgba(255, 255, 255, .92) 0%, rgba(244, 248, 251, .82) 100%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  backdrop-filter: blur(22px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, .95);
+  border-radius: 26px;
+  padding: 3.1rem 2.2rem 1.7rem;
+  display: grid;
+  gap: .95rem;
+  box-shadow: 0 24px 54px rgba(0, 0, 0, .5), inset 0 1px 0 #fff;
+}
+.mailbox::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 10px;
+  background: repeating-linear-gradient(-45deg, var(--x-red) 0 14px, #fff 14px 22px, var(--x-green) 22px 36px, #fff 36px 44px);
+  opacity: .9;
+}
+.mailbox::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(118deg, rgba(255, 255, 255, .55) 0%, rgba(255, 255, 255, 0) 24%);
+  pointer-events: none;
+}
+.mailbox > * { position: relative; z-index: 1; }
+/* 낡은 우표 (원래 모양 그대로) */
+.mailbox > .stamp {
+  position: absolute;
+  top: 1.6rem;
+  right: 1.7rem;
+  width: 98px;
+  height: 126px;
+  padding: 13px;
+  background: #f3e6c4;
+  -webkit-mask:
+    linear-gradient(#000 0 0) center / calc(100% - 12px) calc(100% - 12px) no-repeat,
+    radial-gradient(circle 4.5px at center, #0000 96%, #000) -7px -7px / 14px 14px repeat;
+  mask:
+    linear-gradient(#000 0 0) center / calc(100% - 12px) calc(100% - 12px) no-repeat,
+    radial-gradient(circle 4.5px at center, #0000 96%, #000) -7px -7px / 14px 14px repeat;
+  rotate: 3deg;
+}
+.stamp-face {
+  height: 100%;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 1px;
+  background: linear-gradient(170deg, #8a2a22 0%, #6a1814 100%);
+  box-shadow: inset 0 0 0 2px #f7edd2, inset 0 0 0 3px #c9a35a;
+  color: #f7e6c2;
+  text-align: center;
+  line-height: 1.25;
+}
+.stamp-face .star { font-size: 15px; color: #e6c06a; }
+.stamp-face .place { font-size: 12px; font-weight: 700; letter-spacing: .2em; margin-right: -.2em; }
+.stamp-face .name { font-size: 15px; font-weight: 800; }
+.stamp-face .year { font-size: 11px; font-weight: 700; letter-spacing: .12em; color: #e6c06a; margin-top: 2px; }
+/* 우표 위에 살짝 비뚤게 찍힌 둥근 소인 */
+.mailbox > .postmark {
+  position: absolute;
+  z-index: 2;
+  top: 92px;
+  right: 46px;
+  width: 132px;
+  height: 88px;
+  color: var(--paper-ink);
+  opacity: .7;
+  rotate: -13deg;
+  transform-origin: 33.3% 50%;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.postmark text { font-family: var(--font); font-weight: 800; fill: currentColor; }
+.mailbox h2 {
+  margin: 0;
+  padding: 0 10.8rem .75rem 0;
+  min-height: 5.4rem;
+  align-content: end;
+  display: grid;
+  font-size: 1.55rem;
+  font-weight: 800;
+  border-bottom: 1px solid rgba(31, 42, 68, .16);
+}
+.mailbox h2 .deco { color: var(--x-red); }
+.topics { display: flex; flex-wrap: wrap; gap: .5rem; border: 0; padding: 0; margin: 0; }
+.topics legend { padding: 0; margin-bottom: .45rem; color: var(--paper-soft); font-size: .9rem; font-weight: 700; }
+.topics label {
+  border: 1.5px solid rgba(31, 42, 68, .2);
+  border-radius: 999px;
+  padding: .3rem 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  background: rgba(255, 255, 255, .75);
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+.topics input { position: absolute; opacity: 0; pointer-events: none; }
+.topics label:has(input:checked) { background: var(--x-green); border-color: var(--x-green); color: #fff; box-shadow: 0 6px 14px rgba(31, 122, 77, .3); }
+.topics label:has(input:focus-visible) { outline: 3px solid var(--paper-ink); outline-offset: 2px; }
+textarea {
+  width: 100%;
+  min-height: 12rem;
+  border: 1px solid rgba(31, 42, 68, .14);
+  border-radius: 16px;
+  padding: .2rem 1rem;
+  font-size: 1.08rem;
+  line-height: 2.4rem;
+  color: var(--paper-ink);
+  background:
+    repeating-linear-gradient(180deg, transparent 0 calc(2.4rem - 1px), rgba(31, 42, 68, .12) calc(2.4rem - 1px) 2.4rem) local,
+    rgba(255, 255, 255, .6);
+  resize: vertical;
+}
+textarea::placeholder { color: rgba(31, 42, 68, .5); }
+textarea:focus-visible { outline: 3px solid var(--x-green); outline-offset: 2px; }
+.send-row { display: flex; flex-wrap: wrap; align-items: center; gap: .7rem; justify-content: space-between; }
+.count { color: var(--paper-soft); font-size: .9rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.send {
+  background: linear-gradient(135deg, #E23E2A 0%, #B32A1A 100%);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, .6);
+  border-radius: 999px;
+  padding: .6rem 1.8rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(179, 42, 26, .35), inset 0 1px 0 rgba(255, 255, 255, .4);
+  transition: translate .15s ease, box-shadow .15s ease;
+}
+.send:hover { translate: 0 -2px; box-shadow: 0 12px 24px rgba(179, 42, 26, .42), inset 0 1px 0 rgba(255, 255, 255, .4); }
+.send:active { translate: 0 1px; }
+.send:disabled { opacity: .55; cursor: not-allowed; }
+.mailbox .send:focus-visible { outline-color: var(--paper-ink); }
+.notice { margin: 0; min-height: 1.6em; color: #1B7560; font-weight: 700; }
+.notice.error { color: #BF2F4C; }
+.rule { margin: 0; color: var(--paper-soft); font-size: .9rem; font-weight: 700; }
+.closed-box { text-align: center; padding: 1.4rem .8rem; font-size: 1.5rem; font-weight: 700; margin: 0; }
+
+/* 우체통과 초록 트리 */
+.postbox-stage { margin: 2.6rem 0 1rem; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; }
+.postbox-row { display: flex; align-items: flex-end; justify-content: center; gap: clamp(6px, 3vw, 28px); }
+.flying-letter {
+  width: 68px; height: 46px;
+  background: var(--cream);
+  border: 2px solid var(--red);
+  border-radius: 6px;
+  display: grid; place-items: center;
+  font-size: 22px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .35);
+  margin-bottom: -14px;
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+}
+.flying-letter.drop { animation: dropIntoBox 1.05s cubic-bezier(.4, 0, .2, 1) forwards; }
+@keyframes dropIntoBox {
+  0% { opacity: 1; transform: translateY(-55px) scale(1.1) rotate(-8deg); }
+  60% { opacity: 1; transform: translateY(34px) scale(.85) rotate(4deg); }
+  100% { opacity: 0; transform: translateY(58px) scale(.3); }
+}
+.red-postbox { appearance: none; border: 0; background: transparent; padding: 8px; width: 190px; display: flex; flex-direction: column; align-items: center; gap: 14px; transition: transform .25s ease; }
+.red-postbox:hover { transform: translateY(-4px); }
+.red-postbox.shake { animation: boxBounce .6s ease; }
+@keyframes boxBounce {
+  0%, 100% { transform: scale(1); }
+  35% { transform: scale(1.06, .94); }
+  70% { transform: scale(.97, 1.04); }
+}
+.postbox-body {
+  width: 156px; height: 196px; flex: 0 0 auto;
+  background: linear-gradient(150deg, #f25a45 0%, var(--red) 55%, var(--red-dark) 100%);
+  border-radius: 78px 78px 16px 16px;
+  position: relative;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, .45), inset 0 5px 12px rgba(255, 255, 255, .3);
+  display: flex; flex-direction: column; align-items: center;
+  padding-top: 38px;
+  color: #fff;
+}
+.postbox-body::after { content: ""; position: absolute; bottom: -12px; width: 176px; height: 14px; background: var(--red-dark); border-radius: 999px; }
+.postbox-slot { width: 92px; height: 14px; background: #2b0907; border-radius: 999px; border: 3px solid #f7d6d2; transition: height .25s ease; }
+.red-postbox[aria-expanded="true"] .postbox-slot { height: 20px; background: var(--cream); }
+.postbox-emblem { margin-top: 20px; font-size: 1rem; padding: 2px 14px; border: 1.5px solid rgba(255, 255, 255, .8); border-radius: 999px; }
+.postbox-count { margin-top: 8px; font-size: .8rem; background: rgba(0, 0, 0, .25); padding: 1px 10px; border-radius: 999px; }
+.postbox-caption {
+  white-space: nowrap;
+  margin: 6px -160px 0;
+  font-size: 1.1rem;
+  color: var(--ink);
+  background: var(--cream);
+  padding: .3rem 1.1rem;
+  border-radius: 999px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .35);
+}
+.tree { width: clamp(92px, 17vw, 140px); height: auto; flex: 0 0 auto; margin-bottom: 58px; filter: drop-shadow(0 8px 14px rgba(0, 0, 0, .45)); }
+.tree path:nth-of-type(1) { fill: #49c27f; }
+.tree path:nth-of-type(2) { fill: #35a868; }
+.tree path:nth-of-type(3) { fill: #2a9058; }
+.tree .star { fill: var(--gold); filter: drop-shadow(0 0 6px var(--gold)); animation: twinkle 1.4s ease-in-out infinite; }
+.tree .orn { animation: twinkle 1.8s ease-in-out infinite; animation-delay: var(--d, 0s); filter: drop-shadow(0 0 4px #fff); }
+
+/* 도착한 편지: 유리 카드를 부채처럼 겹쳐 놓고 옆으로 슥슥 넘겨 본다 */
+.wall-section[hidden] { display: none !important; }
+.wall-section { animation: fadeUp .4s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.wall-head { display: grid; justify-items: center; gap: .9rem; margin: 1.6rem 0 .6rem; text-align: center; }
+.wall-head h2 { margin: 0; font-size: 1.5rem; text-shadow: 0 1px 12px rgba(0, 0, 0, .6); }
+.wall-head h2 span { color: var(--gold); }
+
+/* 리퀴드 글래스 메뉴: 유리 캡슐 안에서 선택된 항목만 밝은 유리 알약이 된다 */
+.tabs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, .07));
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, .38);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55), inset 0 -10px 18px rgba(255, 255, 255, .05), 0 14px 32px rgba(0, 0, 0, .38);
+}
+.tab {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: .32rem 1rem;
+  font-size: .92rem;
+  font-weight: 700;
+  color: var(--cream);
+  transition: background .25s ease, color .25s ease, box-shadow .25s ease;
+}
+.tab:hover { background: rgba(255, 255, 255, .12); }
+.tab[aria-pressed="true"] {
+  background: linear-gradient(180deg, rgba(255, 255, 255, .98), rgba(255, 255, 255, .74));
+  border-color: rgba(255, 255, 255, .9);
+  color: #1F2A44;
+  box-shadow: inset 0 1px 0 #fff, inset 0 -5px 8px rgba(31, 42, 68, .08), 0 6px 14px rgba(0, 0, 0, .3);
+}
+
+.wall {
+  --drag: 0px;
+  display: grid;
+  justify-items: center;
+  align-items: stretch;
+  padding: 34px 0 46px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 3%, #000 97%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 3%, #000 97%, transparent 100%);
+  overflow: hidden;
+  overflow: clip visible;
+  touch-action: pan-y;
+  cursor: grab;
+  border-radius: 20px;
+}
+.wall:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+.wall.dragging { cursor: grabbing; user-select: none; -webkit-user-select: none; }
+.wall.is-empty { cursor: default; padding: 8px 0; }
+.letter {
+  --tint: #cfe6f7;
+  --x: 0%;
+  --s: 1;
+  grid-area: 1 / 1;
+  width: min(430px, 80vw);
+  min-height: 340px;
+  max-height: min(600px, 76vh);
+  overflow-y: auto;
+  color: #1F2A44;
+  background: linear-gradient(180deg, var(--tint) 0%, rgba(255, 255, 255, .86) 30%, rgba(255, 255, 255, .92) 100%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, .92);
+  border-radius: 30px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, .5), inset 0 1px 0 #fff, inset 0 -14px 24px rgba(255, 255, 255, .5);
+  transform: translateX(calc(var(--x) + var(--drag))) scale(var(--s));
+  transition: transform .55s cubic-bezier(.22, .8, .2, 1), opacity .4s ease, filter .4s ease, visibility 0s;
+  display: grid;
+}
+.wall.dragging .letter { transition: none; }
+.letter[data-pos="0"] { z-index: 5; cursor: auto; }
+.letter:not([data-pos="0"]) { cursor: pointer; overflow: hidden; }
+.letter[data-pos="-1"] { --x: -42%; --s: .86; z-index: 4; filter: brightness(.9); }
+.letter[data-pos="1"] { --x: 42%; --s: .86; z-index: 4; filter: brightness(.9); }
+.letter[data-pos="-2"] { --x: -72%; --s: .74; z-index: 3; filter: brightness(.78); }
+.letter[data-pos="2"] { --x: 72%; --s: .74; z-index: 3; filter: brightness(.78); }
+.letter[data-pos="-3"] { --x: -92%; --s: .64; z-index: 2; opacity: 0; visibility: hidden; pointer-events: none; transition-delay: 0s, 0s, 0s, .4s; }
+.letter[data-pos="3"] { --x: 92%; --s: .64; z-index: 2; opacity: 0; visibility: hidden; pointer-events: none; transition-delay: 0s, 0s, 0s, .4s; }
+/* 유리 위로 비치는 빛 */
+.letter::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(120deg, rgba(255, 255, 255, .6) 0%, rgba(255, 255, 255, 0) 22%);
+  pointer-events: none;
+}
+.letter { position: relative; }
+.letter-inner { position: relative; z-index: 1; display: grid; grid-template-rows: auto 1fr auto; gap: .9rem; padding: 1.3rem 1.3rem 1.15rem; min-height: 100%; }
+.letter[data-palette="1"] { --tint: #cfe6f7; }
+.letter[data-palette="2"] { --tint: #f7cfe2; }
+.letter[data-palette="3"] { --tint: #f8dcc0; }
+.letter[data-palette="4"] { --tint: #c9efdf; }
+.letter[data-palette="5"] { --tint: #dccff7; }
+.letter[data-palette="6"] { --tint: #f6ecb6; }
+.letter[data-palette="7"] { --tint: #c6ecef; }
+.letter[data-palette="8"] { --tint: #f9cdc4; }
+.stage-card[data-palette="1"] { background: #fff1d6; }
+.stage-card[data-palette="2"] { background: #e4f0ff; }
+.stage-card[data-palette="3"] { background: #e6f6e6; }
+.stage-card[data-palette="4"] { background: #ffe6ea; }
+.stage-card[data-palette="5"] { background: #f0e8ff; }
+.stage-card[data-palette="6"] { background: #fff8c4; }
+.stage-card[data-palette="7"] { background: #dff5f3; }
+.stage-card[data-palette="8"] { background: #ffe5d4; }
+.letter-head { display: flex; align-items: center; gap: .6rem; }
+.letter-badge {
+  width: 46px; height: 46px; flex: 0 0 auto;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  color: #C5301F;
+  background: linear-gradient(180deg, #fff, rgba(255, 255, 255, .6));
+  border: 1px solid #fff;
+  box-shadow: 0 6px 14px rgba(31, 42, 68, .14), inset 0 -4px 6px rgba(31, 42, 68, .05);
+}
+.letter .topic { font-size: .85rem; font-weight: 800; color: #1F2A44; background: rgba(255, 255, 255, .78); border: 1px solid #fff; padding: .1rem .7rem; border-radius: 999px; box-shadow: 0 3px 8px rgba(31, 42, 68, .08); }
+.letter-no { margin-left: auto; font-size: .8rem; font-weight: 700; color: rgba(31, 42, 68, .6); font-variant-numeric: tabular-nums; }
+.letter-body { display: grid; gap: .7rem; align-content: start; }
+.letter p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 1.08rem; line-height: 1.7; }
+.letter-actions { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+.reply-toggle, .like {
+  display: inline-flex; align-items: center; justify-content: center; gap: .3em;
+  border-radius: 14px;
+  padding: .55rem .6rem;
+  font-size: .95rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  transition: translate .15s ease, box-shadow .15s ease;
+}
+.reply-toggle { background: linear-gradient(180deg, #fff, rgba(255, 255, 255, .7)); border: 1px solid rgba(31, 42, 68, .14); color: #1F2A44; box-shadow: 0 4px 10px rgba(31, 42, 68, .08), inset 0 1px 0 #fff; }
+.like { background: linear-gradient(180deg, #33405f, #1F2A44); border: 1px solid rgba(255, 255, 255, .25); color: #fff; box-shadow: 0 8px 18px rgba(31, 42, 68, .3), inset 0 1px 0 rgba(255, 255, 255, .3); }
+.reply-toggle:hover, .like:not(:disabled):hover { translate: 0 -2px; }
+.like:disabled { cursor: default; opacity: 1; }
+.like[aria-pressed="true"] { background: linear-gradient(180deg, #ee5a47, #C5301F); box-shadow: 0 8px 18px rgba(197, 48, 31, .32), inset 0 1px 0 rgba(255, 255, 255, .4); }
+.like[aria-pressed="true"] .ico { fill: #fff; stroke: #fff; }
+.empty { color: var(--soft); padding: 1.3rem .2rem; text-align: center; margin: 0; }
+
+/* 답장 */
+.comment-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .3rem; font-size: .92rem; }
+.comment-item { background: rgba(255, 255, 255, .7); border: 1px solid #fff; border-radius: 12px; padding: .3rem .65rem; white-space: pre-wrap; overflow-wrap: anywhere; box-shadow: 0 3px 8px rgba(31, 42, 68, .06); }
+.reply-form { display: grid; gap: .35rem; }
+.reply-form[hidden] { display: none; }
+.reply-input { width: 100%; border: 1px solid rgba(31, 42, 68, .16); border-radius: 12px; padding: .4rem .65rem; font-size: .92rem; color: #1F2A44; background: rgba(255, 255, 255, .85); }
+.reply-input:focus-visible { outline: 3px solid #1F7A4D; outline-offset: 1px; }
+.reply-row { display: flex; justify-content: space-between; align-items: center; gap: .3rem; }
+.letter .rule { color: rgba(31, 42, 68, .7); }
+.reply-btn { background: linear-gradient(180deg, #2a9a66, #1F7A4D); color: #fff; border: 1px solid rgba(255, 255, 255, .4); border-radius: 999px; padding: .2rem .9rem; font-size: .85rem; font-weight: 700; flex-shrink: 0; }
+.letter .like:focus-visible, .letter .reply-toggle:focus-visible, .letter .reply-btn:focus-visible { outline-color: #1F2A44; }
+
+/* 넘기기 버튼 */
+.deck-nav { display: flex; justify-content: center; align-items: center; gap: 1rem; }
+.deck-nav[hidden], .deck-hint[hidden] { display: none; }
+.deck-btn {
+  width: 52px; height: 52px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  color: var(--cream);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .28), rgba(255, 255, 255, .08));
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, .45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .6), inset 0 -8px 12px rgba(255, 255, 255, .06), 0 12px 26px rgba(0, 0, 0, .4);
+  transition: translate .15s ease, opacity .2s ease;
+}
+.deck-btn:not(:disabled):hover { translate: 0 -2px; }
+.deck-btn:disabled { opacity: .35; cursor: default; }
+.deck-btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+#deckCount { min-width: 4.5em; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+.deck-hint { margin: .7rem 0 0; text-align: center; font-size: .88rem; color: var(--soft); }
+@media (max-width: 640px) {
+  .letter[data-pos="-1"] { --x: -13%; --s: .9; }
+  .letter[data-pos="1"] { --x: 13%; --s: .9; }
+  .letter[data-pos="-2"] { --x: -23%; --s: .8; }
+  .letter[data-pos="2"] { --x: 23%; --s: .8; }
+  .letter[data-pos="-3"] { --x: -30%; --s: .7; }
+  .letter[data-pos="3"] { --x: 30%; --s: .7; }
+  .tab { padding: .3rem .8rem; font-size: .88rem; }
+}
+
+/* #show 전시 모드 */
+body.show-mode .mailbox,
+body.show-mode .postbox-stage,
+body.show-mode .wall-section,
+body.show-mode .greeting { display: none !important; }
+body.show-mode .wrap { max-width: 900px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 32px 24px; }
+.stage { display: none; }
+body.show-mode .stage { display: grid; gap: 20px; }
+.stage-card { background: var(--cream); color: var(--ink); border-radius: 8px 8px 28px 8px; padding: clamp(28px, 5vw, 56px); box-shadow: 0 18px 44px rgba(0, 0, 0, .45); display: grid; gap: 20px; }
+.stage-card .topic { font-size: 1rem; color: #6d6456; }
+.stage-card .stage-text { font-size: clamp(1.6rem, 4vw, 2.6rem); line-height: 1.45; margin: 0; white-space: pre-wrap; }
+.stage-comments { border-top: 1px dashed rgba(43, 38, 32, .3); padding-top: 14px; display: grid; gap: 8px; font-size: clamp(1rem, 2vw, 1.2rem); }
+.stage-comments[hidden] { display: none; }
+.stage-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; color: #6d6456; font-size: .9rem; }
+.stage-controls { display: flex; gap: 8px; align-items: center; }
+.stage-btn { border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 999px; padding: .15rem .8rem; font-size: .85rem; }
+
+@keyframes drift { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
+@media (max-width: 520px) {
+  .mailbox { padding: 2.2rem 1.4rem 1.4rem; }
+  .mailbox > .stamp { scale: .8; transform-origin: top right; top: 1.3rem; right: 1.2rem; }
+  .mailbox h2 { padding-right: 6rem; }
+  .tree.second { display: none; }
+  .postbox-caption { white-space: normal; margin: 6px -40px 0; }
+}
+@media (max-width: 520px) {
+  .lights { height: 96px; }
+  .bulb i { width: calc(var(--s, 30px) * .8); height: calc(var(--s, 30px) * .8); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .letter, .bulb, .bulb i, .tree .orn, .tree .star { animation: none; }
+}
+
+/* 눈 · 선 아이콘 · 잔잔한 움직임 */
+#snow { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.ico { width: 1.15em; height: 1.15em; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; vertical-align: -.2em; flex: 0 0 auto; }
+.flying-letter { color: var(--red); }
+.tree rect { fill: #7a5236; }
+@keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+.greeting { animation: fadeUp .7s ease both; }
+.postbox-body { animation: floaty 5s ease-in-out infinite; }
+body.show-mode .mailbox-wrap { display: none !important; }
+@media (max-width: 520px) {
+  .mailbox { padding: 3.2rem 1.3rem 1.4rem; border-radius: 22px; }
+  .mailbox > .stamp { scale: .8; transform-origin: top right; top: 1.6rem; right: 1.1rem; }
+  .mailbox h2 { padding-right: 7.8rem; }
+  .mailbox h2 .deco:last-child { display: none; }
+  .mailbox > .postmark { top: 82px; right: 32px; width: 105px; height: 70px; }
+  .ghost-card { inset: 12px -5px -10px 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .greeting, .mailbox-wrap, .postbox-body, .letter { animation: none !important; }
+  #snow { display: none; }
+}
+
+/* 리퀴드 글래스 버튼: 도톰한 유리 알약에 위쪽 반사광 */
+.bgm-btn {
+  background: linear-gradient(180deg, rgba(255, 255, 255, .26), rgba(255, 255, 255, .08));
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, .45);
+  padding: .4rem 1.05rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .6), inset 0 -8px 12px rgba(255, 255, 255, .05), 0 10px 24px rgba(0, 0, 0, .35);
+}
+.bgm-btn[aria-pressed="true"] { border-color: rgba(255, 216, 77, .8); color: var(--gold); }
+.greeting {
+  background: linear-gradient(160deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, .05));
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, .3);
+  border-radius: 24px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 18px 40px rgba(0, 0, 0, .35);
+}
+.topics label {
+  border: 1px solid rgba(255, 255, 255, .95);
+  background: linear-gradient(180deg, #fff, rgba(236, 241, 246, .85));
+  padding: .42rem 1.15rem;
+  box-shadow: inset 0 1px 0 #fff, inset 0 -6px 9px rgba(31, 42, 68, .07), 0 6px 14px rgba(31, 42, 68, .13);
+}
+.topics label:has(input:checked) {
+  background: linear-gradient(180deg, #4fc491 0%, #1F8A57 100%);
+  border-color: rgba(255, 255, 255, .7);
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 60, 30, .35);
+  box-shadow: inset 0 2px 1px rgba(255, 255, 255, .55), inset 0 -7px 10px rgba(0, 70, 35, .25), 0 10px 20px rgba(31, 122, 77, .38);
+}
+.send {
+  background: linear-gradient(180deg, #f2644f 0%, #C5301F 100%);
+  border-color: rgba(255, 255, 255, .7);
+  padding: .7rem 2rem;
+  text-shadow: 0 1px 2px rgba(110, 20, 10, .4);
+  box-shadow: inset 0 2px 1px rgba(255, 255, 255, .5), inset 0 -8px 12px rgba(110, 20, 10, .28), 0 12px 24px rgba(179, 42, 26, .4);
+}
+.send:hover { box-shadow: inset 0 2px 1px rgba(255, 255, 255, .5), inset 0 -8px 12px rgba(110, 20, 10, .28), 0 16px 28px rgba(179, 42, 26, .46); }
+.postbox-caption {
+  color: var(--cream);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .26), rgba(255, 255, 255, .08));
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, .45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .6), 0 10px 24px rgba(0, 0, 0, .35);
+}
+</style>
+</head>
+<body>
+<!-- 손으로 그린 듯한 선 아이콘 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3.3 6.5c5.8-.6 11.6-.5 17.4.1.5 3.8.4 7.5-.1 11.2-5.8.5-11.5.4-17.2-.2-.5-3.7-.5-7.4-.1-11.1z"/><path d="M3.8 7.2l8.1 6.1 8.3-6.3"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4.1 19.9l1.3-4.7L15.9 4.8c.8-.8 1.9-.7 2.7 0l.7.8c.8.8.7 1.9 0 2.7L8.8 18.8 4.1 19.9z"/><path d="M14.3 6.5l3.4 3.4"/><path d="M11.2 20.3c2.7-.6 5.5.5 8.6-.4"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.2C7.3 16.6 3.4 13.2 3.5 9.2c.1-2.8 2.2-4.6 4.5-4.5 1.6.1 3 .9 4 2.5 1.1-1.7 2.5-2.5 4.2-2.5 2.4 0 4.4 2 4.3 4.8-.1 3.9-3.7 7.2-8.5 10.7z"/></symbol>
+</svg>
+<canvas id="bokeh" aria-hidden="true"></canvas>
+<canvas id="snow" aria-hidden="true"></canvas>
+<div class="lights" id="lights" aria-hidden="true"></div>
+<div class="wrap">
+  <header>
+    <div class="head-top">
+      <div class="title-group">
+        <h1>2027 <span>마음의 소리</span><small>부산사서교사협의회</small></h1>
+        <p class="subtitle">2027년도, 함께 만들어가요.</p>
+      </div>
+      <button type="button" class="bgm-btn" id="bgmBtn" aria-pressed="true">배경음악 끄기</button>
+    </div>
+  </header>
+
+  <div class="stack">
+    <div class="greeting">
+      <p>안녕하세요 선생님, 반갑습니다.</p>
+      <p>선생님의 이야기들에 먼저 귀기울이고 그 이야기를 모아 방향성을 정하려 합니다.</p>
+      <p>거창한 제안이 아니어도 괜찮습니다. 해보고 싶었던 일, 지켜졌으면 하는 약속, 혼자 안고 있던 고민을 들려주세요.</p>
+      <p>작은 목소리도 놓치지 않고 듣겠습니다.</p>
+    </div>
+
+    <div class="mailbox-wrap">
+      <div class="ghost-card" aria-hidden="true"></div>
+      <form class="mailbox" id="form">
+        <div class="stamp" aria-hidden="true"><div class="stamp-face"><span class="star">★</span><span class="place">부산</span><span class="name">사서교사</span><span class="year">2027</span></div></div>
+        <svg class="postmark" viewBox="0 0 150 100" aria-hidden="true">
+          <defs>
+            <filter id="wornInk" x="0" y="0" width="100%" height="100%">
+              <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="7" result="n"/>
+              <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.7 1.5" result="m"/>
+              <feComposite in="SourceGraphic" in2="m" operator="in"/>
+            </filter>
+            <path id="pmTop" d="M17 50 a33 33 0 0 1 66 0"/>
+            <path id="pmBottom" d="M9 50 a41 41 0 0 0 82 0"/>
+          </defs>
+          <g filter="url(#wornInk)" fill="none" stroke="currentColor">
+            <circle cx="50" cy="50" r="46" stroke-width="2.4"/>
+            <circle cx="50" cy="50" r="27.5" stroke-width="1.2"/>
+            <path d="M99 34 q7 -6 14 0 t14 0 t14 0 t9 -2" stroke-width="2" stroke-linecap="round"/>
+            <path d="M100 47 q7 -6 14 0 t14 0 t14 0 t8 -2" stroke-width="2" stroke-linecap="round"/>
+            <path d="M99 60 q7 -6 14 0 t14 0 t14 0 t9 -2" stroke-width="2" stroke-linecap="round"/>
+            <path d="M97 73 q7 -6 14 0 t14 0 t14 0 t10 -2" stroke-width="2" stroke-linecap="round"/>
+            <g stroke="none">
+              <text font-size="7.6" letter-spacing=".6" text-anchor="middle"><textPath href="#pmTop" startOffset="50%">부산사서교사협의회</textPath></text>
+              <text font-size="7.2" letter-spacing="1.6" text-anchor="middle"><textPath href="#pmBottom" startOffset="50%">마음우체통</textPath></text>
+              <text x="50" y="48.5" font-size="12.5" text-anchor="middle">2026</text>
+              <text x="50" y="60" font-size="8" letter-spacing=".3" text-anchor="middle">12. 16.</text>
+            </g>
+          </g>
+        </svg>
+        <h2><span><span class="deco" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><use href="#i-mail"/></svg></span> 편지 쓰기 <span class="deco" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><use href="#i-pen"/></svg></span></span></h2>
+        <fieldset class="topics">
+          <legend>어떤 이야기인가요?</legend>
+          <label><input type="radio" name="topic" id="topic1" value="1" checked><span>함께 해보고 싶은 일</span></label>
+          <label><input type="radio" name="topic" id="topic2" value="2"><span>이것만은 지켜졌으면</span></label>
+          <label><input type="radio" name="topic" id="topic3" value="3"><span>요즘 혼자 하는 고민</span></label>
+        </fieldset>
+        <label for="text" class="rule">편지 내용 (300자까지 · 이름은 남지 않습니다)</label>
+        <textarea id="text" maxlength="300" placeholder="예: 가까운 학교 선생님들과 한 학기에 한 번 밥 먹는 자리가 있으면 좋겠어요."></textarea>
+        <div class="send-row">
+          <span class="count" id="count">0 / 300</span>
+          <button class="send" id="send" type="submit">우체통에 넣기</button>
+        </div>
+        <p class="notice" id="notice" role="status"></p>
+        <p class="rule">함께 만들어가는 모임입니다. 타인에 대한 배려를 담아 내용을 작성해주세요. 의견은 확인 후 게시됩니다.</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- 📮 빨간 우체통 영역 -->
+  <div class="postbox-stage" id="postboxStage">
+    <div class="flying-letter" id="flyingLetter" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><use href="#i-mail"/></svg></div>
+    <div class="postbox-row">
+      <svg class="tree" viewBox="0 0 120 170" aria-hidden="true">
+        <rect x="52" y="140" width="16" height="22" rx="4"/>
+        <path d="M60 22 L92 70 H28 Z"/>
+        <path d="M60 50 L102 106 H18 Z"/>
+        <path d="M60 82 L112 144 H8 Z"/>
+        <path class="star" d="M60 4 L64 13 L74 14 L66 20 L69 30 L60 24 L51 30 L54 20 L46 14 L56 13 Z"/>
+        <circle class="orn" cx="52" cy="58" r="4.5" fill="#ff7a6b" style="--d:0s"/>
+        <circle class="orn" cx="72" cy="64" r="4" fill="#f3a6d6" style="--d:.5s"/>
+        <circle class="orn" cx="42" cy="94" r="4.5" fill="#7fb2ff" style="--d:.9s"/>
+        <circle class="orn" cx="64" cy="88" r="4" fill="#ffffff" style="--d:.3s"/>
+        <circle class="orn" cx="84" cy="98" r="4.5" fill="#ff7a6b" style="--d:1.2s"/>
+        <circle class="orn" cx="30" cy="132" r="4.5" fill="#f3a6d6" style="--d:.7s"/>
+        <circle class="orn" cx="56" cy="124" r="4" fill="#ffd76a" style="--d:1.5s"/>
+        <circle class="orn" cx="78" cy="130" r="4.5" fill="#7fb2ff" style="--d:.2s"/>
+        <circle class="orn" cx="98" cy="134" r="4" fill="#ffffff" style="--d:1s"/>
+      </svg>
+      <button type="button" class="red-postbox" id="redPostbox" aria-expanded="false">
+        <div class="postbox-body">
+          <div class="postbox-slot"></div>
+          <span class="postbox-emblem">마음우체통</span>
+          <span class="postbox-count" id="boxCount">편지함</span>
+        </div>
+        <span class="postbox-caption" id="boxCaption">빨간 우체통을 눌러 먼저 도착한 편지 보기</span>
+      </button>
+      <svg class="tree second" viewBox="0 0 120 170" aria-hidden="true">
+        <rect x="52" y="140" width="16" height="22" rx="4"/>
+        <path d="M60 22 L92 70 H28 Z"/>
+        <path d="M60 50 L102 106 H18 Z"/>
+        <path d="M60 82 L112 144 H8 Z"/>
+        <path class="star" d="M60 4 L64 13 L74 14 L66 20 L69 30 L60 24 L51 30 L54 20 L46 14 L56 13 Z"/>
+        <circle class="orn" cx="52" cy="58" r="4.5" fill="#7fb2ff" style="--d:0s"/>
+        <circle class="orn" cx="72" cy="64" r="4" fill="#ff7a6b" style="--d:.5s"/>
+        <circle class="orn" cx="42" cy="94" r="4.5" fill="#f3a6d6" style="--d:.9s"/>
+        <circle class="orn" cx="64" cy="88" r="4" fill="#ffffff" style="--d:.3s"/>
+        <circle class="orn" cx="84" cy="98" r="4.5" fill="#ffd76a" style="--d:1.2s"/>
+        <circle class="orn" cx="30" cy="132" r="4.5" fill="#ff7a6b" style="--d:.7s"/>
+        <circle class="orn" cx="56" cy="124" r="4" fill="#7fb2ff" style="--d:1.5s"/>
+        <circle class="orn" cx="78" cy="130" r="4.5" fill="#f3a6d6" style="--d:.2s"/>
+        <circle class="orn" cx="98" cy="134" r="4" fill="#ffffff" style="--d:1s"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 도착한 편지 벽 (빨간 우체통을 클릭하면 열립니다) -->
+  <section class="wall-section" id="wallSection" hidden>
+    <div class="wall-head">
+      <h2>먼저 도착한 편지 <span id="total"></span></h2>
+      <div class="tabs" id="tabs">
+        <button type="button" class="tab" data-filter="0" aria-pressed="true">전체</button>
+        <button type="button" class="tab" data-filter="1" aria-pressed="false">함께 해보고 싶은 일</button>
+        <button type="button" class="tab" data-filter="2" aria-pressed="false">지켜졌으면</button>
+        <button type="button" class="tab" data-filter="3" aria-pressed="false">혼자 하는 고민</button>
+      </div>
+    </div>
+    <div class="wall" id="wall" tabindex="0" role="group" aria-roledescription="carousel" aria-label="도착한 편지. 좌우 화살표 키나 밀기로 넘겨 보세요"></div>
+    <div class="deck-nav" id="deckNav" hidden>
+      <button type="button" class="deck-btn" id="deckPrev" aria-label="이전 편지"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.6 5.2c-2.6 2.1-4.8 4.3-6.9 6.8 2 2.5 4.2 4.8 6.8 6.9"/></svg></button>
+      <span id="deckCount" aria-live="polite"></span>
+      <button type="button" class="deck-btn" id="deckNext" aria-label="다음 편지"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.4 5.2c2.6 2.1 4.8 4.3 6.9 6.8-2 2.5-4.2 4.8-6.8 6.9"/></svg></button>
+    </div>
+    <p class="deck-hint" id="deckHint" hidden>카드를 옆으로 밀거나 뒤쪽 카드를 눌러 편지를 넘겨 보세요</p>
+  </section>
+
+  <!-- #show 전체모임 스크린 전시 모드 -->
+  <section class="stage" id="stage" aria-live="polite">
+    <article class="stage-card" id="stageCard">
+      <span class="topic" id="stageTopic"></span>
+      <p class="stage-text" id="stageText"></p>
+      <div class="stage-comments" id="stageComments" hidden></div>
+      <div class="stage-foot">
+        <span id="stageLikes"></span>
+        <div class="stage-controls">
+          <span id="stageIndex"></span>
+          <button type="button" class="stage-btn" id="stagePrev">이전</button>
+          <button type="button" class="stage-btn" id="stagePause">일시정지</button>
+          <button type="button" class="stage-btn" id="stageNext">다음</button>
+        </div>
+      </div>
+    </article>
+  </section>
+</div>
+
+
+<script>
+/* ───── 설정 (웹 앱 URL 연결 완료!) ─────
+   받는 기간이 끝나면 IS_CLOSED 를 true 로 바꾸거나 CLOSE_AT 에 마감 일시를 적으세요. */
+const API_URL = "https://script.google.com/macros/s/AKfycbx7OTlknAFxp2xY-8e_OVXMUQ-MpD9Hxjrkl7SEhxBqVoTqEXiUQ4Hy2Lfq6XWSFiIW0Q/exec";
+const IS_CLOSED = false;
+const CLOSE_AT = ""; // 예: "2026-12-08T23:59:59+09:00"
+
+const TOPICS = { 1: "함께 해보고 싶은 일", 2: "이것만은 지켜졌으면", 3: "요즘 혼자 하는 고민" };
+const SAMPLE = [
+  { id: "s1", topic: 1, text: "가까운 학교 선생님들과 한 학기에 한 번 밥 먹는 자리가 있으면 좋겠어요.", likes: 7, comments: [{ id: "c1", text: "저도요! 권역별로 소소하게 모이면 부담 없고 좋을 것 같아요." }] },
+  { id: "s2", topic: 3, text: "도서관 협력수업을 처음 제안해 보려는데 어떻게 말을 꺼내야 할지 모르겠어요.", likes: 4, comments: [] },
+  { id: "s3", topic: 2, text: "전체모임이 제시간에 끝났으면 좋겠습니다.", likes: 11, comments: [] },
+  { id: "s4", topic: 1, text: "신규 선생님께 첫 학기 업무 달력을 선물하면 어떨까요?", likes: 5, comments: [] },
+  { id: "s5", topic: 2, text: "회비가 어디에 쓰였는지 한 장으로 알려 주세요.", likes: 9, comments: [] },
+  { id: "s6", topic: 3, text: "업무분장에서 도서관 일이 아닌 것이 자꾸 넘어옵니다. 다른 학교는 어떤가요?", likes: 6, comments: [] }
+];
+
+let letters = [];
+let filter = 0;
+let wallOpened = false;
+let deckIdx = 0;
+let deckSuppressClick = false;
+const $ = (id) => document.getElementById(id);
+function icon(name) {
+  const ns = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(ns, "svg");
+  svg.setAttribute("class", "ico");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("aria-hidden", "true");
+  const use = document.createElementNS(ns, "use");
+  use.setAttribute("href", "#i-" + name);
+  svg.appendChild(use);
+  return svg;
+}
+
+/* ───── 저작권 걱정 없는 잔잔한 배경음악 (Web Audio API) ─────
+   따뜻한 일렉트릭 피아노(Rhodes 풍) 코드 보이싱과 워킹 베이스, 부드러운 멜로디 */
+let audioCtx = null;
+let bgmPlaying = false;
+let bgmTimer = null;
+let jazzStep = 0;
+let userMutedBgm = false;
+
+// 재즈 II-V-I-VI 코드 진행 (Fmaj9 - Em7 - A7b13 - Dm9 - G13 - Cmaj9)
+const JAZZ_PROGRESSION = [
+  { bass: 87.31,  chord: [174.61, 220.00, 261.63, 329.63, 392.00], mel: [523.25, 440.00, 392.00, 329.63] }, // Fmaj9
+  { bass: 82.41,  chord: [164.81, 196.00, 246.94, 293.66, 349.23], mel: [392.00, 493.88, 440.00, 369.99] }, // Em7 -> A7
+  { bass: 110.00, chord: [220.00, 277.18, 329.63, 392.00, 440.00], mel: [554.37, 523.25, 440.00, 392.00] }, // A7(b13)
+  { bass: 73.42,  chord: [146.83, 174.61, 220.00, 261.63, 329.63], mel: [440.00, 392.00, 349.23, 293.66] }, // Dm9
+  { bass: 98.00,  chord: [196.00, 246.94, 293.66, 349.23, 440.00], mel: [493.88, 440.00, 392.00, 329.63] }, // G13
+  { bass: 65.41,  chord: [130.81, 164.81, 196.00, 246.94, 293.66], mel: [392.00, 329.63, 293.66, 246.94] }  // Cmaj9
+];
+
+function playJazzTone(freq, duration, vol, delaySec = 0) {
+  if (!audioCtx || !bgmPlaying) return;
+  const start = audioCtx.currentTime + delaySec;
+  const osc = audioCtx.createOscillator();
+  const warm = audioCtx.createOscillator();
+  const filterNode = audioCtx.createBiquadFilter();
+  const gain = audioCtx.createGain();
+
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(freq, start);
+
+  warm.type = "triangle";
+  warm.frequency.setValueAtTime(freq, start);
+  const warmGain = audioCtx.createGain();
+  warmGain.gain.setValueAtTime(vol * 0.25, start);
+
+  // 부드러운 로우패스 필터로 포근한 재즈 피아노 질감 생성
+  filterNode.type = "lowpass";
+  filterNode.frequency.setValueAtTime(950, start);
+
+  gain.gain.setValueAtTime(0.0001, start);
+  gain.gain.linearRampToValueAtTime(vol, start + 0.05);
+  gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+
+  osc.connect(filterNode);
+  warm.connect(warmGain);
+  warmGain.connect(filterNode);
+  filterNode.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start(start);
+  warm.start(start);
+  osc.stop(start + duration + 0.05);
+  warm.stop(start + duration + 0.05);
+}
+
+function startJazzLoop() {
+  if (bgmPlaying) return;
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === "suspended") audioCtx.resume();
+  bgmPlaying = true;
+
+  const barTick = () => {
+    if (!bgmPlaying) return;
+    const item = JAZZ_PROGRESSION[jazzStep % JAZZ_PROGRESSION.length];
+    // 1박: 따뜻한 어쿠스틱 베이스 + 부드럽게 굴러가는 재즈 코드(아르페지오 스트럼)
+    playJazzTone(item.bass, 2.8, 0.05, 0);
+    item.chord.forEach((f, idx) => {
+      playJazzTone(f, 2.4, 0.024, idx * 0.045);
+    });
+    // 스윙 리듬의 잔잔한 오른손 재즈 선율
+    playJazzTone(item.mel[0], 1.1, 0.03, 0.55);
+    playJazzTone(item.mel[1], 0.9, 0.026, 1.25);
+    // 3박: 워킹 베이스 5도음과 코드 살짝 짚어주기
+    playJazzTone(item.bass * 1.5, 1.4, 0.038, 1.6);
+    playJazzTone(item.mel[2], 1.2, 0.028, 2.15);
+    if (jazzStep % 2 === 0) {
+      playJazzTone(item.mel[3], 0.9, 0.022, 2.75);
+    }
+    jazzStep++;
+  };
+  barTick();
+  bgmTimer = setInterval(barTick, 3200);
+}
+
+function stopJazzLoop() {
+  bgmPlaying = false;
+  clearInterval(bgmTimer);
+}
+
+/* ───── 효과음 준비 (넘기는 소리 · 타자기 소리) ─────
+   배경음악과 따로 연결되어 있어 배경음악을 꺼도 들립니다. */
+let sfxGain = null;
+let sfxNoise = null;
+function setupAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (sfxGain) return;
+  const sr = audioCtx.sampleRate;
+  sfxGain = audioCtx.createGain();
+  sfxGain.gain.value = 1;
+  sfxGain.connect(audioCtx.destination);
+  sfxNoise = audioCtx.createBuffer(1, Math.floor(sr * 0.4), sr);
+  const nd = sfxNoise.getChannelData(0);
+  for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+}
+
+/* 편지 카드를 넘길 때 나는 "슥" 소리: 종이가 스치는 듯한 짧은 바람 소리가
+   넘기는 방향으로 지나간다. SFX_ON 을 false 로 바꾸면 효과음(넘기는 소리 · 타자기 소리)이 모두 꺼집니다. */
+const SFX_ON = true;
+function playSwipe(dir) {
+  if (!SFX_ON) return;
+  try {
+    setupAudio();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    const t = audioCtx.currentTime + 0.01;
+    const src = audioCtx.createBufferSource();
+    src.buffer = sfxNoise;
+    const bp = audioCtx.createBiquadFilter();
+    bp.type = "bandpass";
+    bp.Q.value = 0.9;
+    bp.frequency.setValueAtTime(700, t);
+    bp.frequency.exponentialRampToValueAtTime(3200, t + 0.16);
+    bp.frequency.exponentialRampToValueAtTime(1500, t + 0.28);
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(0.11, t + 0.05);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+    src.connect(bp);
+    bp.connect(g);
+    if (audioCtx.createStereoPanner) {
+      const pan = audioCtx.createStereoPanner();
+      pan.pan.setValueAtTime(0.5 * dir, t);
+      pan.pan.linearRampToValueAtTime(-0.5 * dir, t + 0.28);
+      g.connect(pan);
+      pan.connect(sfxGain);
+    } else {
+      g.connect(sfxGain);
+    }
+    src.start(t);
+    src.stop(t + 0.34);
+  } catch (e) {}
+}
+
+/* 편지를 쓸 때 나는 타자기 소리: 글쇠가 "탁" 하고 찍히는 짧은 소리.
+   띄어쓰기는 조금 낮게, 지울 때는 작게, 줄을 바꿀 때는 종이가 밀리는 소리가 난다. */
+let lastTypeAt = 0;
+function playType(kind) {
+  if (!SFX_ON) return;
+  try {
+    setupAudio();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    const now = audioCtx.currentTime;
+    if (now - lastTypeAt < 0.03) return;
+    lastTypeAt = now;
+    const t = now + 0.005;
+    const burst = (start, length, freq, q, vol) => {
+      const src = audioCtx.createBufferSource();
+      src.buffer = sfxNoise;
+      const bp = audioCtx.createBiquadFilter();
+      bp.type = "bandpass";
+      bp.frequency.value = freq;
+      bp.Q.value = q;
+      const g = audioCtx.createGain();
+      g.gain.setValueAtTime(vol, start);
+      g.gain.exponentialRampToValueAtTime(0.0001, start + length);
+      src.connect(bp);
+      bp.connect(g);
+      g.connect(sfxGain);
+      src.start(start, Math.random() * 0.2);
+      src.stop(start + length + 0.01);
+    };
+    if (kind === "return") {
+      /* 줄 바꿈: 종이가 드르륵 밀리는 소리 */
+      for (let i = 0; i < 7; i++) burst(t + i * 0.028, 0.02, 2400 + i * 120, 3, 0.05);
+      return;
+    }
+    const vary = 0.9 + Math.random() * 0.2;
+    const loud = kind === "delete" ? 0.45 : 1;
+    const pitch = kind === "space" ? 0.6 : 1;
+    burst(t, 0.022, 3400 * vary * pitch, 2.2, 0.16 * loud);          // 글쇠가 종이를 치는 소리
+    burst(t + 0.004, 0.05, 1100 * vary * pitch, 1.4, 0.09 * loud);   // 묵직한 몸통 소리
+    burst(t + 0.045, 0.02, 2200 * vary * pitch, 3, 0.04 * loud);     // 글쇠가 돌아오는 소리
+  } catch (e) {}
+}
+
+/* 배경음악은 켜짐이 기본입니다.
+   브라우저는 방문자가 화면을 한 번 누르거나 키를 누르기 전에는 소리를 막으므로,
+   첫 동작 때 자동으로 시작합니다. 버튼으로 언제든 끌 수 있습니다. */
+let wantBgm = true;
+function syncBgmButton() {
+  $("bgmBtn").setAttribute("aria-pressed", String(wantBgm));
+  $("bgmBtn").textContent = wantBgm ? "배경음악 끄기" : "배경음악 켜기";
+}
+$("bgmBtn").addEventListener("click", () => {
+  wantBgm = !wantBgm;
+  if (wantBgm) startJazzLoop(); else stopJazzLoop();
+  syncBgmButton();
+});
+function startBgmOnFirstAction(e) {
+  if (e.target && e.target.closest && e.target.closest("#bgmBtn")) return;
+  document.removeEventListener("pointerdown", startBgmOnFirstAction);
+  document.removeEventListener("keydown", startBgmOnFirstAction);
+  if (wantBgm && !bgmPlaying) startJazzLoop();
+}
+document.addEventListener("pointerdown", startBgmOnFirstAction);
+document.addEventListener("keydown", startBgmOnFirstAction);
+
+/* ───── 우체통 열기 / 닫기 & 편지 넣기 애니메이션 ───── */
+function togglePostbox(forceOpen) {
+  wallOpened = typeof forceOpen === "boolean" ? forceOpen : !wallOpened;
+  const sec = $("wallSection");
+  const btn = $("redPostbox");
+  const cap = $("boxCaption");
+  sec.hidden = !wallOpened;
+  btn.setAttribute("aria-expanded", String(wallOpened));
+  cap.textContent = wallOpened
+    ? "우체통이 열렸습니다 (다시 누르면 닫힙니다)"
+    : "빨간 우체통을 눌러 먼저 도착한 편지 보기";
+  if (wallOpened) {
+    setTimeout(() => sec.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
+  }
+}
+
+$("redPostbox").addEventListener("click", () => togglePostbox());
+
+function triggerMailboxDropAnimation() {
+  const stage = $("postboxStage");
+  const flyer = $("flyingLetter");
+  const box = $("redPostbox");
+  stage.scrollIntoView({ behavior: "smooth", block: "center" });
+  flyer.classList.remove("drop");
+  box.classList.remove("shake");
+  void flyer.offsetWidth;
+  flyer.classList.add("drop");
+  setTimeout(() => box.classList.add("shake"), 650);
+}
+
+function likedSet() {
+  try { return new Set(JSON.parse(localStorage.getItem("mailbox-liked") || "[]")); }
+  catch (e) { return new Set(); }
+}
+function saveLiked(set) {
+  try { localStorage.setItem("mailbox-liked", JSON.stringify([...set])); } catch (e) {}
+}
+
+function isClosedNow(serverClosed) {
+  if (IS_CLOSED || serverClosed) return true;
+  if (CLOSE_AT && Date.now() > new Date(CLOSE_AT).getTime()) return true;
+  return false;
+}
+function applyClosedState(serverClosed) {
+  if (!isClosedNow(serverClosed)) return;
+  const form = $("form");
+  form.textContent = "";
+  const msg = document.createElement("p");
+  msg.className = "closed-box";
+  msg.textContent = "편지 접수가 끝났습니다";
+  form.appendChild(msg);
+}
+
+function render() {
+  const wall = $("wall");
+  wall.textContent = "";
+  const liked = likedSet();
+  const list = letters.filter((l) => filter === 0 || Number(l.topic) === filter);
+  $("total").textContent = letters.length ? "(" + letters.length + "통)" : "";
+  $("boxCount").textContent = letters.length ? letters.length + "통 도착" : "편지함";
+
+  if (!list.length) {
+    const p = document.createElement("p");
+    p.className = "empty";
+    p.textContent = letters.length ? "이 주제의 편지는 아직 없습니다." : "아직 도착한 편지가 없습니다. 첫 편지를 넣어 주세요.";
+    wall.appendChild(p);
+    wall.classList.add("is-empty");
+    layoutDeck();
+    return;
+  }
+  wall.classList.remove("is-empty");
+  deckIdx = Math.max(0, Math.min(deckIdx, list.length - 1));
+  list.forEach((l, i) => {
+    const card = document.createElement("article");
+    card.className = "letter";
+    card.dataset.topic = l.topic;
+    // 8가지 유리 색조가 골고루 어우러지도록 배정
+    card.dataset.palette = String((i % 8) + 1);
+
+    const inner = document.createElement("div");
+    inner.className = "letter-inner";
+
+    const head = document.createElement("div");
+    head.className = "letter-head";
+    const badge = document.createElement("span");
+    badge.className = "letter-badge";
+    badge.appendChild(icon("mail"));
+    const topic = document.createElement("span");
+    topic.className = "topic";
+    topic.textContent = TOPICS[l.topic] || "";
+    const no = document.createElement("span");
+    no.className = "letter-no";
+    no.textContent = (i + 1) + " / " + list.length;
+    head.append(badge, topic, no);
+
+    const bodyWrap = document.createElement("div");
+    bodyWrap.className = "letter-body";
+    const body = document.createElement("p");
+    body.textContent = l.text;
+    bodyWrap.appendChild(body);
+
+    const cList = document.createElement("ul");
+    cList.className = "comment-list";
+    (l.comments || []).forEach((c) => {
+      const li = document.createElement("li");
+      li.className = "comment-item";
+      li.textContent = "↳ " + c.text;
+      cList.appendChild(li);
+    });
+    if ((l.comments || []).length) bodyWrap.appendChild(cList);
+
+    const rForm = document.createElement("div");
+    rForm.className = "reply-form";
+    rForm.hidden = true;
+    const rInput = document.createElement("input");
+    rInput.type = "text";
+    rInput.className = "reply-input";
+    rInput.maxLength = 150;
+    rInput.placeholder = "따뜻한 답장을 남겨 주세요 (150자)";
+    rInput.setAttribute("aria-label", "답장 내용");
+    const rRow = document.createElement("div");
+    rRow.className = "reply-row";
+    const rNotice = document.createElement("span");
+    rNotice.className = "rule";
+    const rBtn = document.createElement("button");
+    rBtn.type = "button";
+    rBtn.className = "reply-btn";
+    rBtn.textContent = "등록";
+    rRow.append(rNotice, rBtn);
+    rForm.append(rInput, rRow);
+    bodyWrap.appendChild(rForm);
+
+    const actions = document.createElement("div");
+    actions.className = "letter-actions";
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "reply-toggle";
+    toggle.textContent = "답장 달기";
+    const like = document.createElement("button");
+    like.type = "button";
+    like.className = "like";
+    const isLiked = liked.has(l.id);
+    like.setAttribute("aria-pressed", String(isLiked));
+    like.append(icon("heart"), " 공감 " + (Number(l.likes) || 0));
+    like.setAttribute("aria-label", "공감 " + (Number(l.likes) || 0) + "개");
+    like.disabled = isLiked;
+    like.addEventListener("click", () => sendLike(l));
+    actions.append(toggle, like);
+
+    toggle.addEventListener("click", () => {
+      rForm.hidden = !rForm.hidden;
+      if (!rForm.hidden) rInput.focus();
+    });
+
+    rBtn.addEventListener("click", async () => {
+      const val = rInput.value.trim();
+      if (val.length < 2) {
+        rNotice.textContent = "두 글자 이상 써 주세요.";
+        return;
+      }
+      rBtn.disabled = true;
+      try {
+        if (API_URL) {
+          const out = await post({ action: "comment", letterId: l.id, text: val });
+          if (!out.ok) throw new Error(out.error);
+          rNotice.textContent = "확인 뒤 실립니다.";
+        } else {
+          l.comments = l.comments || [];
+          l.comments.push({ id: "lc" + Date.now(), text: val });
+          render();
+          return;
+        }
+        rInput.value = "";
+      } catch (err) {
+        rNotice.textContent = "다시 눌러 주세요.";
+      } finally {
+        rBtn.disabled = false;
+      }
+    });
+
+    /* 뒤에 놓인 카드를 누르면 그 카드가 앞으로 나온다 */
+    card.addEventListener("click", () => {
+      if (!deckSuppressClick && i !== deckIdx) goDeck(i);
+    });
+
+    inner.append(head, bodyWrap, actions);
+    card.appendChild(inner);
+    wall.appendChild(card);
+  });
+  layoutDeck();
+}
+
+/* ───── 편지 카드 넘기기 ───── */
+function layoutDeck() {
+  const cards = [...$("wall").querySelectorAll(".letter")];
+  cards.forEach((c, i) => {
+    const isCurrent = i === deckIdx;
+    c.dataset.pos = String(Math.max(-3, Math.min(3, i - deckIdx)));
+    c.firstElementChild.inert = !isCurrent;
+    c.setAttribute("aria-hidden", String(!isCurrent));
+  });
+  $("deckNav").hidden = cards.length === 0;
+  $("deckHint").hidden = cards.length < 2;
+  $("deckCount").textContent = cards.length ? (deckIdx + 1) + " / " + cards.length : "";
+  $("deckPrev").disabled = deckIdx <= 0;
+  $("deckNext").disabled = deckIdx >= cards.length - 1;
+}
+function goDeck(index) {
+  const n = $("wall").querySelectorAll(".letter").length;
+  if (!n) return;
+  const before = deckIdx;
+  deckIdx = Math.max(0, Math.min(n - 1, index));
+  layoutDeck();
+  if (deckIdx !== before) playSwipe(deckIdx > before ? 1 : -1);
+}
+$("deckPrev").addEventListener("click", () => goDeck(deckIdx - 1));
+$("deckNext").addEventListener("click", () => goDeck(deckIdx + 1));
+(function deckDrag() {
+  const wall = $("wall");
+  let startX = 0, dx = 0, active = false, moved = false;
+  wall.addEventListener("pointerdown", (e) => {
+    if (e.button || e.target.closest("button, input, textarea, a")) return;
+    active = true; moved = false; startX = e.clientX; dx = 0;
+  });
+  window.addEventListener("pointermove", (e) => {
+    if (!active) return;
+    dx = e.clientX - startX;
+    if (!moved && Math.abs(dx) > 8) {
+      moved = true;
+      wall.classList.add("dragging");
+      const sel = window.getSelection && window.getSelection();
+      if (sel) sel.removeAllRanges();
+    }
+    if (moved) wall.style.setProperty("--drag", (dx * 0.7) + "px");
+  });
+  const end = () => {
+    if (!active) return;
+    active = false;
+    wall.classList.remove("dragging");
+    wall.style.setProperty("--drag", "0px");
+    if (moved) {
+      if (Math.abs(dx) > 50) goDeck(deckIdx + (dx < 0 ? 1 : -1));
+      deckSuppressClick = true;
+      setTimeout(() => { deckSuppressClick = false; }, 60);
+    }
+  };
+  window.addEventListener("pointerup", end);
+  window.addEventListener("pointercancel", end);
+  wall.addEventListener("keydown", (e) => {
+    if (e.target.closest("input, textarea")) return;
+    if (e.key === "ArrowRight") { goDeck(deckIdx + 1); e.preventDefault(); }
+    if (e.key === "ArrowLeft") { goDeck(deckIdx - 1); e.preventDefault(); }
+  });
+})();
+
+async function load() {
+  if (!API_URL) {
+    letters = SAMPLE.map((l) => ({ ...l, comments: [...(l.comments || [])] }));
+    render();
+    applyClosedState(false);
+    renderStage();
+    return;
+  }
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    letters = (data.letters || []).reverse();
+    render();
+    applyClosedState(data.closed);
+    renderStage();
+  } catch (e) {
+    $("wall").textContent = "";
+    const p = document.createElement("p");
+    p.className = "empty";
+    p.textContent = "편지를 불러오지 못했습니다. 잠시 뒤 새로고침해 주세요.";
+    $("wall").appendChild(p);
+  }
+}
+
+async function post(payload) {
+  const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
+  return res.json();
+}
+
+async function sendLike(letter) {
+  const liked = likedSet();
+  if (liked.has(letter.id)) return;
+  liked.add(letter.id);
+  saveLiked(liked);
+  letter.likes = (Number(letter.likes) || 0) + 1;
+  render();
+  if (!API_URL) return;
+  try { await post({ action: "like", id: letter.id }); } catch (e) {}
+}
+
+if ($("text")) {
+  $("text").addEventListener("input", (e) => {
+    $("count").textContent = $("text").value.length + " / 300";
+    const type = e.inputType || "";
+    if (type === "insertLineBreak" || type === "insertParagraph") playType("return");
+    else if (type.indexOf("delete") === 0) playType("delete");
+    else if (e.data === " ") playType("space");
+    else playType("key");
+  });
+}
+
+$("tabs").addEventListener("click", (e) => {
+  const btn = e.target.closest(".tab");
+  if (!btn) return;
+  filter = Number(btn.dataset.filter);
+  deckIdx = 0;
+  document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-pressed", String(t === btn)));
+  render();
+});
+
+$("form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const notice = $("notice");
+  const text = $("text").value.trim();
+  const topic = Number(document.querySelector('input[name="topic"]:checked').value);
+  notice.className = "notice";
+  if (text.length < 5) {
+    notice.className = "notice error";
+    notice.textContent = "다섯 글자 이상 써 주세요.";
+    return;
+  }
+  $("send").disabled = true;
+  try {
+    if (API_URL) {
+      const out = await post({ action: "write", topic, text });
+      if (!out.ok) throw new Error(out.error || "저장 실패");
+      notice.textContent = "편지가 빨간 우체통에 쏙 들어갔습니다! 인수위원회 확인 뒤 우체통 안에 실립니다.";
+    } else {
+      letters.unshift({ id: "local" + Date.now(), topic, text, likes: 0, comments: [] });
+      deckIdx = 0;
+      render();
+      notice.textContent = "편지가 우체통에 들어갔습니다! 아래 빨간 우체통을 눌러 확인해 보세요.";
+    }
+    $("text").value = "";
+    $("count").textContent = "0 / 300";
+    triggerMailboxDropAnimation();
+  } catch (err) {
+    notice.className = "notice error";
+    notice.textContent = "편지를 넣지 못했습니다. 내용은 그대로 두었으니 잠시 뒤 다시 눌러 주세요.";
+  } finally {
+    $("send").disabled = false;
+  }
+});
+
+/* ───── #show 전시 모드 ───── */
+let stageIdx = 0;
+let stageTimer = null;
+let stagePaused = false;
+
+function renderStage() {
+  if (!document.body.classList.contains("show-mode")) return;
+  const card = $("stageCard");
+  const cBox = $("stageComments");
+  cBox.textContent = "";
+  if (!letters.length) {
+    $("stageTopic").textContent = "";
+    $("stageText").textContent = "전시할 편지가 아직 없습니다.";
+    $("stageLikes").textContent = "";
+    $("stageIndex").textContent = "";
+    cBox.hidden = true;
+    return;
+  }
+  stageIdx = ((stageIdx % letters.length) + letters.length) % letters.length;
+  const l = letters[stageIdx];
+  card.dataset.palette = String((stageIdx % 8) + 1);
+  $("stageTopic").textContent = TOPICS[l.topic] || "";
+  $("stageText").textContent = l.text;
+  $("stageLikes").textContent = "공감 " + (Number(l.likes) || 0);
+  $("stageIndex").textContent = (stageIdx + 1) + " / " + letters.length;
+
+  const comments = l.comments || [];
+  if (comments.length) {
+    cBox.hidden = false;
+    comments.forEach((c) => {
+      const p = document.createElement("div");
+      p.textContent = "↳ " + c.text;
+      cBox.appendChild(p);
+    });
+  } else {
+    cBox.hidden = true;
+  }
+}
+
+function stepStage(delta) {
+  if (!letters.length) return;
+  stageIdx = (stageIdx + delta + letters.length) % letters.length;
+  renderStage();
+}
+
+function syncShowMode() {
+  const isShow = location.hash === "#show";
+  document.body.classList.toggle("show-mode", isShow);
+  clearInterval(stageTimer);
+  if (isShow) {
+    renderStage();
+    stageTimer = setInterval(() => {
+      if (!stagePaused) stepStage(1);
+    }, 8000);
+  }
+}
+
+$("stagePrev").addEventListener("click", () => stepStage(-1));
+$("stageNext").addEventListener("click", () => stepStage(1));
+$("stagePause").addEventListener("click", () => {
+  stagePaused = !stagePaused;
+  $("stagePause").textContent = stagePaused ? "재생" : "일시정지";
+});
+window.addEventListener("keydown", (e) => {
+  if (!document.body.classList.contains("show-mode")) return;
+  if (e.key === "ArrowRight") stepStage(1);
+  if (e.key === "ArrowLeft") stepStage(-1);
+});
+window.addEventListener("hashchange", syncShowMode);
+syncShowMode();
+
+/* 화면 위 별 줄 만들기 */
+(function makeLights() {
+  const sizes = [16, 26, 14, 34, 20, 30, 15, 40, 22, 18, 28];
+  const threads = [8, 46, 22, 4, 62, 30, 14, 54, 36, 70, 18];
+  const box = $("lights");
+  const n = Math.max(14, Math.min(40, Math.floor(window.innerWidth / 34)));
+  for (let i = 0; i < n; i++) {
+    const b = document.createElement("span");
+    b.className = "bulb";
+    b.style.setProperty("--s", sizes[i % sizes.length] + "px");
+    b.style.setProperty("--l", threads[(i * 4) % threads.length] + "px");
+    b.style.setProperty("--t", (5 + (i * 1.3) % 3).toFixed(1) + "s");
+    b.style.setProperty("--d", (-(i * 0.9) % 5).toFixed(2) + "s");
+    b.appendChild(document.createElement("i"));
+    box.appendChild(b);
+  }
+})();
+
+/* ───── 뒤에 깔리는 흐릿한 트리 조명 ─────
+   화면 가운데에 큰 트리 모양으로 빛망울을 뿌리고 천천히 깜빡이게 합니다. */
+(function bokeh() {
+  const cv = $("bokeh");
+  const ctx = cv.getContext("2d");
+  const colors = ["255,200,90", "255,214,120", "255,176,70", "255,228,160", "255,150,70"];
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let W = 0, H = 0, dots = [];
+  function build() {
+    W = cv.width = window.innerWidth;
+    H = cv.height = window.innerHeight;
+    const small = W < 600 ? 0.7 : 1;
+    /* 화면을 칸으로 나누고 칸마다 하나씩 놓아 한쪽으로 몰리지 않게 한다 */
+    const cols = Math.max(3, Math.round(W / 230));
+    const rows = Math.max(4, Math.round(H / 200));
+    dots = [];
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        if (Math.random() < 0.12) continue;
+        dots.push({
+          x: (c + 0.15 + Math.random() * 0.7) * (W / cols),
+          y: (r + 0.15 + Math.random() * 0.7) * (H / rows),
+          r: (44 + Math.random() * 78) * small,
+          c: colors[Math.floor(Math.random() * colors.length)],
+          p: Math.random() * 6.283,
+          s: 0.5 + Math.random() * 1.3
+        });
+      }
+    }
+  }
+  function draw(ms) {
+    ctx.clearRect(0, 0, W, H);
+    const t = ms / 1000;
+    for (const d of dots) {
+      const wave = 0.5 + 0.5 * Math.sin(t * d.s + d.p);
+      const a = 0.12 + 0.4 * wave;
+      /* 촛불처럼 위아래로 길쭉한 불빛. 깜빡일 때 살짝 길어졌다 줄어든다 */
+      const tall = 1.45 + 0.18 * Math.sin(t * d.s * 1.7 + d.p);
+      ctx.save();
+      ctx.translate(d.x, d.y);
+      ctx.scale(1, tall);
+      const g = ctx.createRadialGradient(0, d.r * 0.15, 0, 0, 0, d.r);
+      g.addColorStop(0, "rgba(255,244,210," + a + ")");
+      g.addColorStop(0.35, "rgba(" + d.c + "," + a * 0.8 + ")");
+      g.addColorStop(1, "rgba(" + d.c + ",0)");
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(0, 0, d.r, 0, 6.283);
+      ctx.fill();
+      ctx.restore();
+    }
+    if (!still) requestAnimationFrame(draw);
+  }
+  let resizeTimer = null;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { build(); if (still) draw(0); }, 200);
+  });
+  build();
+  requestAnimationFrame(draw);
+})();
+
+/* 천천히 내리는 눈: 유리 카드 뒤에서 조용히 움직인다 */
+(function snow() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cv = $("snow");
+  const ctx = cv.getContext("2d");
+  let W = 0, H = 0, flakes = [];
+  function build() {
+    W = cv.width = window.innerWidth;
+    H = cv.height = window.innerHeight;
+    const n = Math.round(Math.min(70, W / 18));
+    flakes = Array.from({ length: n }, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      r: 1.2 + Math.random() * 2.6,
+      v: 10 + Math.random() * 22,
+      p: Math.random() * 6.283,
+      a: 0.35 + Math.random() * 0.45
+    }));
+  }
+  let last = 0;
+  function draw(ms) {
+    const dt = Math.min(0.05, (ms - last) / 1000);
+    last = ms;
+    ctx.clearRect(0, 0, W, H);
+    for (const f of flakes) {
+      f.y += f.v * dt;
+      if (f.y > H + 6) { f.y = -6; f.x = Math.random() * W; }
+      const x = f.x + Math.sin(ms / 1600 + f.p) * 14;
+      ctx.beginPath();
+      ctx.arc(x, f.y, f.r, 0, 6.283);
+      ctx.fillStyle = "rgba(255,255,255," + f.a + ")";
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  let timer = null;
+  window.addEventListener("resize", () => { clearTimeout(timer); timer = setTimeout(build, 200); });
+  build();
+  requestAnimationFrame(draw);
+})();
+
+/* 편지를 쓰는 동안 글자가 다른 서체로 섞여 보이지 않도록,
+   자주 쓰는 한글 2,350자의 서체 조각을 화면이 뜬 뒤에 미리 받아 둔다. */
+window.addEventListener("load", () => {
+  const common = "가각간갇갈갉갊감갑값갓갔강갖갗같갚갛개객갠갤갬갭갯갰갱갸갹갼걀걋걍걔걘걜거걱건걷걸걺검겁것겄겅겆겉겊겋게겐겔겜겝겟겠겡겨격겪견겯결겸겹겻겼경곁계곈곌곕곗고곡곤곧골곪곬곯곰곱곳공곶과곽관괄괆괌괍괏광괘괜괠괩괬괭괴괵괸괼굄굅굇굉교굔굘굡굣구국군굳굴굵굶굻굼굽굿궁궂궈궉권궐궜궝궤궷귀귁귄귈귐귑귓규균귤그극근귿글긁금급긋긍긔기긱긴긷길긺김깁깃깅깆깊까깍깎깐깔깖깜깝깟깠깡깥깨깩깬깰깸깹깻깼깽꺄꺅꺌꺼꺽꺾껀껄껌껍껏껐껑께껙껜껨껫껭껴껸껼꼇꼈꼍꼐꼬꼭꼰꼲꼴꼼꼽꼿꽁꽂꽃꽈꽉꽐꽜꽝꽤꽥꽹꾀꾄꾈꾐꾑꾕꾜꾸꾹꾼꿀꿇꿈꿉꿋꿍꿎꿔꿜꿨꿩꿰꿱꿴꿸뀀뀁뀄뀌뀐뀔뀜뀝뀨끄끅끈끊끌끎끓끔끕끗끙끝끼끽낀낄낌낍낏낑나낙낚난낟날낡낢남납낫났낭낮낯낱낳내낵낸낼냄냅냇냈냉냐냑냔냘냠냥너넉넋넌널넒넓넘넙넛넜넝넣네넥넨넬넴넵넷넸넹녀녁년녈념녑녔녕녘녜녠노녹논놀놂놈놉놋농높놓놔놘놜놨뇌뇐뇔뇜뇝뇟뇨뇩뇬뇰뇹뇻뇽누눅눈눋눌눔눕눗눙눠눴눼뉘뉜뉠뉨뉩뉴뉵뉼늄늅늉느늑는늘늙늚늠늡늣능늦늪늬늰늴니닉닌닐닒님닙닛닝닢다닥닦단닫달닭닮닯닳담답닷닸당닺닻닿대댁댄댈댐댑댓댔댕댜더덕덖던덛덜덞덟덤덥덧덩덫덮데덱덴델뎀뎁뎃뎄뎅뎌뎐뎔뎠뎡뎨뎬도독돈돋돌돎돐돔돕돗동돛돝돠돤돨돼됐되된될됨됩됫됴두둑둔둘둠둡둣둥둬뒀뒈뒝뒤뒨뒬뒵뒷뒹듀듄듈듐듕드득든듣들듦듬듭듯등듸디딕딘딛딜딤딥딧딨딩딪따딱딴딸땀땁땃땄땅땋때땍땐땔땜땝땟땠땡떠떡떤떨떪떫떰떱떳떴떵떻떼떽뗀뗄뗌뗍뗏뗐뗑뗘뗬또똑똔똘똥똬똴뙈뙤뙨뚜뚝뚠뚤뚫뚬뚱뛔뛰뛴뛸뜀뜁뜅뜨뜩뜬뜯뜰뜸뜹뜻띄띈띌띔띕띠띤띨띰띱띳띵라락란랄람랍랏랐랑랒랖랗래랙랜랠램랩랫랬랭랴략랸럇량러럭런럴럼럽럿렀렁렇레렉렌렐렘렙렛렝려력련렬렴렵렷렸령례롄롑롓로록론롤롬롭롯롱롸롼뢍뢨뢰뢴뢸룀룁룃룅료룐룔룝룟룡루룩룬룰룸룹룻룽뤄뤘뤠뤼뤽륀륄륌륏륑류륙륜률륨륩륫륭르륵른를름릅릇릉릊릍릎리릭린릴림립릿링마막만많맏말맑맒맘맙맛망맞맡맣매맥맨맬맴맵맷맸맹맺먀먁먈먕머먹먼멀멂멈멉멋멍멎멓메멕멘멜멤멥멧멨멩며멱면멸몃몄명몇몌모목몫몬몰몲몸몹못몽뫄뫈뫘뫙뫼묀묄묍묏묑묘묜묠묩묫무묵묶문묻물묽묾뭄뭅뭇뭉뭍뭏뭐뭔뭘뭡뭣뭬뮈뮌뮐뮤뮨뮬뮴뮷므믄믈믐믓미믹민믿밀밂밈밉밋밌밍및밑바박밖밗반받발밝밞밟밤밥밧방밭배백밴밸뱀뱁뱃뱄뱅뱉뱌뱍뱐뱝버벅번벋벌벎범법벗벙벚베벡벤벧벨벰벱벳벴벵벼벽변별볍볏볐병볕볘볜보복볶본볼봄봅봇봉봐봔봤봬뵀뵈뵉뵌뵐뵘뵙뵤뵨부북분붇불붉붊붐붑붓붕붙붚붜붤붰붸뷔뷕뷘뷜뷩뷰뷴뷸븀븃븅브븍븐블븜븝븟비빅빈빌빎빔빕빗빙빚빛빠빡빤빨빪빰빱빳빴빵빻빼빽뺀뺄뺌뺍뺏뺐뺑뺘뺙뺨뻐뻑뻔뻗뻘뻠뻣뻤뻥뻬뼁뼈뼉뼘뼙뼛뼜뼝뽀뽁뽄뽈뽐뽑뽕뾔뾰뿅뿌뿍뿐뿔뿜뿟뿡쀼쁑쁘쁜쁠쁨쁩삐삑삔삘삠삡삣삥사삭삯산삳살삵삶삼삽삿샀상샅새색샌샐샘샙샛샜생샤샥샨샬샴샵샷샹섀섄섈섐섕서석섞섟선섣설섦섧섬섭섯섰성섶세섹센셀셈셉셋셌셍셔셕션셜셤셥셧셨셩셰셴셸솅소속솎손솔솖솜솝솟송솥솨솩솬솰솽쇄쇈쇌쇔쇗쇘쇠쇤쇨쇰쇱쇳쇼쇽숀숄숌숍숏숑수숙순숟술숨숩숫숭숯숱숲숴쉈쉐쉑쉔쉘쉠쉥쉬쉭쉰쉴쉼쉽쉿슁슈슉슐슘슛슝스슥슨슬슭슴습슷승시식신싣실싫심십싯싱싶싸싹싻싼쌀쌈쌉쌌쌍쌓쌔쌕쌘쌜쌤쌥쌨쌩썅써썩썬썰썲썸썹썼썽쎄쎈쎌쏀쏘쏙쏜쏟쏠쏢쏨쏩쏭쏴쏵쏸쐈쐐쐤쐬쐰쐴쐼쐽쑈쑤쑥쑨쑬쑴쑵쑹쒀쒔쒜쒸쒼쓩쓰쓱쓴쓸쓺쓿씀씁씌씐씔씜씨씩씬씰씸씹씻씽아악안앉않알앍앎앓암압앗았앙앝앞애액앤앨앰앱앳앴앵야약얀얄얇얌얍얏양얕얗얘얜얠얩어억언얹얻얼얽얾엄업없엇었엉엊엌엎에엑엔엘엠엡엣엥여역엮연열엶엷염엽엾엿였영옅옆옇예옌옐옘옙옛옜오옥온올옭옮옰옳옴옵옷옹옻와왁완왈왐왑왓왔왕왜왝왠왬왯왱외왹왼욀욈욉욋욍요욕욘욜욤욥욧용우욱운울욹욺움웁웃웅워웍원월웜웝웠웡웨웩웬웰웸웹웽위윅윈윌윔윕윗윙유육윤율윰윱윳융윷으윽은을읊음읍읏응읒읓읔읕읖읗의읜읠읨읫이익인일읽읾잃임입잇있잉잊잎자작잔잖잗잘잚잠잡잣잤장잦재잭잰잴잼잽잿쟀쟁쟈쟉쟌쟎쟐쟘쟝쟤쟨쟬저적전절젊점접젓정젖제젝젠젤젬젭젯젱져젼졀졈졉졌졍졔조족존졸졺좀좁좃종좆좇좋좌좍좔좝좟좡좨좼좽죄죈죌죔죕죗죙죠죡죤죵주죽준줄줅줆줌줍줏중줘줬줴쥐쥑쥔쥘쥠쥡쥣쥬쥰쥴쥼즈즉즌즐즘즙즛증지직진짇질짊짐집짓징짖짙짚짜짝짠짢짤짧짬짭짯짰짱째짹짼쨀쨈쨉쨋쨌쨍쨔쨘쨩쩌쩍쩐쩔쩜쩝쩟쩠쩡쩨쩽쪄쪘쪼쪽쫀쫄쫌쫍쫏쫑쫓쫘쫙쫠쫬쫴쬈쬐쬔쬘쬠쬡쭁쭈쭉쭌쭐쭘쭙쭝쭤쭸쭹쮜쮸쯔쯤쯧쯩찌찍찐찔찜찝찡찢찧차착찬찮찰참찹찻찼창찾채책챈챌챔챕챗챘챙챠챤챦챨챰챵처척천철첨첩첫첬청체첵첸첼쳄쳅쳇쳉쳐쳔쳤쳬쳰촁초촉촌촐촘촙촛총촤촨촬촹최쵠쵤쵬쵭쵯쵱쵸춈추축춘출춤춥춧충춰췄췌췐취췬췰췸췹췻췽츄츈츌츔츙츠측츤츨츰츱츳층치칙친칟칠칡침칩칫칭카칵칸칼캄캅캇캉캐캑캔캘캠캡캣캤캥캬캭컁커컥컨컫컬컴컵컷컸컹케켁켄켈켐켑켓켕켜켠켤켬켭켯켰켱켸코콕콘콜콤콥콧콩콰콱콴콸쾀쾅쾌쾡쾨쾰쿄쿠쿡쿤쿨쿰쿱쿳쿵쿼퀀퀄퀑퀘퀭퀴퀵퀸퀼큄큅큇큉큐큔큘큠크큭큰클큼큽킁키킥킨킬킴킵킷킹타탁탄탈탉탐탑탓탔탕태택탠탤탬탭탯탰탱탸턍터턱턴털턺텀텁텃텄텅테텍텐텔템텝텟텡텨텬텼톄톈토톡톤톨톰톱톳통톺톼퇀퇘퇴퇸툇툉툐투툭툰툴툼툽툿퉁퉈퉜퉤튀튁튄튈튐튑튕튜튠튤튬튱트특튼튿틀틂틈틉틋틔틘틜틤틥티틱틴틸팀팁팃팅파팍팎판팔팖팜팝팟팠팡팥패팩팬팰팸팹팻팼팽퍄퍅퍼퍽펀펄펌펍펏펐펑페펙펜펠펨펩펫펭펴편펼폄폅폈평폐폘폡폣포폭폰폴폼폽폿퐁퐈퐝푀푄표푠푤푭푯푸푹푼푿풀풂품풉풋풍풔풩퓌퓐퓔퓜퓟퓨퓬퓰퓸퓻퓽프픈플픔픕픗피픽핀필핌핍핏핑하학한할핥함합핫항해핵핸핼햄햅햇했행햐향허헉헌헐헒험헙헛헝헤헥헨헬헴헵헷헹혀혁현혈혐협혓혔형혜혠혤혭호혹혼홀홅홈홉홋홍홑화확환활홧황홰홱홴횃횅회획횐횔횝횟횡효횬횰횹횻후훅훈훌훑훔훗훙훠훤훨훰훵훼훽휀휄휑휘휙휜휠휨휩휫휭휴휵휸휼흄흇흉흐흑흔흖흗흘흙흠흡흣흥흩희흰흴흼흽힁히힉힌힐힘힙힛힝";
+  if (document.fonts && document.fonts.load) {
+    ["400", "700"].forEach((w) => {
+      document.fonts.load(w + ' 16px "Nanum Gothic"', common).catch(() => {});
+    });
+  }
+});
+
+load();
+</script>
+</body>
+</html>
