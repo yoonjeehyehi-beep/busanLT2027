@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>2027 마음의 소리: 부산사서교사협의회</title>
+<title>2027 마음의 소리: 부산사서교사회</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -138,7 +138,6 @@ h1 small { display: block; font-size: .4em; font-weight: 700; color: var(--cream
 }
 
 /* 편지지: 트리 불빛이 비치는 서리 낀 흰 유리 편지지. 위쪽에 빨강·초록 항공우편 띠 */
-.stack { display: grid; gap: 1.6rem; }
 .mailbox-wrap { position: relative; animation: fadeUp .8s .15s ease both; }
 .ghost-card {
   position: absolute;
@@ -299,25 +298,6 @@ textarea:focus-visible { outline: 3px solid var(--x-green); outline-offset: 2px;
 /* 우체통과 초록 트리 */
 .postbox-stage { margin: 2.6rem 0 1rem; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; }
 .postbox-row { display: flex; align-items: flex-end; justify-content: center; gap: clamp(6px, 3vw, 28px); }
-.flying-letter {
-  width: 68px; height: 46px;
-  background: var(--cream);
-  border: 2px solid var(--red);
-  border-radius: 6px;
-  display: grid; place-items: center;
-  font-size: 22px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, .35);
-  margin-bottom: -14px;
-  z-index: 3;
-  opacity: 0;
-  pointer-events: none;
-}
-.flying-letter.drop { animation: dropIntoBox 1.05s cubic-bezier(.4, 0, .2, 1) forwards; }
-@keyframes dropIntoBox {
-  0% { opacity: 1; transform: translateY(-55px) scale(1.1) rotate(-8deg); }
-  60% { opacity: 1; transform: translateY(34px) scale(.85) rotate(4deg); }
-  100% { opacity: 0; transform: translateY(58px) scale(.3); }
-}
 .red-postbox { appearance: none; border: 0; background: transparent; padding: 8px; width: 190px; display: flex; flex-direction: column; align-items: center; gap: 14px; transition: transform .25s ease; }
 .red-postbox:hover { transform: translateY(-4px); }
 .red-postbox.shake { animation: boxBounce .6s ease; }
@@ -583,7 +563,6 @@ body.show-mode .stage { display: grid; gap: 20px; }
 /* 눈 · 선 아이콘 · 잔잔한 움직임 */
 #snow { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 .ico { width: 1.15em; height: 1.15em; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; vertical-align: -.2em; flex: 0 0 auto; }
-.flying-letter { color: var(--red); }
 .tree rect { fill: #7a5236; }
 @keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 .greeting { animation: fadeUp .7s ease both; }
@@ -649,6 +628,290 @@ body.show-mode .mailbox-wrap { display: none !important; }
   border: 1px solid rgba(255, 255, 255, .45);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .6), 0 10px 24px rgba(0, 0, 0, .35);
 }
+
+/* ───── PC에 맞춘 배치: 왼쪽에 제목 · 인사말 · 우체통, 오른쪽에 큰 편지지 ───── */
+.wrap { max-width: 1280px; padding: 8px 40px 110px; }
+.hero {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-areas: "head" "greet" "paper" "post";
+}
+.hero > header { grid-area: head; padding-bottom: 0; }
+.hero > .greeting { grid-area: greet; max-width: none; }
+.hero > .mailbox-wrap { grid-area: paper; }
+.hero > .postbox-stage { grid-area: post; }
+body.show-mode .hero { display: block; }
+/* 배경음악 버튼은 화면 오른쪽 위에 늘 떠 있다 */
+.bgm-btn { position: fixed; top: 16px; right: 20px; z-index: 40; }
+@media (min-width: 1080px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas: "head paper" "greet paper" "post paper";
+    column-gap: clamp(40px, 4.4vw, 72px);
+    row-gap: 1.3rem;
+    align-items: start;
+  }
+  .hero > header { padding-top: .4rem; }
+  h1 { font-size: clamp(3.8rem, 5.6vw, 5.4rem); }
+  .hero > .mailbox-wrap { align-self: stretch; display: grid; margin-top: 1.2rem; }
+  .hero .mailbox { height: 100%; }
+  .hero > .postbox-stage { align-self: end; margin: .4rem 0 0; }
+  .tree { width: 112px; margin-bottom: 64px; }
+  .postbox-caption { margin: 6px -120px 0; }
+}
+
+/* ───── 편지지: 글 칸이 편지지 폭을 꽉 채우는 줄 노트 ───── */
+.mailbox {
+  --pad: 2.4rem;
+  padding: 3.1rem var(--pad) 1.6rem;
+  grid-template-rows: auto auto auto 1fr auto auto auto;
+  align-content: stretch;
+}
+.mailbox textarea {
+  align-self: stretch;
+  width: calc(100% + var(--pad) * 2);
+  margin: 0 calc(var(--pad) * -1);
+  min-height: 15rem;
+  height: auto;
+  border: 0;
+  border-top: 1px solid rgba(197, 48, 31, .28);
+  border-bottom: 1px solid rgba(31, 42, 68, .12);
+  border-radius: 0;
+  padding: 0 var(--pad) 0 calc(var(--pad) + 1.5rem);
+  font-size: 1.12rem;
+  line-height: 2.5rem;
+  background:
+    linear-gradient(90deg,
+      transparent calc(var(--pad) + .45rem),
+      rgba(197, 48, 31, .4) calc(var(--pad) + .45rem) calc(var(--pad) + .45rem + 1px),
+      transparent calc(var(--pad) + .45rem + 1px) calc(var(--pad) + .45rem + 4px),
+      rgba(197, 48, 31, .4) calc(var(--pad) + .45rem + 4px) calc(var(--pad) + .45rem + 5px),
+      transparent calc(var(--pad) + .45rem + 5px)),
+    repeating-linear-gradient(180deg, transparent 0 calc(2.5rem - 1px), rgba(31, 42, 68, .13) calc(2.5rem - 1px) 2.5rem) local,
+    rgba(255, 255, 255, .5);
+  box-shadow: none;
+  resize: none;
+}
+.mailbox textarea:focus-visible { outline: 2px solid var(--x-green); outline-offset: -2px; background-color: rgba(255, 255, 255, .72); }
+.mailbox .send-row { padding-top: .2rem; }
+
+/* ───── 편지를 접어 봉투에 넣고 우체통으로 날려 보내는 모션 ───── */
+.fly-paper, .fly-env, .fly-spark { position: fixed; z-index: 60; pointer-events: none; }
+.fly-paper {
+  border-radius: 14px;
+  padding: 0 1.6rem;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 calc(2.5rem - 1px), rgba(31, 42, 68, .13) calc(2.5rem - 1px) 2.5rem),
+    #fffdf6;
+  box-shadow: 0 22px 44px rgba(0, 0, 0, .38);
+  transform-origin: 50% 50%;
+}
+.fly-paper p { margin: 0; font-size: 1.12rem; line-height: 2.5rem; color: #1F2A44; white-space: pre-wrap; overflow-wrap: anywhere; }
+.fly-env {
+  width: 150px; height: 96px;
+  border-radius: 8px;
+  background: repeating-linear-gradient(-45deg, #C5301F 0 10px, #fff 10px 15px, #1F7A4D 15px 25px, #fff 25px 30px);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, .42);
+  perspective: 500px;
+}
+.fly-env::before { content: ""; position: absolute; inset: 5px; border-radius: 4px; background: #fffaf0; }
+.fly-env-flap {
+  position: absolute;
+  left: 5px; right: 5px; top: 5px;
+  height: 60%;
+  background: linear-gradient(180deg, #f3e8cf, #e9dbbc);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: 50% 0;
+}
+.fly-env-seal {
+  position: absolute;
+  left: 50%; top: calc(5px + 60% - 11px);
+  width: 22px; height: 22px;
+  margin-left: -11px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f07a64, #a8231a 70%);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .35);
+}
+.fly-env-stamp { position: absolute; right: 11px; bottom: 10px; width: 19px; height: 23px; background: #8a2a22; outline: 2px dotted #f3e6c4; outline-offset: -3px; }
+.fly-spark {
+  width: 13px; height: 13px;
+  background: var(--gold);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  filter: drop-shadow(0 0 4px rgba(255, 216, 77, .9));
+}
+.red-postbox.gulp .postbox-slot { animation: slotGlow .9s ease; }
+@keyframes slotGlow {
+  0% { box-shadow: 0 0 0 0 rgba(255, 216, 77, 0); }
+  30% { box-shadow: 0 0 24px 7px rgba(255, 216, 77, .85); background: #fff3c2; }
+  100% { box-shadow: 0 0 0 0 rgba(255, 216, 77, 0); }
+}
+
+/* ───── 도착한 편지: 분류 메뉴와 보기 방식 메뉴 ───── */
+.wall-tools { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .7rem 1rem; }
+.view-switch .tab { display: inline-flex; align-items: center; gap: .4em; }
+.view-switch .ico { width: 1.05em; height: 1.05em; }
+
+/* 전체 펼쳐 보기: 모든 편지를 한눈에 */
+.wall.grid-view {
+  grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+  justify-items: stretch;
+  align-items: stretch;
+  gap: 24px 20px;
+  padding: 26px 4px 30px;
+  -webkit-mask-image: none;
+  mask-image: none;
+  overflow: visible;
+  cursor: default;
+}
+.wall.grid-view .letter {
+  --x: 0%;
+  --s: 1;
+  grid-area: auto;
+  width: auto;
+  min-height: 300px;
+  max-height: none;
+  overflow: visible;
+  transform: none;
+  filter: none;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  z-index: auto;
+  cursor: auto;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, .4), inset 0 1px 0 #fff, inset 0 -14px 24px rgba(255, 255, 255, .5);
+  transition: translate .2s ease, box-shadow .2s ease;
+}
+.wall.grid-view .letter:hover { translate: 0 -5px; box-shadow: 0 26px 48px rgba(0, 0, 0, .48), inset 0 1px 0 #fff; }
+.wall.grid-view.animate-in .letter { animation: cardIn .5s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(min(var(--i, 0), 14) * 45ms); }
+@keyframes cardIn { from { opacity: 0; transform: translateY(18px) scale(.96); } to { opacity: 1; transform: none; } }
+@media (min-width: 1080px) {
+  .letter { width: 460px; }
+}
+@media (max-width: 520px) {
+  .wrap { padding: 8px 16px 96px; }
+  .mailbox { --pad: 1.3rem; }
+  .wall.grid-view { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wall.grid-view.animate-in .letter, .red-postbox.gulp .postbox-slot { animation: none !important; }
+}
+
+/* 분류마다 이름표 앞에 작은 색 점 */
+.letter .topic { white-space: nowrap; display: inline-flex; align-items: center; gap: .4em; }
+.letter .topic::before { content: ""; width: .55em; height: .55em; border-radius: 50%; background: var(--dot, #1F7A4D); }
+.letter[data-topic="1"] { --dot: #1F8A57; }
+.letter[data-topic="2"] { --dot: #D23A27; }
+.letter[data-topic="3"] { --dot: #3E5BA9; }
+.letter[data-topic="4"] { --dot: #E0A21B; }
+.letter-no { white-space: nowrap; }
+.wall.grid-view .letter-no { display: none; }
+.wall.grid-view .letter-badge { width: 40px; height: 40px; font-size: 1.1rem; }
+@media (min-width: 1080px) {
+  /* 별 장식은 화면 위에 겹쳐 걸고, 그 아래로 첫 화면이 한눈에 들어오게 */
+  .lights { position: absolute; inset: 0 0 auto 0; z-index: 0; }
+  .wrap { padding-top: 76px; }
+  h1 { font-size: clamp(3.4rem, 5vw, 4.8rem); }
+  .hero > header { padding: 0; gap: .6rem; }
+  .greeting { padding: .95rem 1.25rem; }
+  .greeting p { line-height: 1.55; }
+  .mailbox { padding-top: 2.5rem; }
+  .mailbox h2 { min-height: 4.3rem; }
+  .mailbox textarea { min-height: 11rem; }
+}
+body { overflow-x: clip; }
+@media (max-width: 1079px) {
+  /* 휴대폰 · 태블릿에서는 배경음악 버튼이 글을 가리지 않도록 맨 위에만 둔다 */
+  .bgm-btn { position: absolute; top: 14px; right: 14px; }
+}
+@media (max-width: 520px) {
+  .ghost-card { inset: 12px 0 -10px 10px; }
+  .wall.grid-view .letter { min-height: 220px; }
+}
+
+/* ───── 보낸 편지가 편지함에 도착하는 모션 ───── */
+.letter.is-new {
+  animation: letterArrive .95s .5s cubic-bezier(.2, .9, .25, 1.15) both, newGlow 1.3s 1.35s ease-out 2;
+}
+@keyframes letterArrive {
+  0% { opacity: 0; translate: 0 -90px; scale: .6; rotate: -7deg; }
+  55% { opacity: 1; translate: 0 10px; scale: 1.04; rotate: 1.5deg; }
+  80% { translate: 0 -4px; scale: .99; rotate: -.5deg; }
+  100% { opacity: 1; translate: 0 0; scale: 1; rotate: 0deg; }
+}
+@keyframes newGlow {
+  0% { outline: 3px solid rgba(255, 216, 77, .95); outline-offset: 0; }
+  100% { outline: 3px solid rgba(255, 216, 77, 0); outline-offset: 16px; }
+}
+.letter .new-chip {
+  font-size: .75rem;
+  font-weight: 800;
+  color: #6b4200;
+  background: linear-gradient(180deg, #ffeaa0, #f5c542);
+  border: 1px solid #fff;
+  padding: .08rem .6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(245, 197, 66, .45), inset 0 1px 0 rgba(255, 255, 255, .8);
+}
+/* 이름표가 길어도 카드 밖으로 넘치지 않게 줄을 바꾼다 */
+.letter-inner { grid-template-columns: minmax(0, 1fr); }
+.letter-head { flex-wrap: wrap; row-gap: .4rem; }
+
+/* "편지를 보냈습니다" 유리 알림 */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 30px;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  padding: .6rem 1.5rem .6rem .65rem;
+  border-radius: 999px;
+  color: #1F2A44;
+  font-size: 1.05rem;
+  font-weight: 800;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .97), rgba(255, 255, 255, .8));
+  -webkit-backdrop-filter: blur(16px) saturate(170%);
+  backdrop-filter: blur(16px) saturate(170%);
+  border: 1px solid #fff;
+  box-shadow: inset 0 1px 0 #fff, inset 0 -8px 12px rgba(31, 42, 68, .06), 0 20px 44px rgba(0, 0, 0, .5);
+  transform: translate(-50%, 160%);
+  opacity: 0;
+  transition: transform .55s cubic-bezier(.2, .9, .25, 1.2), opacity .3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast.show { transform: translate(-50%, 0); opacity: 1; }
+.toast small { display: block; font-size: .8rem; font-weight: 700; color: rgba(31, 42, 68, .65); }
+.toast-ico {
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  color: #fff;
+  background: linear-gradient(180deg, #f2644f, #C5301F);
+  box-shadow: inset 0 2px 1px rgba(255, 255, 255, .45), 0 6px 14px rgba(197, 48, 31, .4);
+}
+@media (prefers-reduced-motion: reduce) {
+  .letter.is-new { animation: none !important; outline: 3px solid rgba(255, 216, 77, .9); }
+  .toast { transition: opacity .2s ease; }
+}
+
+/* 편지지 아래 안내문: 인사말과 같은 글씨체 · 크기 · 굵기 */
+.paper-note { margin: 0; font-family: var(--font); font-size: 1rem; font-weight: 400; line-height: 1.6; color: var(--paper-ink); }
+@media (min-width: 1080px) { .paper-note { line-height: 1.55; } }
+/* 편지 쓰기 안의 질문 · 분류 버튼 · 글 칸 안내도 같은 글씨체 · 크기 · 굵기로 */
+.mailbox .topics legend,
+.mailbox .topics label,
+.mailbox > label.rule {
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 400;
+}
+.mailbox .topics legend, .mailbox > label.rule { color: var(--paper-ink); }
 </style>
 </head>
 <body>
@@ -662,17 +925,17 @@ body.show-mode .mailbox-wrap { display: none !important; }
 <canvas id="snow" aria-hidden="true"></canvas>
 <div class="lights" id="lights" aria-hidden="true"></div>
 <div class="wrap">
-  <header>
-    <div class="head-top">
-      <div class="title-group">
-        <h1>2027 <span>마음의 소리</span><small>부산사서교사협의회</small></h1>
-        <p class="subtitle">2027년도, 함께 만들어가요.</p>
+  <div class="hero">
+    <header>
+      <div class="head-top">
+        <div class="title-group">
+          <h1>2027 <span>마음의 소리</span><small>부산사서교사회</small></h1>
+          <p class="subtitle">2027년도, 함께 만들어가요.</p>
+        </div>
+        <button type="button" class="bgm-btn" id="bgmBtn" aria-pressed="true">배경음악 끄기</button>
       </div>
-      <button type="button" class="bgm-btn" id="bgmBtn" aria-pressed="true">배경음악 끄기</button>
-    </div>
-  </header>
+    </header>
 
-  <div class="stack">
     <div class="greeting">
       <p>안녕하세요 선생님, 반갑습니다.</p>
       <p>선생님의 이야기들에 먼저 귀기울이고 그 이야기를 모아 방향성을 정하려 합니다.</p>
@@ -702,7 +965,7 @@ body.show-mode .mailbox-wrap { display: none !important; }
             <path d="M99 60 q7 -6 14 0 t14 0 t14 0 t9 -2" stroke-width="2" stroke-linecap="round"/>
             <path d="M97 73 q7 -6 14 0 t14 0 t14 0 t10 -2" stroke-width="2" stroke-linecap="round"/>
             <g stroke="none">
-              <text font-size="7.6" letter-spacing=".6" text-anchor="middle"><textPath href="#pmTop" startOffset="50%">부산사서교사협의회</textPath></text>
+              <text font-size="7.8" letter-spacing="1.5" text-anchor="middle"><textPath href="#pmTop" startOffset="50%">부산사서교사회</textPath></text>
               <text font-size="7.2" letter-spacing="1.6" text-anchor="middle"><textPath href="#pmBottom" startOffset="50%">마음우체통</textPath></text>
               <text x="50" y="48.5" font-size="12.5" text-anchor="middle">2026</text>
               <text x="50" y="60" font-size="8" letter-spacing=".3" text-anchor="middle">12. 16.</text>
@@ -715,6 +978,7 @@ body.show-mode .mailbox-wrap { display: none !important; }
           <label><input type="radio" name="topic" id="topic1" value="1" checked><span>함께 해보고 싶은 일</span></label>
           <label><input type="radio" name="topic" id="topic2" value="2"><span>이것만은 지켜졌으면</span></label>
           <label><input type="radio" name="topic" id="topic3" value="3"><span>요즘 혼자 하는 고민</span></label>
+          <label><input type="radio" name="topic" id="topic4" value="4"><span>이런 소모임 만들어요!</span></label>
         </fieldset>
         <label for="text" class="rule">편지 내용 (300자까지 · 이름은 남지 않습니다)</label>
         <textarea id="text" maxlength="300" placeholder="예: 가까운 학교 선생님들과 한 학기에 한 번 밥 먹는 자리가 있으면 좋겠어요."></textarea>
@@ -723,55 +987,54 @@ body.show-mode .mailbox-wrap { display: none !important; }
           <button class="send" id="send" type="submit">우체통에 넣기</button>
         </div>
         <p class="notice" id="notice" role="status"></p>
-        <p class="rule">함께 만들어가는 모임입니다. 타인에 대한 배려를 담아 내용을 작성해주세요. 의견은 확인 후 게시됩니다.</p>
+        <p class="paper-note">함께 만들어가는 모임입니다. 타인에 대한 배려를 담아 내용을 작성해주세요. 보낸 편지는 바로 아래 편지함에 실리며, 배려가 부족한 글은 게시가 되지 않을 수 있습니다.</p>
       </form>
     </div>
-  </div>
 
-  <!-- 📮 빨간 우체통 영역 -->
-  <div class="postbox-stage" id="postboxStage">
-    <div class="flying-letter" id="flyingLetter" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><use href="#i-mail"/></svg></div>
-    <div class="postbox-row">
-      <svg class="tree" viewBox="0 0 120 170" aria-hidden="true">
-        <rect x="52" y="140" width="16" height="22" rx="4"/>
-        <path d="M60 22 L92 70 H28 Z"/>
-        <path d="M60 50 L102 106 H18 Z"/>
-        <path d="M60 82 L112 144 H8 Z"/>
-        <path class="star" d="M60 4 L64 13 L74 14 L66 20 L69 30 L60 24 L51 30 L54 20 L46 14 L56 13 Z"/>
-        <circle class="orn" cx="52" cy="58" r="4.5" fill="#ff7a6b" style="--d:0s"/>
-        <circle class="orn" cx="72" cy="64" r="4" fill="#f3a6d6" style="--d:.5s"/>
-        <circle class="orn" cx="42" cy="94" r="4.5" fill="#7fb2ff" style="--d:.9s"/>
-        <circle class="orn" cx="64" cy="88" r="4" fill="#ffffff" style="--d:.3s"/>
-        <circle class="orn" cx="84" cy="98" r="4.5" fill="#ff7a6b" style="--d:1.2s"/>
-        <circle class="orn" cx="30" cy="132" r="4.5" fill="#f3a6d6" style="--d:.7s"/>
-        <circle class="orn" cx="56" cy="124" r="4" fill="#ffd76a" style="--d:1.5s"/>
-        <circle class="orn" cx="78" cy="130" r="4.5" fill="#7fb2ff" style="--d:.2s"/>
-        <circle class="orn" cx="98" cy="134" r="4" fill="#ffffff" style="--d:1s"/>
-      </svg>
-      <button type="button" class="red-postbox" id="redPostbox" aria-expanded="false">
-        <div class="postbox-body">
-          <div class="postbox-slot"></div>
-          <span class="postbox-emblem">마음우체통</span>
-          <span class="postbox-count" id="boxCount">편지함</span>
-        </div>
-        <span class="postbox-caption" id="boxCaption">빨간 우체통을 눌러 먼저 도착한 편지 보기</span>
-      </button>
-      <svg class="tree second" viewBox="0 0 120 170" aria-hidden="true">
-        <rect x="52" y="140" width="16" height="22" rx="4"/>
-        <path d="M60 22 L92 70 H28 Z"/>
-        <path d="M60 50 L102 106 H18 Z"/>
-        <path d="M60 82 L112 144 H8 Z"/>
-        <path class="star" d="M60 4 L64 13 L74 14 L66 20 L69 30 L60 24 L51 30 L54 20 L46 14 L56 13 Z"/>
-        <circle class="orn" cx="52" cy="58" r="4.5" fill="#7fb2ff" style="--d:0s"/>
-        <circle class="orn" cx="72" cy="64" r="4" fill="#ff7a6b" style="--d:.5s"/>
-        <circle class="orn" cx="42" cy="94" r="4.5" fill="#f3a6d6" style="--d:.9s"/>
-        <circle class="orn" cx="64" cy="88" r="4" fill="#ffffff" style="--d:.3s"/>
-        <circle class="orn" cx="84" cy="98" r="4.5" fill="#ffd76a" style="--d:1.2s"/>
-        <circle class="orn" cx="30" cy="132" r="4.5" fill="#ff7a6b" style="--d:.7s"/>
-        <circle class="orn" cx="56" cy="124" r="4" fill="#7fb2ff" style="--d:1.5s"/>
-        <circle class="orn" cx="78" cy="130" r="4.5" fill="#f3a6d6" style="--d:.2s"/>
-        <circle class="orn" cx="98" cy="134" r="4" fill="#ffffff" style="--d:1s"/>
-      </svg>
+    <!-- 📮 빨간 우체통 영역 -->
+    <div class="postbox-stage" id="postboxStage">
+        <div class="postbox-row">
+        <svg class="tree" viewBox="0 0 120 170" aria-hidden="true">
+          <rect x="52" y="140" width="16" height="22" rx="4"/>
+          <path d="M60 22 L92 70 H28 Z"/>
+          <path d="M60 50 L102 106 H18 Z"/>
+          <path d="M60 82 L112 144 H8 Z"/>
+          <path class="star" d="M60 4 L64 13 L74 14 L66 20 L69 30 L60 24 L51 30 L54 20 L46 14 L56 13 Z"/>
+          <circle class="orn" cx="52" cy="58" r="4.5" fill="#ff7a6b" style="--d:0s"/>
+          <circle class="orn" cx="72" cy="64" r="4" fill="#f3a6d6" style="--d:.5s"/>
+          <circle class="orn" cx="42" cy="94" r="4.5" fill="#7fb2ff" style="--d:.9s"/>
+          <circle class="orn" cx="64" cy="88" r="4" fill="#ffffff" style="--d:.3s"/>
+          <circle class="orn" cx="84" cy="98" r="4.5" fill="#ff7a6b" style="--d:1.2s"/>
+          <circle class="orn" cx="30" cy="132" r="4.5" fill="#f3a6d6" style="--d:.7s"/>
+          <circle class="orn" cx="56" cy="124" r="4" fill="#ffd76a" style="--d:1.5s"/>
+          <circle class="orn" cx="78" cy="130" r="4.5" fill="#7fb2ff" style="--d:.2s"/>
+          <circle class="orn" cx="98" cy="134" r="4" fill="#ffffff" style="--d:1s"/>
+        </svg>
+        <button type="button" class="red-postbox" id="redPostbox" aria-expanded="false">
+          <div class="postbox-body">
+            <div class="postbox-slot"></div>
+            <span class="postbox-emblem">마음우체통</span>
+            <span class="postbox-count" id="boxCount">편지함</span>
+          </div>
+          <span class="postbox-caption" id="boxCaption">빨간 우체통을 눌러 먼저 도착한 편지 보기</span>
+        </button>
+        <svg class="tree second" viewBox="0 0 120 170" aria-hidden="true">
+          <rect x="52" y="140" width="16" height="22" rx="4"/>
+          <path d="M60 22 L92 70 H28 Z"/>
+          <path d="M60 50 L102 106 H18 Z"/>
+          <path d="M60 82 L112 144 H8 Z"/>
+          <path class="star" d="M60 4 L64 13 L74 14 L66 20 L69 30 L60 24 L51 30 L54 20 L46 14 L56 13 Z"/>
+          <circle class="orn" cx="52" cy="58" r="4.5" fill="#7fb2ff" style="--d:0s"/>
+          <circle class="orn" cx="72" cy="64" r="4" fill="#ff7a6b" style="--d:.5s"/>
+          <circle class="orn" cx="42" cy="94" r="4.5" fill="#f3a6d6" style="--d:.9s"/>
+          <circle class="orn" cx="64" cy="88" r="4" fill="#ffffff" style="--d:.3s"/>
+          <circle class="orn" cx="84" cy="98" r="4.5" fill="#ffd76a" style="--d:1.2s"/>
+          <circle class="orn" cx="30" cy="132" r="4.5" fill="#ff7a6b" style="--d:.7s"/>
+          <circle class="orn" cx="56" cy="124" r="4" fill="#7fb2ff" style="--d:1.5s"/>
+          <circle class="orn" cx="78" cy="130" r="4.5" fill="#f3a6d6" style="--d:.2s"/>
+          <circle class="orn" cx="98" cy="134" r="4" fill="#ffffff" style="--d:1s"/>
+        </svg>
+      </div>
     </div>
   </div>
 
@@ -779,11 +1042,18 @@ body.show-mode .mailbox-wrap { display: none !important; }
   <section class="wall-section" id="wallSection" hidden>
     <div class="wall-head">
       <h2>먼저 도착한 편지 <span id="total"></span></h2>
-      <div class="tabs" id="tabs">
+      <div class="wall-tools">
+      <div class="tabs" id="tabs" role="group" aria-label="이야기 분류">
         <button type="button" class="tab" data-filter="0" aria-pressed="true">전체</button>
         <button type="button" class="tab" data-filter="1" aria-pressed="false">함께 해보고 싶은 일</button>
         <button type="button" class="tab" data-filter="2" aria-pressed="false">지켜졌으면</button>
         <button type="button" class="tab" data-filter="3" aria-pressed="false">혼자 하는 고민</button>
+        <button type="button" class="tab" data-filter="4" aria-pressed="false">소모임 만들어요</button>
+      </div>
+      <div class="tabs view-switch" id="viewSwitch" role="group" aria-label="보기 방식">
+        <button type="button" class="tab" data-view="deck" aria-pressed="true"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="4.5" width="10" height="15" rx="2.2"/><path d="M4 7.5v9M20 7.5v9"/></svg>넘겨 보기</button>
+        <button type="button" class="tab" data-view="grid" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6"/></svg>전체 펼쳐 보기</button>
+      </div>
       </div>
     </div>
     <div class="wall" id="wall" tabindex="0" role="group" aria-roledescription="carousel" aria-label="도착한 편지. 좌우 화살표 키나 밀기로 넘겨 보세요"></div>
@@ -794,6 +1064,12 @@ body.show-mode .mailbox-wrap { display: none !important; }
     </div>
     <p class="deck-hint" id="deckHint" hidden>카드를 옆으로 밀거나 뒤쪽 카드를 눌러 편지를 넘겨 보세요</p>
   </section>
+
+  <!-- "편지를 보냈습니다" 알림 -->
+  <div class="toast" id="toast" aria-hidden="true">
+    <span class="toast-ico"><svg class="ico" viewBox="0 0 24 24"><use href="#i-mail"/></svg></span>
+    <span><span id="toastTitle"></span><small id="toastSub"></small></span>
+  </div>
 
   <!-- #show 전체모임 스크린 전시 모드 -->
   <section class="stage" id="stage" aria-live="polite">
@@ -822,20 +1098,29 @@ const API_URL = "https://script.google.com/macros/s/AKfycbx7OTlknAFxp2xY-8e_OVXM
 const IS_CLOSED = false;
 const CLOSE_AT = ""; // 예: "2026-12-08T23:59:59+09:00"
 
-const TOPICS = { 1: "함께 해보고 싶은 일", 2: "이것만은 지켜졌으면", 3: "요즘 혼자 하는 고민" };
+const TOPICS = { 1: "함께 해보고 싶은 일", 2: "이것만은 지켜졌으면", 3: "요즘 혼자 하는 고민", 4: "이런 소모임 만들어요!" };
+/* 고른 이야기에 맞춰 편지지의 예시 문장이 바뀐다 */
+const PLACEHOLDERS = {
+  1: "예: 가까운 학교 선생님들과 한 학기에 한 번 밥 먹는 자리가 있으면 좋겠어요.",
+  2: "예: 전체모임이 제시간에 끝났으면 좋겠습니다.",
+  3: "예: 협력수업을 처음 제안해 보려는데 어떻게 말을 꺼내야 할지 모르겠어요.",
+  4: "예: 그림책을 함께 읽는 소모임을 만들어요! 한 달에 한 번, 퇴근 후에 모여 수업 아이디어도 나눠요."
+};
 const SAMPLE = [
   { id: "s1", topic: 1, text: "가까운 학교 선생님들과 한 학기에 한 번 밥 먹는 자리가 있으면 좋겠어요.", likes: 7, comments: [{ id: "c1", text: "저도요! 권역별로 소소하게 모이면 부담 없고 좋을 것 같아요." }] },
   { id: "s2", topic: 3, text: "도서관 협력수업을 처음 제안해 보려는데 어떻게 말을 꺼내야 할지 모르겠어요.", likes: 4, comments: [] },
   { id: "s3", topic: 2, text: "전체모임이 제시간에 끝났으면 좋겠습니다.", likes: 11, comments: [] },
   { id: "s4", topic: 1, text: "신규 선생님께 첫 학기 업무 달력을 선물하면 어떨까요?", likes: 5, comments: [] },
   { id: "s5", topic: 2, text: "회비가 어디에 쓰였는지 한 장으로 알려 주세요.", likes: 9, comments: [] },
-  { id: "s6", topic: 3, text: "업무분장에서 도서관 일이 아닌 것이 자꾸 넘어옵니다. 다른 학교는 어떤가요?", likes: 6, comments: [] }
+  { id: "s6", topic: 3, text: "업무분장에서 도서관 일이 아닌 것이 자꾸 넘어옵니다. 다른 학교는 어떤가요?", likes: 6, comments: [] },
+  { id: "s7", topic: 4, text: "그림책을 함께 읽는 소모임을 만들어요! 한 달에 한 번 모여 읽고, 수업에 쓸 아이디어도 나눠요.", likes: 8, comments: [] }
 ];
 
 let letters = [];
 let filter = 0;
 let wallOpened = false;
 let deckIdx = 0;
+let viewMode = "deck"; // "deck" 넘겨 보기 · "grid" 전체 펼쳐 보기
 let deckSuppressClick = false;
 const $ = (id) => document.getElementById(id);
 function icon(name) {
@@ -1075,16 +1360,204 @@ function togglePostbox(forceOpen) {
 
 $("redPostbox").addEventListener("click", () => togglePostbox());
 
-function triggerMailboxDropAnimation() {
-  const stage = $("postboxStage");
-  const flyer = $("flyingLetter");
+/* ───── 편지를 접어 봉투에 넣고, 빨간 우체통 투입구로 날려 보내는 모션 ─────
+   1) 쓴 편지지가 반으로 접히며 작아지고  2) 빨강·초록 테두리 봉투가 닫히고
+   3) 봉투가 포물선을 그리며 날아가  4) 우체통 투입구로 쏙 들어간다 */
+function sendLetterAnimation(text, onLanded) {
   const box = $("redPostbox");
-  stage.scrollIntoView({ behavior: "smooth", block: "center" });
-  flyer.classList.remove("drop");
-  box.classList.remove("shake");
-  void flyer.offsetWidth;
-  flyer.classList.add("drop");
-  setTimeout(() => box.classList.add("shake"), 650);
+  const slot = box.querySelector(".postbox-slot");
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const landed = () => {
+    playDrop();
+    box.classList.remove("shake", "gulp");
+    void box.offsetWidth;
+    box.classList.add("shake", "gulp");
+    sparkle(slot);
+    const cap = $("boxCaption");
+    cap.textContent = "편지가 우체통에 쏙 들어갔어요!";
+    setTimeout(() => {
+      cap.textContent = wallOpened
+        ? "우체통이 열렸습니다 (다시 누르면 닫힙니다)"
+        : "빨간 우체통을 눌러 먼저 도착한 편지 보기";
+    }, 2600);
+  };
+  const done = () => {
+    landed();
+    if (onLanded) setTimeout(onLanded, 450);
+  };
+  if (still || !document.body.animate) { done(); return; }
+
+  const r = slot.getBoundingClientRect();
+  if (r.top > 90 && r.bottom < window.innerHeight - 60) {
+    fly();
+  } else {
+    $("postboxStage").scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(fly, 700);
+  }
+
+  function fly() {
+    const area = $("text") || $("form");
+    const from = area.getBoundingClientRect();
+    const to = slot.getBoundingClientRect();
+    const EW = 150, EH = 96;
+    const cx = from.left + from.width / 2;
+    const cy = from.top + from.height / 2;
+
+    /* 1) 편지지가 접히며 봉투 크기로 줄어든다 */
+    const paper = document.createElement("div");
+    paper.className = "fly-paper";
+    paper.style.cssText = "left:" + from.left + "px;top:" + from.top + "px;width:" + from.width + "px;height:" + from.height + "px";
+    const p = document.createElement("p");
+    p.textContent = text;
+    paper.appendChild(p);
+    document.body.appendChild(paper);
+    const sx = EW / from.width, sy = EH / from.height;
+    paper.animate([
+      { transform: "none", opacity: 1 },
+      { transform: "scale(1, " + Math.min(1, sy * 1.7) + ")", opacity: 1, offset: 0.45 },
+      { transform: "scale(" + sx + ", " + sy + ")", opacity: 0 }
+    ], { duration: 640, easing: "cubic-bezier(.5, 0, .3, 1)", fill: "forwards" })
+      .finished.then(() => paper.remove());
+
+    /* 2) 봉투가 나타나고 덮개가 닫히며 밀랍 도장이 찍힌다 */
+    const env = document.createElement("div");
+    env.className = "fly-env";
+    env.style.left = (cx - EW / 2) + "px";
+    env.style.top = (cy - EH / 2) + "px";
+    const stamp = document.createElement("span");
+    stamp.className = "fly-env-stamp";
+    const flap = document.createElement("span");
+    flap.className = "fly-env-flap";
+    const seal = document.createElement("span");
+    seal.className = "fly-env-seal";
+    env.append(stamp, flap, seal);
+    document.body.appendChild(env);
+    env.animate([{ opacity: 0, scale: ".86" }, { opacity: 1, scale: "1" }], { duration: 260, delay: 430, easing: "ease-out", fill: "both" });
+    flap.animate([{ transform: "rotateX(180deg)" }, { transform: "rotateX(0deg)" }], { duration: 320, delay: 620, easing: "cubic-bezier(.3, .7, .3, 1)", fill: "both" });
+    seal.animate([{ opacity: 0, transform: "scale(1.9)" }, { opacity: 1, transform: "scale(1)" }], { duration: 200, delay: 900, easing: "ease-in", fill: "both" });
+
+    /* 3) 포물선을 그리며 우체통 위로 날아가  4) 투입구 속으로 쏙 들어간다 */
+    const s = Math.min(1, (to.width * 0.92) / EW);
+    const tx = to.left + to.width / 2 - cx;
+    const above = to.top - (EH * s) / 2 - cy;      // 봉투 아래 끝이 투입구에 닿는 위치
+    const inside = above + EH * s;                 // 봉투가 다 들어간 위치
+    const lift = Math.min(170, Math.abs(tx) * 0.22 + 70);
+    const peak = Math.min(0, above) - lift;
+    const tilt = tx < 0 ? -14 : 14;
+    const T = (x, y, rot, sc) => "translate(" + x + "px, " + y + "px) rotate(" + rot + "deg) scale(" + sc + ")";
+    setTimeout(() => playSwipe(tx < 0 ? -1 : 1), 1050);
+    env.animate([
+      { transform: T(0, 0, 0, 1), clipPath: "inset(0 0 0 0)" },
+      { transform: T(tx * 0.18, -lift * 0.55, tilt * 0.6, 1), clipPath: "inset(0 0 0 0)", offset: 0.22 },
+      { transform: T(tx * 0.55, peak, tilt, (1 + s) / 2), clipPath: "inset(0 0 0 0)", offset: 0.5 },
+      { transform: T(tx, above - 18, 0, s), clipPath: "inset(0 0 0 0)", offset: 0.76, easing: "ease-out" },
+      { transform: T(tx, above, 0, s), clipPath: "inset(0 0 0 0)", offset: 0.82, easing: "ease-in" },
+      { transform: T(tx, inside, 0, s), clipPath: "inset(0 0 100% 0)" }
+    ], { duration: 1250, delay: 1050, easing: "cubic-bezier(.45, .05, .35, 1)", fill: "both" })
+      .finished.then(() => { env.remove(); done(); });
+  }
+}
+
+/* 투입구 둘레로 금빛 별이 톡 터진다 */
+function sparkle(el) {
+  const r = el.getBoundingClientRect();
+  const x = r.left + r.width / 2, y = r.top + r.height / 2;
+  for (let i = 0; i < 9; i++) {
+    const s = document.createElement("span");
+    s.className = "fly-spark";
+    s.style.left = (x - 6.5) + "px";
+    s.style.top = (y - 6.5) + "px";
+    document.body.appendChild(s);
+    const a = (i / 9) * Math.PI * 2 - Math.PI / 2;
+    const d = 36 + Math.random() * 30;
+    s.animate([
+      { transform: "translate(0, 0) scale(.4) rotate(0deg)", opacity: 1 },
+      { transform: "translate(" + Math.cos(a) * d + "px, " + Math.sin(a) * d + "px) scale(1) rotate(90deg)", opacity: 0 }
+    ], { duration: 760, easing: "cubic-bezier(.2, .7, .3, 1)" }).finished.then(() => s.remove());
+  }
+}
+
+/* ───── 편지 도착 효과음 ─────
+   봉투가 우체통에 들어갈 때 "톡", 편지함에 나타날 때 맑은 종소리 "띠링". */
+function playDrop() {
+  if (!SFX_ON) return;
+  try {
+    setupAudio();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    const t = audioCtx.currentTime + 0.01;
+    const src = audioCtx.createBufferSource();
+    src.buffer = sfxNoise;
+    const lp = audioCtx.createBiquadFilter();
+    lp.type = "lowpass";
+    lp.frequency.value = 1100;
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(0.16, t + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.13);
+    src.connect(lp);
+    lp.connect(g);
+    g.connect(sfxGain);
+    src.start(t, Math.random() * 0.2);
+    src.stop(t + 0.16);
+  } catch (e) {}
+}
+function playArrive() {
+  if (!SFX_ON) return;
+  try {
+    setupAudio();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    const t0 = audioCtx.currentTime + 0.02;
+    const bell = (freq, t) => {
+      /* 기본음에 아주 작은 배음을 얹어 작은 종처럼 맑게 */
+      [[1, 0.085, 1.5], [2.76, 0.016, 0.5], [5.4, 0.005, 0.25]].forEach(([mul, vol, len]) => {
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = "sine";
+        o.frequency.value = freq * mul;
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.linearRampToValueAtTime(vol, t + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + len);
+        o.connect(g);
+        g.connect(sfxGain);
+        o.start(t);
+        o.stop(t + len + 0.05);
+      });
+    };
+    bell(783.99, t0);          // 솔
+    bell(1046.5, t0 + 0.14);   // 도
+    bell(1318.51, t0 + 0.28);  // 미
+  } catch (e) {}
+}
+
+/* ───── 보낸 편지를 편지함 맨 앞에 바로 띄운다 ───── */
+let newLetterId = null;
+function showToast(title, sub) {
+  const toast = $("toast");
+  $("toastTitle").textContent = title;
+  $("toastSub").textContent = sub;
+  toast.classList.remove("show");
+  void toast.offsetWidth;
+  toast.classList.add("show");
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => toast.classList.remove("show"), 3400);
+}
+function showNewLetter(letter) {
+  letters.unshift(letter);
+  newLetterId = letter.id;
+  /* 새 편지가 바로 보이도록 분류는 "전체", 맨 앞 카드로 */
+  filter = 0;
+  $("tabs").querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-pressed", String(t.dataset.filter === "0")));
+  deckIdx = 0;
+  togglePostbox(true);
+  render();
+  renderStage();
+  setTimeout(() => {
+    playArrive();
+    showToast("편지를 보냈습니다", "편지함에 방금 도착했어요");
+  }, 650);
+  clearTimeout(showNewLetter.timer);
+  showNewLetter.timer = setTimeout(() => { newLetterId = null; }, 4000);
 }
 
 function likedSet() {
@@ -1135,6 +1608,7 @@ function render() {
     card.dataset.topic = l.topic;
     // 8가지 유리 색조가 골고루 어우러지도록 배정
     card.dataset.palette = String((i % 8) + 1);
+    card.style.setProperty("--i", i);
 
     const inner = document.createElement("div");
     inner.className = "letter-inner";
@@ -1150,7 +1624,15 @@ function render() {
     const no = document.createElement("span");
     no.className = "letter-no";
     no.textContent = (i + 1) + " / " + list.length;
-    head.append(badge, topic, no);
+    head.append(badge, topic);
+    if (l.id === newLetterId) {
+      card.classList.add("is-new");
+      const chip = document.createElement("span");
+      chip.className = "new-chip";
+      chip.textContent = "방금 도착";
+      head.append(chip);
+    }
+    head.append(no);
 
     const bodyWrap = document.createElement("div");
     bodyWrap.className = "letter-body";
@@ -1239,7 +1721,7 @@ function render() {
 
     /* 뒤에 놓인 카드를 누르면 그 카드가 앞으로 나온다 */
     card.addEventListener("click", () => {
-      if (!deckSuppressClick && i !== deckIdx) goDeck(i);
+      if (viewMode === "deck" && !deckSuppressClick && i !== deckIdx) goDeck(i);
     });
 
     inner.append(head, bodyWrap, actions);
@@ -1252,14 +1734,15 @@ function render() {
 /* ───── 편지 카드 넘기기 ───── */
 function layoutDeck() {
   const cards = [...$("wall").querySelectorAll(".letter")];
+  const grid = viewMode === "grid";
   cards.forEach((c, i) => {
-    const isCurrent = i === deckIdx;
+    const isCurrent = grid || i === deckIdx;
     c.dataset.pos = String(Math.max(-3, Math.min(3, i - deckIdx)));
     c.firstElementChild.inert = !isCurrent;
     c.setAttribute("aria-hidden", String(!isCurrent));
   });
-  $("deckNav").hidden = cards.length === 0;
-  $("deckHint").hidden = cards.length < 2;
+  $("deckNav").hidden = grid || cards.length === 0;
+  $("deckHint").hidden = grid || cards.length < 2;
   $("deckCount").textContent = cards.length ? (deckIdx + 1) + " / " + cards.length : "";
   $("deckPrev").disabled = deckIdx <= 0;
   $("deckNext").disabled = deckIdx >= cards.length - 1;
@@ -1272,13 +1755,43 @@ function goDeck(index) {
   layoutDeck();
   if (deckIdx !== before) playSwipe(deckIdx > before ? 1 : -1);
 }
+/* 보기 방식 바꾸기: 넘겨 보기 ↔ 전체 펼쳐 보기 */
+function animateGridIn() {
+  const wall = $("wall");
+  wall.classList.remove("animate-in");
+  void wall.offsetWidth;
+  wall.classList.add("animate-in");
+  clearTimeout(animateGridIn.timer);
+  animateGridIn.timer = setTimeout(() => wall.classList.remove("animate-in"), 1400);
+}
+function setView(mode) {
+  if (mode === viewMode) return;
+  viewMode = mode;
+  const wall = $("wall");
+  wall.classList.toggle("grid-view", mode === "grid");
+  $("viewSwitch").querySelectorAll(".tab").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.view === mode)));
+  if (mode === "grid") {
+    wall.removeAttribute("aria-roledescription");
+    wall.setAttribute("aria-label", "도착한 편지 전체");
+    animateGridIn();
+  } else {
+    wall.setAttribute("aria-roledescription", "carousel");
+    wall.setAttribute("aria-label", "도착한 편지. 좌우 화살표 키나 밀기로 넘겨 보세요");
+  }
+  layoutDeck();
+  playSwipe(mode === "grid" ? 1 : -1);
+}
+$("viewSwitch").addEventListener("click", (e) => {
+  const btn = e.target.closest(".tab");
+  if (btn) setView(btn.dataset.view);
+});
 $("deckPrev").addEventListener("click", () => goDeck(deckIdx - 1));
 $("deckNext").addEventListener("click", () => goDeck(deckIdx + 1));
 (function deckDrag() {
   const wall = $("wall");
   let startX = 0, dx = 0, active = false, moved = false;
   wall.addEventListener("pointerdown", (e) => {
-    if (e.button || e.target.closest("button, input, textarea, a")) return;
+    if (viewMode !== "deck" || e.button || e.target.closest("button, input, textarea, a")) return;
     active = true; moved = false; startX = e.clientX; dx = 0;
   });
   window.addEventListener("pointermove", (e) => {
@@ -1306,7 +1819,7 @@ $("deckNext").addEventListener("click", () => goDeck(deckIdx + 1));
   window.addEventListener("pointerup", end);
   window.addEventListener("pointercancel", end);
   wall.addEventListener("keydown", (e) => {
-    if (e.target.closest("input, textarea")) return;
+    if (viewMode !== "deck" || e.target.closest("input, textarea")) return;
     if (e.key === "ArrowRight") { goDeck(deckIdx + 1); e.preventDefault(); }
     if (e.key === "ArrowLeft") { goDeck(deckIdx - 1); e.preventDefault(); }
   });
@@ -1352,6 +1865,9 @@ async function sendLike(letter) {
   try { await post({ action: "like", id: letter.id }); } catch (e) {}
 }
 
+document.querySelectorAll('input[name="topic"]').forEach((r) => {
+  r.addEventListener("change", () => { if ($("text")) $("text").placeholder = PLACEHOLDERS[r.value]; });
+});
 if ($("text")) {
   $("text").addEventListener("input", (e) => {
     $("count").textContent = $("text").value.length + " / 300";
@@ -1368,7 +1884,8 @@ $("tabs").addEventListener("click", (e) => {
   if (!btn) return;
   filter = Number(btn.dataset.filter);
   deckIdx = 0;
-  document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-pressed", String(t === btn)));
+  $("tabs").querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-pressed", String(t === btn)));
+  if (viewMode === "grid") animateGridIn();
   render();
 });
 
@@ -1385,19 +1902,17 @@ $("form").addEventListener("submit", async (e) => {
   }
   $("send").disabled = true;
   try {
+    let newId = "local" + Date.now();
     if (API_URL) {
       const out = await post({ action: "write", topic, text });
       if (!out.ok) throw new Error(out.error || "저장 실패");
-      notice.textContent = "편지가 빨간 우체통에 쏙 들어갔습니다! 인수위원회 확인 뒤 우체통 안에 실립니다.";
-    } else {
-      letters.unshift({ id: "local" + Date.now(), topic, text, likes: 0, comments: [] });
-      deckIdx = 0;
-      render();
-      notice.textContent = "편지가 우체통에 들어갔습니다! 아래 빨간 우체통을 눌러 확인해 보세요.";
+      if (out.id) newId = out.id;
     }
+    notice.textContent = "편지를 보냈습니다! 바로 아래 편지함에 실렸어요.";
     $("text").value = "";
     $("count").textContent = "0 / 300";
-    triggerMailboxDropAnimation();
+    const newLetter = { id: newId, topic, text, likes: 0, comments: [] };
+    sendLetterAnimation(text, () => showNewLetter(newLetter));
   } catch (err) {
     notice.className = "notice error";
     notice.textContent = "편지를 넣지 못했습니다. 내용은 그대로 두었으니 잠시 뒤 다시 눌러 주세요.";
