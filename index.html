@@ -912,6 +912,127 @@ body { overflow-x: clip; }
   font-weight: 400;
 }
 .mailbox .topics legend, .mailbox > label.rule { color: var(--paper-ink); }
+
+/* ───── 편지 카드는 모두 같은 크기, 긴 글은 카드 안에서 스크롤 ───── */
+.letter { height: 400px; min-height: 0; max-height: none; overflow: hidden; }
+.letter-inner { height: 100%; min-height: 0; }
+.letter-body {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: .35rem;
+  margin-right: -.35rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(31, 42, 68, .3) transparent;
+}
+.letter-body::-webkit-scrollbar { width: 6px; }
+.letter-body::-webkit-scrollbar-track { background: transparent; }
+.letter-body::-webkit-scrollbar-thumb { background: rgba(31, 42, 68, .3); border-radius: 99px; }
+.letter-body::-webkit-scrollbar-thumb:hover { background: rgba(31, 42, 68, .5); }
+/* 아래에 글이 더 있으면 끝을 살짝 흐리게 해서 스크롤할 수 있다는 걸 알려준다 */
+.letter-body.more {
+  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 2.2rem), transparent);
+  mask-image: linear-gradient(180deg, #000 calc(100% - 2.2rem), transparent);
+}
+.wall.grid-view .letter { height: 330px; min-height: 0; overflow: hidden; }
+@media (max-width: 520px) {
+  .letter { height: 380px; }
+  .wall.grid-view .letter { height: 300px; min-height: 0; }
+}
+
+/* ───── 신고 버튼 · 신고 확인 창 ───── */
+.report-btn {
+  width: 32px; height: 32px; flex: 0 0 auto;
+  display: grid; place-items: center;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(31, 42, 68, .12);
+  background: rgba(255, 255, 255, .7);
+  color: rgba(31, 42, 68, .5);
+  font-size: .95rem;
+  transition: color .2s ease, background .2s ease, border-color .2s ease;
+}
+.report-btn:hover { color: #C5301F; border-color: rgba(197, 48, 31, .4); background: #fff; }
+.report-btn:focus-visible, .comment-report:focus-visible { outline: 3px solid #1F2A44; outline-offset: 2px; }
+/* 깃발은 카드 오른쪽 위 모서리에 고정 */
+.letter-head { position: relative; padding-right: 40px; min-height: 46px; }
+.report-btn { position: absolute; top: 7px; right: 0; }
+/* 전체 보기의 좁은 카드에서는 봉투 아이콘을 빼서 분류 이름표와 깃발이 한 줄에 들어가게 */
+.wall.grid-view .letter-badge { display: none; }
+.wall.grid-view .letter-head { min-height: 32px; }
+.wall.grid-view .report-btn { top: 0; }
+.comment-item { display: flex; align-items: flex-start; gap: .4rem; }
+.comment-item .comment-text { flex: 1; min-width: 0; }
+.comment-report {
+  flex: 0 0 auto;
+  border: 0;
+  background: none;
+  padding: 0 .1rem;
+  font-size: .75rem;
+  color: rgba(31, 42, 68, .45);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.comment-report:hover { color: #C5301F; }
+.modal[hidden] { display: none; }
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(6, 14, 12, .55);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  animation: fadeIn .2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-card {
+  width: min(400px, 100%);
+  display: grid;
+  justify-items: center;
+  gap: .7rem;
+  text-align: center;
+  padding: 1.6rem 1.5rem 1.3rem;
+  border-radius: 28px;
+  color: #1F2A44;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .97), rgba(255, 255, 255, .86));
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid #fff;
+  box-shadow: inset 0 1px 0 #fff, 0 30px 60px rgba(0, 0, 0, .5);
+  animation: cardIn .3s cubic-bezier(.2, .8, .2, 1);
+}
+.modal-ico {
+  width: 52px; height: 52px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  color: #fff;
+  background: linear-gradient(180deg, #f2644f, #C5301F);
+  box-shadow: inset 0 2px 1px rgba(255, 255, 255, .45), 0 8px 18px rgba(197, 48, 31, .4);
+}
+.modal-card h3 { margin: 0; font-size: 1.2rem; }
+.modal-card p { margin: 0; font-size: .95rem; line-height: 1.6; color: rgba(31, 42, 68, .8); }
+.modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; width: 100%; margin-top: .4rem; }
+.modal-btn {
+  border-radius: 14px;
+  padding: .6rem .8rem;
+  font-weight: 700;
+  border: 1px solid rgba(31, 42, 68, .14);
+  background: linear-gradient(180deg, #fff, rgba(255, 255, 255, .7));
+  color: #1F2A44;
+  box-shadow: 0 4px 10px rgba(31, 42, 68, .08), inset 0 1px 0 #fff;
+}
+.modal-btn.danger {
+  border-color: rgba(255, 255, 255, .6);
+  background: linear-gradient(180deg, #ee5a47, #C5301F);
+  color: #fff;
+  box-shadow: inset 0 2px 1px rgba(255, 255, 255, .4), 0 8px 18px rgba(197, 48, 31, .35);
+}
+.modal-btn:focus-visible { outline: 3px solid #1F2A44; outline-offset: 2px; }
+body.modal-open { overflow: hidden; }
 </style>
 </head>
 <body>
@@ -919,6 +1040,7 @@ body { overflow-x: clip; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3.3 6.5c5.8-.6 11.6-.5 17.4.1.5 3.8.4 7.5-.1 11.2-5.8.5-11.5.4-17.2-.2-.5-3.7-.5-7.4-.1-11.1z"/><path d="M3.8 7.2l8.1 6.1 8.3-6.3"/></symbol>
   <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4.1 19.9l1.3-4.7L15.9 4.8c.8-.8 1.9-.7 2.7 0l.7.8c.8.8.7 1.9 0 2.7L8.8 18.8 4.1 19.9z"/><path d="M14.3 6.5l3.4 3.4"/><path d="M11.2 20.3c2.7-.6 5.5.5 8.6-.4"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5.5 20.5V4.2"/><path d="M5.6 4.6c3.3-1.6 5.6 1.4 8.8.3 1.5-.5 2.6-1 3.9-.6-.2 3.1-.1 6 .2 9-1.4-.4-2.6 0-4 .5-3.2 1.1-5.6-1.8-8.8-.3"/></symbol>
   <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.2C7.3 16.6 3.4 13.2 3.5 9.2c.1-2.8 2.2-4.6 4.5-4.5 1.6.1 3 .9 4 2.5 1.1-1.7 2.5-2.5 4.2-2.5 2.4 0 4.4 2 4.3 4.8-.1 3.9-3.7 7.2-8.5 10.7z"/></symbol>
 </svg>
 <canvas id="bokeh" aria-hidden="true"></canvas>
@@ -1064,6 +1186,19 @@ body { overflow-x: clip; }
     </div>
     <p class="deck-hint" id="deckHint" hidden>카드를 옆으로 밀거나 뒤쪽 카드를 눌러 편지를 넘겨 보세요</p>
   </section>
+
+  <!-- 신고 확인 창 -->
+  <div class="modal" id="reportModal" hidden role="dialog" aria-modal="true" aria-labelledby="reportTitle" aria-describedby="reportDesc">
+    <div class="modal-card">
+      <span class="modal-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><use href="#i-flag"/></svg></span>
+      <h3 id="reportTitle">이 편지를 신고할까요?</h3>
+      <p id="reportDesc">신고한 글은 선생님 화면에서 바로 가려지고, 운영진이 확인합니다. 신고한 사람의 이름은 남지 않습니다.</p>
+      <div class="modal-actions">
+        <button type="button" class="modal-btn" id="reportCancel">취소</button>
+        <button type="button" class="modal-btn danger" id="reportOk">신고하기</button>
+      </div>
+    </div>
+  </div>
 
   <!-- "편지를 보냈습니다" 알림 -->
   <div class="toast" id="toast" aria-hidden="true">
@@ -1560,6 +1695,83 @@ function showNewLetter(letter) {
   showNewLetter.timer = setTimeout(() => { newLetterId = null; }, 4000);
 }
 
+/* ───── 악플 예방 설정 ─────
+   BANNED_WORDS: 이 단어가 들어 있으면 편지 · 답장을 보낼 수 없고, 이미 실린 글도 화면에 보이지 않습니다.
+                 띄어쓰기 · 문장부호를 빼고 비교하므로 "급간 이동", "급간-이동", "급 간 이 동"도 걸러집니다.
+                 단어를 더 넣으려면 ["급간이동", "급간 이동", "새 단어"] 처럼 따옴표로 묶어 추가하세요.
+   REPORT_LIMIT: 앱스크립트가 글마다 신고 수(reports)를 보내 주면, 이 수만큼 쌓인 글은 모두의 화면에서 가려집니다. */
+const BANNED_WORDS = ["급간이동", "급간 이동"];
+const REPORT_LIMIT = 3;
+
+const squash = (s) => String(s || "").toLowerCase().replace(/[\s\p{P}\p{S}]/gu, "");
+function findBanned(text) {
+  const s = squash(text);
+  return BANNED_WORDS.find((w) => squash(w) && s.includes(squash(w))) || null;
+}
+function reportedSet() {
+  try { return new Set(JSON.parse(localStorage.getItem("mailbox-reported") || "[]")); }
+  catch (e) { return new Set(); }
+}
+function saveReported(set) {
+  try { localStorage.setItem("mailbox-reported", JSON.stringify([...set])); } catch (e) {}
+}
+function tooManyReports(x) { return x.hidden === true || String(x.hidden).toUpperCase() === "TRUE" || Number(x.reports) >= REPORT_LIMIT; }
+/* 화면에 보여 줄 편지와 답장만 골라낸다 */
+function visibleLetters() {
+  const mine = reportedSet();
+  return letters.filter((l) => !findBanned(l.text) && !mine.has(String(l.id)) && !tooManyReports(l));
+}
+function visibleComments(l) {
+  const mine = reportedSet();
+  return (l.comments || []).filter((c) => !findBanned(c.text) && !mine.has(l.id + ":" + c.id) && !tooManyReports(c));
+}
+
+/* ───── 신고하기 ───── */
+let reportTarget = null;
+let reportReturnFocus = null;
+function openReport(letter, comment) {
+  reportTarget = { letter, comment: comment || null };
+  reportReturnFocus = document.activeElement;
+  $("reportTitle").textContent = comment ? "이 답장을 신고할까요?" : "이 편지를 신고할까요?";
+  $("reportModal").hidden = false;
+  document.body.classList.add("modal-open");
+  $("reportOk").focus();
+}
+function closeReport() {
+  $("reportModal").hidden = true;
+  document.body.classList.remove("modal-open");
+  reportTarget = null;
+  if (reportReturnFocus && document.contains(reportReturnFocus)) reportReturnFocus.focus();
+}
+function confirmReport() {
+  if (!reportTarget) return;
+  const { letter, comment } = reportTarget;
+  const mine = reportedSet();
+  mine.add(comment ? letter.id + ":" + comment.id : String(letter.id));
+  saveReported(mine);
+  closeReport();
+  render();
+  renderStage();
+  showToast("신고했습니다", comment ? "이 답장은 선생님 화면에서 가렸어요" : "이 편지는 선생님 화면에서 가렸어요");
+  if (API_URL) {
+    post({ action: "report", target: comment ? "comment" : "letter", id: letter.id, letterId: letter.id, commentId: comment ? comment.id : "" })
+      .catch(() => {});
+  }
+}
+$("reportCancel").addEventListener("click", closeReport);
+$("reportOk").addEventListener("click", confirmReport);
+$("reportModal").addEventListener("click", (e) => { if (e.target === $("reportModal")) closeReport(); });
+document.addEventListener("keydown", (e) => {
+  if ($("reportModal").hidden) return;
+  if (e.key === "Escape") closeReport();
+  if (e.key === "Tab") {
+    /* 창이 열려 있는 동안 키보드 이동은 두 버튼 사이에서만 */
+    const a = $("reportCancel"), b = $("reportOk");
+    if (e.shiftKey && document.activeElement === a) { b.focus(); e.preventDefault(); }
+    else if (!e.shiftKey && document.activeElement === b) { a.focus(); e.preventDefault(); }
+  }
+});
+
 function likedSet() {
   try { return new Set(JSON.parse(localStorage.getItem("mailbox-liked") || "[]")); }
   catch (e) { return new Set(); }
@@ -1587,14 +1799,15 @@ function render() {
   const wall = $("wall");
   wall.textContent = "";
   const liked = likedSet();
-  const list = letters.filter((l) => filter === 0 || Number(l.topic) === filter);
-  $("total").textContent = letters.length ? "(" + letters.length + "통)" : "";
-  $("boxCount").textContent = letters.length ? letters.length + "통 도착" : "편지함";
+  const shown = visibleLetters();
+  const list = shown.filter((l) => filter === 0 || Number(l.topic) === filter);
+  $("total").textContent = shown.length ? "(" + shown.length + "통)" : "";
+  $("boxCount").textContent = shown.length ? shown.length + "통 도착" : "편지함";
 
   if (!list.length) {
     const p = document.createElement("p");
     p.className = "empty";
-    p.textContent = letters.length ? "이 주제의 편지는 아직 없습니다." : "아직 도착한 편지가 없습니다. 첫 편지를 넣어 주세요.";
+    p.textContent = shown.length ? "이 주제의 편지는 아직 없습니다." : "아직 도착한 편지가 없습니다. 첫 편지를 넣어 주세요.";
     wall.appendChild(p);
     wall.classList.add("is-empty");
     layoutDeck();
@@ -1632,7 +1845,14 @@ function render() {
       chip.textContent = "방금 도착";
       head.append(chip);
     }
-    head.append(no);
+    const report = document.createElement("button");
+    report.type = "button";
+    report.className = "report-btn";
+    report.title = "신고하기";
+    report.setAttribute("aria-label", "이 편지 신고하기");
+    report.appendChild(icon("flag"));
+    report.addEventListener("click", () => openReport(l));
+    head.append(no, report);
 
     const bodyWrap = document.createElement("div");
     bodyWrap.className = "letter-body";
@@ -1642,13 +1862,23 @@ function render() {
 
     const cList = document.createElement("ul");
     cList.className = "comment-list";
-    (l.comments || []).forEach((c) => {
+    const comments = visibleComments(l);
+    comments.forEach((c) => {
       const li = document.createElement("li");
       li.className = "comment-item";
-      li.textContent = "↳ " + c.text;
+      const cText = document.createElement("span");
+      cText.className = "comment-text";
+      cText.textContent = "↳ " + c.text;
+      const cReport = document.createElement("button");
+      cReport.type = "button";
+      cReport.className = "comment-report";
+      cReport.textContent = "신고";
+      cReport.setAttribute("aria-label", "이 답장 신고하기");
+      cReport.addEventListener("click", () => openReport(l, c));
+      li.append(cText, cReport);
       cList.appendChild(li);
     });
-    if ((l.comments || []).length) bodyWrap.appendChild(cList);
+    if (comments.length) bodyWrap.appendChild(cList);
 
     const rForm = document.createElement("div");
     rForm.className = "reply-form";
@@ -1690,13 +1920,22 @@ function render() {
 
     toggle.addEventListener("click", () => {
       rForm.hidden = !rForm.hidden;
-      if (!rForm.hidden) rInput.focus();
+      if (!rForm.hidden) {
+        rInput.focus();
+        rForm.scrollIntoView({ block: "nearest" });
+      }
+      markScrollable();
     });
 
     rBtn.addEventListener("click", async () => {
       const val = rInput.value.trim();
       if (val.length < 2) {
         rNotice.textContent = "두 글자 이상 써 주세요.";
+        return;
+      }
+      const badReply = findBanned(val);
+      if (badReply) {
+        rNotice.textContent = "‘" + badReply + "’ 내용은 답장으로 보낼 수 없어요.";
         return;
       }
       rBtn.disabled = true;
@@ -1729,6 +1968,21 @@ function render() {
     wall.appendChild(card);
   });
   layoutDeck();
+  markScrollable();
+}
+
+/* 카드 안 글이 넘치는지 살펴, 넘치면 아래쪽을 흐리게 표시 */
+function markScrollable() {
+  requestAnimationFrame(() => {
+    $("wall").querySelectorAll(".letter-body").forEach((b) => {
+      const check = () => b.classList.toggle("more", b.scrollHeight - b.clientHeight - b.scrollTop > 4);
+      check();
+      if (!b.dataset.watch) {
+        b.dataset.watch = "1";
+        b.addEventListener("scroll", check, { passive: true });
+      }
+    });
+  });
 }
 
 /* ───── 편지 카드 넘기기 ───── */
@@ -1779,6 +2033,7 @@ function setView(mode) {
     wall.setAttribute("aria-label", "도착한 편지. 좌우 화살표 키나 밀기로 넘겨 보세요");
   }
   layoutDeck();
+  markScrollable();
   playSwipe(mode === "grid" ? 1 : -1);
 }
 $("viewSwitch").addEventListener("click", (e) => {
@@ -1900,6 +2155,13 @@ $("form").addEventListener("submit", async (e) => {
     notice.textContent = "다섯 글자 이상 써 주세요.";
     return;
   }
+  const bad = findBanned(text);
+  if (bad) {
+    notice.className = "notice error";
+    notice.textContent = "‘" + bad + "’ 내용은 이 우체통으로 보낼 수 없어요. 내용을 고쳐서 다시 보내 주세요.";
+    $("text").focus();
+    return;
+  }
   $("send").disabled = true;
   try {
     let newId = "local" + Date.now();
@@ -1931,7 +2193,8 @@ function renderStage() {
   const card = $("stageCard");
   const cBox = $("stageComments");
   cBox.textContent = "";
-  if (!letters.length) {
+  const shown = visibleLetters();
+  if (!shown.length) {
     $("stageTopic").textContent = "";
     $("stageText").textContent = "전시할 편지가 아직 없습니다.";
     $("stageLikes").textContent = "";
@@ -1939,15 +2202,15 @@ function renderStage() {
     cBox.hidden = true;
     return;
   }
-  stageIdx = ((stageIdx % letters.length) + letters.length) % letters.length;
-  const l = letters[stageIdx];
+  stageIdx = ((stageIdx % shown.length) + shown.length) % shown.length;
+  const l = shown[stageIdx];
   card.dataset.palette = String((stageIdx % 8) + 1);
   $("stageTopic").textContent = TOPICS[l.topic] || "";
   $("stageText").textContent = l.text;
   $("stageLikes").textContent = "공감 " + (Number(l.likes) || 0);
-  $("stageIndex").textContent = (stageIdx + 1) + " / " + letters.length;
+  $("stageIndex").textContent = (stageIdx + 1) + " / " + shown.length;
 
-  const comments = l.comments || [];
+  const comments = visibleComments(l);
   if (comments.length) {
     cBox.hidden = false;
     comments.forEach((c) => {
@@ -1961,8 +2224,9 @@ function renderStage() {
 }
 
 function stepStage(delta) {
-  if (!letters.length) return;
-  stageIdx = (stageIdx + delta + letters.length) % letters.length;
+  const n = visibleLetters().length;
+  if (!n) return;
+  stageIdx = (stageIdx + delta + n) % n;
   renderStage();
 }
 
