@@ -1042,6 +1042,62 @@ body { overflow-x: clip; }
 }
 .modal-btn:focus-visible { outline: 3px solid #1F2A44; outline-offset: 2px; }
 body.modal-open { overflow: hidden; }
+
+/* ───── 내 편지: 고치기 · 지우기 ───── */
+.letter .mine-chip {
+  font-size: .75rem;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(180deg, #4a5a82, #1F2A44);
+  border: 1px solid rgba(255, 255, 255, .6);
+  padding: .08rem .6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(31, 42, 68, .25), inset 0 1px 0 rgba(255, 255, 255, .35);
+}
+.letter-head.is-mine { padding-right: 76px; }
+.mine-tools { position: absolute; top: 7px; right: 0; display: flex; gap: 6px; }
+.wall.grid-view .mine-tools { top: 0; }
+.mine-tools .report-btn { position: static; }
+.mine-tools .report-btn.del:hover { color: #C5301F; }
+.mine-tools .report-btn.edit:hover { color: #1F7A4D; border-color: rgba(31, 122, 77, .4); }
+.edit-form { display: grid; gap: .45rem; }
+.edit-input {
+  width: 100%;
+  min-height: 9rem;
+  resize: none;
+  border: 1px solid rgba(31, 42, 68, .2);
+  border-radius: 14px;
+  padding: .4rem .7rem;
+  font-family: var(--font);
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: #1F2A44;
+  background: rgba(255, 255, 255, .9);
+}
+.edit-input:focus-visible { outline: 3px solid #1F7A4D; outline-offset: 1px; }
+.edit-row { display: flex; align-items: center; gap: .4rem; }
+.edit-row .edit-count { margin-right: auto; font-size: .8rem; font-weight: 700; color: rgba(31, 42, 68, .6); font-variant-numeric: tabular-nums; }
+.edit-note { margin: 0; min-height: 1.2em; font-size: .85rem; font-weight: 700; color: #BF2F4C; }
+.edit-btn {
+  border-radius: 999px;
+  padding: .25rem .95rem;
+  font-size: .85rem;
+  font-weight: 700;
+  border: 1px solid rgba(31, 42, 68, .16);
+  background: linear-gradient(180deg, #fff, rgba(255, 255, 255, .7));
+  color: #1F2A44;
+}
+.edit-btn.save { border-color: rgba(255, 255, 255, .5); background: linear-gradient(180deg, #2a9a66, #1F7A4D); color: #fff; }
+.edit-btn:disabled { opacity: .55; cursor: default; }
+.edit-btn:focus-visible { outline: 3px solid #1F2A44; outline-offset: 2px; }
+/* 고치는 동안에는 답장 · 공감 버튼을 잠시 숨기고, 고치는 칸이 카드 안을 채운다 */
+.letter.is-editing .letter-actions { display: none; }
+.letter.is-editing .letter-inner { grid-template-rows: auto 1fr; }
+.letter.is-editing .letter-body { overflow: visible; -webkit-mask-image: none; mask-image: none; grid-template-rows: minmax(0, 1fr); align-content: stretch; }
+.letter.is-editing .edit-form { height: 100%; grid-template-rows: 1fr auto auto; }
+.letter.is-editing .edit-input { min-height: 0; height: 100%; }
+.edited-mark { font-size: .78rem; font-weight: 700; color: rgba(31, 42, 68, .5); }
 </style>
 </head>
 <body>
@@ -1050,6 +1106,7 @@ body.modal-open { overflow: hidden; }
   <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3.3 6.5c5.8-.6 11.6-.5 17.4.1.5 3.8.4 7.5-.1 11.2-5.8.5-11.5.4-17.2-.2-.5-3.7-.5-7.4-.1-11.1z"/><path d="M3.8 7.2l8.1 6.1 8.3-6.3"/></symbol>
   <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4.1 19.9l1.3-4.7L15.9 4.8c.8-.8 1.9-.7 2.7 0l.7.8c.8.8.7 1.9 0 2.7L8.8 18.8 4.1 19.9z"/><path d="M14.3 6.5l3.4 3.4"/><path d="M11.2 20.3c2.7-.6 5.5.5 8.6-.4"/></symbol>
   <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5.5 20.5V4.2"/><path d="M5.6 4.6c3.3-1.6 5.6 1.4 8.8.3 1.5-.5 2.6-1 3.9-.6-.2 3.1-.1 6 .2 9-1.4-.4-2.6 0-4 .5-3.2 1.1-5.6-1.8-8.8-.3"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.5 6.8c4.9-.4 9.9-.4 15 .1"/><path d="M9.2 6.6c0-1.6.9-2.4 2.8-2.4s2.8.8 2.8 2.5"/><path d="M6.4 7.2c.3 4.2.6 8.3 1.1 12.3 2.9.4 5.9.4 8.9 0 .5-4 .9-8.1 1.2-12.3"/><path d="M10.2 10.6c0 2.3.1 4.6.3 6.8M13.9 10.6c-.1 2.3-.2 4.6-.4 6.8"/></symbol>
   <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.2C7.3 16.6 3.4 13.2 3.5 9.2c.1-2.8 2.2-4.6 4.5-4.5 1.6.1 3 .9 4 2.5 1.1-1.7 2.5-2.5 4.2-2.5 2.4 0 4.4 2 4.3 4.8-.1 3.9-3.7 7.2-8.5 10.7z"/></symbol>
 </svg>
 <canvas id="bokeh" aria-hidden="true"></canvas>
@@ -1199,7 +1256,7 @@ body.modal-open { overflow: hidden; }
   <!-- 신고 확인 창 -->
   <div class="modal" id="reportModal" hidden role="dialog" aria-modal="true" aria-labelledby="reportTitle" aria-describedby="reportDesc">
     <div class="modal-card">
-      <span class="modal-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><use href="#i-flag"/></svg></span>
+      <span class="modal-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><use id="modalIconUse" href="#i-flag"/></svg></span>
       <h3 id="reportTitle">이 편지를 신고할까요?</h3>
       <p id="reportDesc">신고한 글은 선생님 화면에서 바로 가려지고, 운영진이 확인합니다. 신고한 사람의 이름은 남지 않습니다.</p>
       <div class="modal-actions">
@@ -1676,6 +1733,7 @@ function playArrive() {
 
 /* ───── 보낸 편지를 편지함 맨 앞에 바로 띄운다 ───── */
 let newLetterId = null;
+let arrivalShown = false;
 function showToast(title, sub) {
   const toast = $("toast");
   $("toastTitle").textContent = title;
@@ -1689,6 +1747,7 @@ function showToast(title, sub) {
 function showNewLetter(letter) {
   letters.unshift(letter);
   newLetterId = letter.id;
+  arrivalShown = false;
   /* 새 편지가 바로 보이도록 분류는 "전체", 맨 앞 카드로 */
   filter = 0;
   $("tabs").querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-pressed", String(t.dataset.filter === "0")));
@@ -1735,13 +1794,16 @@ function visibleComments(l) {
   return (l.comments || []).filter((c) => !findBanned(c.text) && !mine.has(l.id + ":" + c.id) && !tooManyReports(c));
 }
 
-/* ───── 신고하기 ───── */
-let reportTarget = null;
-let reportReturnFocus = null;
-function openReport(letter, comment) {
-  reportTarget = { letter, comment: comment || null };
-  reportReturnFocus = document.activeElement;
-  $("reportTitle").textContent = comment ? "이 답장을 신고할까요?" : "이 편지를 신고할까요?";
+/* ───── 확인 창 (신고하기 · 내 편지 지우기에 함께 씀) ───── */
+let confirmAction = null;
+let confirmReturnFocus = null;
+function openConfirm(o) {
+  confirmAction = o.onOk;
+  confirmReturnFocus = document.activeElement;
+  $("modalIconUse").setAttribute("href", "#i-" + o.icon);
+  $("reportTitle").textContent = o.title;
+  $("reportDesc").textContent = o.desc;
+  $("reportOk").textContent = o.ok;
   $("reportModal").hidden = false;
   document.body.classList.add("modal-open");
   $("reportOk").focus();
@@ -1749,16 +1811,29 @@ function openReport(letter, comment) {
 function closeReport() {
   $("reportModal").hidden = true;
   document.body.classList.remove("modal-open");
-  reportTarget = null;
-  if (reportReturnFocus && document.contains(reportReturnFocus)) reportReturnFocus.focus();
+  confirmAction = null;
+  if (confirmReturnFocus && document.contains(confirmReturnFocus)) confirmReturnFocus.focus();
 }
-function confirmReport() {
-  if (!reportTarget) return;
-  const { letter, comment } = reportTarget;
+function runConfirm() {
+  const fn = confirmAction;
+  closeReport();
+  if (fn) fn();
+}
+
+/* ───── 신고하기 ───── */
+function openReport(letter, comment) {
+  openConfirm({
+    icon: "flag",
+    title: comment ? "이 답장을 신고할까요?" : "이 편지를 신고할까요?",
+    desc: "신고한 글은 선생님 화면에서 바로 가려지고, 운영진이 확인합니다. 신고한 사람의 이름은 남지 않습니다.",
+    ok: "신고하기",
+    onOk: () => confirmReport(letter, comment)
+  });
+}
+function confirmReport(letter, comment) {
   const mine = reportedSet();
   mine.add(comment ? letter.id + ":" + comment.id : String(letter.id));
   saveReported(mine);
-  closeReport();
   render();
   renderStage();
   showToast("신고했습니다", comment ? "이 답장은 선생님 화면에서 가렸어요" : "이 편지는 선생님 화면에서 가렸어요");
@@ -1768,7 +1843,7 @@ function confirmReport() {
   }
 }
 $("reportCancel").addEventListener("click", closeReport);
-$("reportOk").addEventListener("click", confirmReport);
+$("reportOk").addEventListener("click", runConfirm);
 $("reportModal").addEventListener("click", (e) => { if (e.target === $("reportModal")) closeReport(); });
 document.addEventListener("keydown", (e) => {
   if ($("reportModal").hidden) return;
@@ -1780,6 +1855,84 @@ document.addEventListener("keydown", (e) => {
     else if (!e.shiftKey && document.activeElement === b) { a.focus(); e.preventDefault(); }
   }
 });
+
+/* ───── 내가 쓴 편지 알아보기 ─────
+   편지를 보낼 때 이 기기에서만 아는 비밀 열쇠를 함께 보내고, 같은 열쇠를 이 브라우저에 보관합니다.
+   열쇠가 맞아야만 앱스크립트가 고치기 · 지우기를 받아 줍니다. 이름은 어디에도 남지 않습니다.
+   관리자는 지금처럼 구글시트에서 모든 편지를 고치고 지울 수 있습니다. */
+function newKey() {
+  try { if (crypto.randomUUID) return crypto.randomUUID(); } catch (e) {}
+  const a = new Uint32Array(4);
+  crypto.getRandomValues(a);
+  return Array.from(a, (n) => n.toString(36)).join("-");
+}
+function myKeys() {
+  try { return JSON.parse(localStorage.getItem("mailbox-mine") || "{}") || {}; }
+  catch (e) { return {}; }
+}
+function rememberMine(id, key) {
+  const m = myKeys();
+  m[String(id)] = key;
+  try { localStorage.setItem("mailbox-mine", JSON.stringify(m)); } catch (e) {}
+}
+function forgetMine(id) {
+  const m = myKeys();
+  delete m[String(id)];
+  try { localStorage.setItem("mailbox-mine", JSON.stringify(m)); } catch (e) {}
+}
+let editingId = null;
+
+async function saveEdit(l, input, note, btn) {
+  const val = input.value.trim();
+  note.textContent = "";
+  if (val.length < 5) { note.textContent = "다섯 글자 이상 써 주세요."; return; }
+  const bad = findBanned(val);
+  if (bad) { note.textContent = "‘" + bad + "’ 내용은 보낼 수 없어요."; return; }
+  if (val === l.text) { editingId = null; render(); return; }
+  btn.disabled = true;
+  try {
+    if (API_URL) {
+      const out = await post({ action: "edit", id: l.id, key: myKeys()[String(l.id)], text: val });
+      if (!out || !out.ok) throw new Error((out && out.error) || "edit");
+    }
+    l.text = val;
+    l.edited = true;
+    editingId = null;
+    render();
+    renderStage();
+    showToast("편지를 고쳤습니다", "모든 선생님께 고친 내용이 보여요");
+  } catch (err) {
+    note.textContent = "지금은 고칠 수 없어요. 잠시 뒤 다시 해 주세요.";
+    btn.disabled = false;
+  }
+}
+
+function askDelete(l) {
+  openConfirm({
+    icon: "trash",
+    title: "이 편지를 지울까요?",
+    desc: "지운 편지는 모든 선생님 화면에서 사라지고, 되돌릴 수 없어요.",
+    ok: "지우기",
+    onOk: () => deleteMine(l)
+  });
+}
+async function deleteMine(l) {
+  try {
+    if (API_URL) {
+      const out = await post({ action: "delete", id: l.id, key: myKeys()[String(l.id)] });
+      if (!out || !out.ok) throw new Error((out && out.error) || "delete");
+    }
+    letters = letters.filter((x) => x !== l);
+    forgetMine(l.id);
+    if (editingId === l.id) editingId = null;
+    render();
+    renderStage();
+    playSwipe(-1);
+    showToast("편지를 지웠습니다", "모든 선생님 화면에서 사라졌어요");
+  } catch (err) {
+    showToast("편지를 지우지 못했어요", "잠시 뒤 다시 해 주세요");
+  }
+}
 
 function likedSet() {
   try { return new Set(JSON.parse(localStorage.getItem("mailbox-liked") || "[]")); }
@@ -1848,26 +2001,100 @@ function render() {
     no.textContent = (i + 1) + " / " + list.length;
     head.append(badge, topic);
     if (l.id === newLetterId) {
-      card.classList.add("is-new");
+      if (!arrivalShown) card.classList.add("is-new");   // 도착 동작은 처음 한 번만
       const chip = document.createElement("span");
       chip.className = "new-chip";
       chip.textContent = "방금 도착";
       head.append(chip);
     }
-    const report = document.createElement("button");
-    report.type = "button";
-    report.className = "report-btn";
-    report.title = "신고하기";
-    report.setAttribute("aria-label", "이 편지 신고하기");
-    report.appendChild(icon("flag"));
-    report.addEventListener("click", () => openReport(l));
-    head.append(no, report);
+    const isMine = Object.prototype.hasOwnProperty.call(myKeys(), String(l.id));
+    if (isMine) {
+      /* 내가 쓴 편지: 신고 대신 고치기 · 지우기 */
+      head.classList.add("is-mine");
+      const chip = document.createElement("span");
+      chip.className = "mine-chip";
+      chip.textContent = "내 편지";
+      const tools = document.createElement("span");
+      tools.className = "mine-tools";
+      const editBtn = document.createElement("button");
+      editBtn.type = "button";
+      editBtn.className = "report-btn edit";
+      editBtn.title = "고치기";
+      editBtn.setAttribute("aria-label", "내 편지 고치기");
+      editBtn.appendChild(icon("pen"));
+      editBtn.addEventListener("click", () => { editingId = l.id; render(); });
+      const delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.className = "report-btn del";
+      delBtn.title = "지우기";
+      delBtn.setAttribute("aria-label", "내 편지 지우기");
+      delBtn.appendChild(icon("trash"));
+      delBtn.addEventListener("click", () => askDelete(l));
+      tools.append(editBtn, delBtn);
+      head.append(chip, no, tools);
+    } else {
+      const report = document.createElement("button");
+      report.type = "button";
+      report.className = "report-btn";
+      report.title = "신고하기";
+      report.setAttribute("aria-label", "이 편지 신고하기");
+      report.appendChild(icon("flag"));
+      report.addEventListener("click", () => openReport(l));
+      head.append(no, report);
+    }
 
     const bodyWrap = document.createElement("div");
     bodyWrap.className = "letter-body";
-    const body = document.createElement("p");
-    body.textContent = l.text;
-    bodyWrap.appendChild(body);
+    if (isMine && editingId === l.id) {
+      /* 카드 안에서 바로 고친다 */
+      card.classList.add("is-editing");
+      const form = document.createElement("div");
+      form.className = "edit-form";
+      const input = document.createElement("textarea");
+      input.className = "edit-input";
+      input.maxLength = 300;
+      input.value = l.text;
+      input.setAttribute("aria-label", "편지 고치기");
+      const note = document.createElement("p");
+      note.className = "edit-note";
+      note.setAttribute("role", "status");
+      const row = document.createElement("div");
+      row.className = "edit-row";
+      const cnt = document.createElement("span");
+      cnt.className = "edit-count";
+      cnt.textContent = input.value.length + " / 300";
+      input.addEventListener("input", (e) => {
+        cnt.textContent = input.value.length + " / 300";
+        const type = e.inputType || "";
+        if (type.indexOf("delete") === 0) playType("delete");
+        else if (e.data === " ") playType("space");
+        else playType("key");
+      });
+      const cancel = document.createElement("button");
+      cancel.type = "button";
+      cancel.className = "edit-btn";
+      cancel.textContent = "취소";
+      cancel.addEventListener("click", () => { editingId = null; render(); });
+      const save = document.createElement("button");
+      save.type = "button";
+      save.className = "edit-btn save";
+      save.textContent = "저장";
+      save.addEventListener("click", () => saveEdit(l, input, note, save));
+      row.append(cnt, cancel, save);
+      form.append(input, row, note);
+      bodyWrap.appendChild(form);
+      requestAnimationFrame(() => { input.focus(); input.setSelectionRange(input.value.length, input.value.length); });
+    } else {
+      const body = document.createElement("p");
+      body.textContent = l.text;
+      bodyWrap.appendChild(body);
+      if (l.edited === true || String(l.edited).toUpperCase() === "TRUE") {
+        const mark = document.createElement("span");
+        mark.className = "edited-mark";
+        mark.textContent = "(고친 글)";
+        bodyWrap.appendChild(mark);
+      }
+    }
 
     const cList = document.createElement("ul");
     cList.className = "comment-list";
@@ -1978,6 +2205,7 @@ function render() {
   });
   layoutDeck();
   markScrollable();
+  if (newLetterId) arrivalShown = true;
 }
 
 /* 카드 안 글이 넘치는지 살펴, 넘치면 아래쪽을 흐리게 표시 */
@@ -2174,10 +2402,16 @@ $("form").addEventListener("submit", async (e) => {
   $("send").disabled = true;
   try {
     let newId = "local" + Date.now();
+    const key = newKey();
     if (API_URL) {
-      const out = await post({ action: "write", topic, text });
+      const out = await post({ action: "write", topic, text, key });
       if (!out.ok) throw new Error(out.error || "저장 실패");
-      if (out.id) newId = out.id;
+      if (out.id) {
+        newId = out.id;
+        rememberMine(newId, key);   // 앱스크립트가 새 편지 번호를 알려 줄 때만 내 편지로 기억
+      }
+    } else {
+      rememberMine(newId, key);
     }
     notice.textContent = "편지를 보냈습니다! 바로 아래 편지함에 실렸어요.";
     $("text").value = "";
