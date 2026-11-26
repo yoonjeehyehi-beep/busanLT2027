@@ -1097,6 +1097,10 @@ body.modal-open { overflow: hidden; }
 .letter.is-editing .letter-body { overflow: visible; -webkit-mask-image: none; mask-image: none; grid-template-rows: minmax(0, 1fr); align-content: stretch; }
 .letter.is-editing .edit-form { height: 100%; grid-template-rows: 1fr auto auto; }
 .letter.is-editing .edit-input { min-height: 0; height: 100%; }
+/* 내 답장 표시 */
+.comment-item.is-mine { border-color: rgba(31, 42, 68, .18); background: rgba(255, 255, 255, .9); }
+.comment-item.is-mine .comment-text::after { content: " · 내 답장"; font-size: .75rem; font-weight: 700; color: rgba(31, 42, 68, .5); }
+.comment-report.del { color: #C5301F; }
 .edited-mark { font-size: .78rem; font-weight: 700; color: rgba(31, 42, 68, .5); }
 </style>
 </head>
@@ -1880,6 +1884,46 @@ function forgetMine(id) {
   delete m[String(id)];
   try { localStorage.setItem("mailbox-mine", JSON.stringify(m)); } catch (e) {}
 }
+/* 답장도 같은 방식으로: 이 기기에서 단 답장만 지울 수 있다 */
+function myCommentKeys() {
+  try { return JSON.parse(localStorage.getItem("mailbox-mine-c") || "{}") || {}; }
+  catch (e) { return {}; }
+}
+function rememberMineComment(id, key) {
+  const m = myCommentKeys();
+  m[String(id)] = key;
+  try { localStorage.setItem("mailbox-mine-c", JSON.stringify(m)); } catch (e) {}
+}
+function forgetMineComment(id) {
+  const m = myCommentKeys();
+  delete m[String(id)];
+  try { localStorage.setItem("mailbox-mine-c", JSON.stringify(m)); } catch (e) {}
+}
+function askDeleteComment(l, c) {
+  openConfirm({
+    icon: "trash",
+    title: "이 답장을 지울까요?",
+    desc: "지운 답장은 모든 선생님 화면에서 사라지고, 되돌릴 수 없어요.",
+    ok: "지우기",
+    onOk: () => deleteMineComment(l, c)
+  });
+}
+async function deleteMineComment(l, c) {
+  try {
+    if (API_URL) {
+      const out = await post({ action: "deleteComment", letterId: l.id, commentId: c.id, key: myCommentKeys()[String(c.id)] });
+      if (!out || !out.ok) throw new Error((out && out.error) || "deleteComment");
+    }
+    l.comments = (l.comments || []).filter((x) => x !== c);
+    forgetMineComment(c.id);
+    render();
+    renderStage();
+    playSwipe(-1);
+    showToast("답장을 지웠습니다", "모든 선생님 화면에서 사라졌어요");
+  } catch (err) {
+    showToast("답장을 지우지 못했어요", "잠시 뒤 다시 해 주세요");
+  }
+}
 let editingId = null;
 
 async function saveEdit(l, input, note, btn) {
@@ -2107,10 +2151,19 @@ function render() {
       cText.textContent = "↳ " + c.text;
       const cReport = document.createElement("button");
       cReport.type = "button";
-      cReport.className = "comment-report";
-      cReport.textContent = "신고";
-      cReport.setAttribute("aria-label", "이 답장 신고하기");
-      cReport.addEventListener("click", () => openReport(l, c));
+      if (Object.prototype.hasOwnProperty.call(myCommentKeys(), String(c.id))) {
+        /* 내가 단 답장: 신고 대신 지우기 */
+        li.classList.add("is-mine");
+        cReport.className = "comment-report del";
+        cReport.textContent = "지우기";
+        cReport.setAttribute("aria-label", "내 답장 지우기");
+        cReport.addEventListener("click", () => askDeleteComment(l, c));
+      } else {
+        cReport.className = "comment-report";
+        cReport.textContent = "신고";
+        cReport.setAttribute("aria-label", "이 답장 신고하기");
+        cReport.addEventListener("click", () => openReport(l, c));
+      }
       li.append(cText, cReport);
       cList.appendChild(li);
     });
@@ -2176,17 +2229,29 @@ function render() {
       }
       rBtn.disabled = true;
       try {
+        let cId = "lc" + Date.now();
+        const cKey = newKey();
+        let cMine = !API_URL;
         if (API_URL) {
-          const out = await post({ action: "comment", letterId: l.id, text: val });
+          const out = await post({ action: "comment", letterId: l.id, text: val, key: cKey });
           if (!out.ok) throw new Error(out.error);
-          rNotice.textContent = "확인 뒤 실립니다.";
-        } else {
-          l.comments = l.comments || [];
-          l.comments.push({ id: "lc" + Date.now(), text: val });
-          render();
-          return;
+          if (out.approved === false) {
+            /* 관리자 승인 방식일 때 */
+            rNotice.textContent = "확인 뒤 실립니다.";
+            rInput.value = "";
+            return;
+          }
+          if (out.id) { cId = out.id; cMine = true; }   // 앱스크립트가 답장 번호를 알려 줄 때만 내 답장으로 기억
         }
-        rInput.value = "";
+        if (cMine) rememberMineComment(cId, cKey);
+        /* 답장은 바로 카드에 붙는다 */
+        l.comments = l.comments || [];
+        l.comments.push({ id: cId, text: val });
+        render();
+        renderStage();
+        playArrive();
+        showToast("답장을 달았습니다", "편지 아래에 바로 보여요");
+        return;
       } catch (err) {
         rNotice.textContent = "다시 눌러 주세요.";
       } finally {
